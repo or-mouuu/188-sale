@@ -239,6 +239,20 @@ dialog.setup::backdrop{background:rgba(10,16,14,.55)}
 .banner button{font:inherit; font-size:12.5px; cursor:pointer; padding:4px 11px;
   border-radius:999px; border:1px solid currentColor; background:transparent; color:inherit}
 
+/* ---- 鎖定畫面 ---- */
+.lock{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px}
+.lockbox{background:var(--surface); border:1px solid var(--line); border-radius:5px;
+  box-shadow:var(--shadow); padding:26px 26px 22px; max-width:420px; width:100%; display:grid; gap:13px}
+.lockbox h1{font-size:24px; margin:0}
+.lockbox p{margin:0; font-size:13.5px; color:var(--ink-2); line-height:1.6}
+.lockbox p.sub{font-size:12.5px; color:var(--muted)}
+.lockbox input{font:inherit; font-size:15px; padding:9px 11px; border:1px solid var(--line);
+  border-radius:3px; background:var(--surface-2); color:var(--ink); width:100%}
+.lockbox .row{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.lockerr{font-size:13px; color:var(--crit); min-height:19px}
+.lockbox .reset{background:none; border:none; color:var(--muted); font:inherit; font-size:12px;
+  cursor:pointer; text-decoration:underline; padding:0; justify-self:start}
+
 footer.end{border-top:1px solid var(--line); padding:22px 0 50px; color:var(--muted);
   font-size:12.5px; line-height:1.7}
 footer.end a{color:var(--accent)}
@@ -258,8 +272,11 @@ footer.end code{font-family:"IBM Plex Mono",monospace; font-size:11.5px;
 
 const REPO = 'or-mouuu/188-sale';
 const DATA_PATH = 'data/data.json';
-const TOKEN_KEY = 'qnl-github-token';
+const VAULT_KEY = 'qnl-vault';        // 用密碼加密後的 GitHub 權杖
 const DRAFT_KEY = 'qnl-draft';
+const SESS_KEY  = 'qnl-unlocked';     // 解鎖後的權杖，只留在這個分頁
+
+let token = '';                       // 解鎖後才有值，不寫進 localStorage
 
 let D = null;                 // 目前編輯中的資料
 let remote = null;            // 線上版（用來判斷有沒有未發佈的變更）
@@ -282,15 +299,126 @@ const live = () => D.items.filter(d => !d.sold);
 const json = o => JSON.stringify(o);
 const dirty = () => remote !== null && json(D) !== remote;
 
-/* ---------- 權杖：只存在這台裝置的瀏覽器裡 ---------- */
-const getToken = () => { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch(e){ return ''; } };
-const setToken = v => { try { v ? localStorage.setItem(TOKEN_KEY, v) : localStorage.removeItem(TOKEN_KEY); } catch(e){} };
+/* ---------- 權杖保險箱 ----------
+   權杖用密碼加密後才存進瀏覽器（AES-GCM，金鑰由 PBKDF2 從密碼導出）。
+   密碼本身不會被存下來，所以沒有密碼就解不開權杖、也就發佈不了。       */
+const getToken = () => token;
+const hasVault = () => { try { return !!localStorage.getItem(VAULT_KEY); } catch(e){ return false; } };
+
+const b64enc = buf => btoa(String.fromCharCode.apply(null, new Uint8Array(buf)));
+const b64dec = str => Uint8Array.from(atob(str), c => c.charCodeAt(0));
+
+async function keyFrom(password, salt){
+  const base = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt, iterations:250000, hash:'SHA-256'},
+    base, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+}
+
+async function lockVault(password, plainToken){
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv   = crypto.getRandomValues(new Uint8Array(12));
+  const key  = await keyFrom(password, salt);
+  const ct   = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key,
+                 new TextEncoder().encode(plainToken));
+  localStorage.setItem(VAULT_KEY, JSON.stringify(
+    {v:1, salt:b64enc(salt), iv:b64enc(iv), ct:b64enc(ct)}));
+}
+
+async function openVault(password){
+  const raw = localStorage.getItem(VAULT_KEY);
+  if (!raw) throw new Error('尚未設定密碼。');
+  const o = JSON.parse(raw);
+  const key = await keyFrom(password, b64dec(o.salt));
+  let out;
+  try {
+    out = await crypto.subtle.decrypt({name:'AES-GCM', iv:b64dec(o.iv)}, key, b64dec(o.ct));
+  } catch(e){
+    throw new Error('密碼不對。');
+  }
+  return new TextDecoder().decode(out);
+}
+
+function clearVault(){
+  try { localStorage.removeItem(VAULT_KEY); sessionStorage.removeItem(SESS_KEY); } catch(e){}
+  token = '';
+}
 
 /* ---------- 草稿：避免關掉分頁就白改 ---------- */
 function saveDraft(){ try { localStorage.setItem(DRAFT_KEY, json(D)); } catch(e){} }
 function clearDraft(){ try { localStorage.removeItem(DRAFT_KEY); } catch(e){} }
 function readDraft(){
   try { const s = localStorage.getItem(DRAFT_KEY); return s ? JSON.parse(s) : null; } catch(e){ return null; }
+}
+
+/* ---------- 鎖定畫面 ---------- */
+function lockScreen(){
+  const first = !hasVault();
+  document.getElementById('root').innerHTML = `
+    <div class="lock"><div class="lockbox">
+      <h1>${first ? '設定後台密碼' : '青年路二手拍後台'}</h1>
+      ${first
+        ? `<p>第一次使用。設一組密碼，並貼上 GitHub 發佈權杖——
+             權杖會用這組密碼加密後才存進這台裝置的瀏覽器。</p>
+           <p class="sub">建立權杖：<a href="https://github.com/settings/personal-access-tokens/new"
+             target="_blank" rel="noopener">GitHub 權杖設定頁</a> →
+             Only select repositories 勾 <code>188-sale</code> →
+             Contents 設成 Read and write。</p>
+           <input id="pw" type="password" placeholder="設定密碼" autocomplete="new-password">
+           <input id="pw2" type="password" placeholder="再輸入一次" autocomplete="new-password">
+           <input id="tk" type="password" placeholder="GitHub 權杖 github_pat_…" autocomplete="off">`
+        : `<p>請輸入密碼。</p>
+           <input id="pw" type="password" placeholder="密碼" autocomplete="current-password">`}
+      <div class="lockerr" id="lockerr"></div>
+      <div class="row">
+        <button class="act big" id="unlock">${first ? '設定並進入' : '解鎖'}</button>
+      </div>
+      ${first ? '' : '<button class="reset" id="forgot">忘記密碼？清除後重新設定</button>'}
+      <p class="sub">這道鎖擋的是路過的人。真正防護的是權杖被加密存放——
+        沒有密碼就發佈不了。商品資料本身在 GitHub 上是公開的。</p>
+    </div></div>`;
+
+  const err = t => { document.getElementById('lockerr').textContent = t; };
+  const go = async () => {
+    const pw = document.getElementById('pw').value;
+    if (!pw){ err('請輸入密碼。'); return; }
+    try {
+      if (first){
+        const pw2 = document.getElementById('pw2').value;
+        const tk  = document.getElementById('tk').value.trim();
+        if (pw.length < 6){ err('密碼至少 6 個字。'); return; }
+        if (pw !== pw2){ err('兩次密碼不一樣。'); return; }
+        if (!tk){ err('請貼上 GitHub 權杖。'); return; }
+        await lockVault(pw, tk);
+        token = tk;
+      } else {
+        token = await openVault(pw);
+      }
+      try { sessionStorage.setItem(SESS_KEY, token); } catch(e){}
+      load();
+    } catch(e){ err(e.message); }
+  };
+  document.getElementById('unlock').onclick = go;
+  document.getElementById('root').addEventListener('keydown', e => {
+    if (e.key === 'Enter') go();
+  });
+  const forgot = document.getElementById('forgot');
+  if (forgot) forgot.onclick = () => {
+    if (forgot.dataset.armed !== '1'){
+      forgot.dataset.armed = '1';
+      forgot.textContent = '再按一次：清除權杖，重新設定密碼';
+      return;
+    }
+    clearVault(); lockScreen();
+  };
+}
+
+function boot(){
+  let saved = '';
+  try { saved = sessionStorage.getItem(SESS_KEY) || ''; } catch(e){}
+  if (saved){ token = saved; load(); }      // 同一個分頁裡不用一直重打密碼
+  else lockScreen();
 }
 
 /* ---------- 載入 ---------- */
@@ -315,7 +443,7 @@ async function load(){
 async function publish(){
   if (publishing) return;
   const token = getToken();
-  if (!token){ openSetup(); return; }
+  if (!token){ lockScreen(); return; }
   publishing = true; render();
   const msgEl = $('pubmsg');
   const say = (t, cls) => { const m = $('pubmsg'); if (m){ m.textContent = t; m.className = 'pubmsg ' + (cls||''); } };
@@ -366,44 +494,48 @@ function b64(str){
 /* ---------- 設定視窗 ---------- */
 function openSetup(){
   const dlg = $('setup');
-  const has = !!getToken();
   dlg.innerHTML = `
     <div class="setup-body">
       <h2>發佈設定</h2>
-      <div class="tokstate ${has ? 'on' : ''}">
-        <span class="dot"></span>
-        <span>${has ? '已設定發佈權杖，可以直接按發佈。' : '尚未設定發佈權杖。'}</span>
-        ${has ? '<button class="act ghost" id="tokclear" style="margin-left:auto">清除</button>' : ''}
-      </div>
+      <div class="tokstate on"><span class="dot"></span>
+        <span>已解鎖，可以直接按發佈。</span></div>
       <p style="margin:0; font-size:13.5px; color:var(--ink-2)">
-        發佈需要一組 GitHub 權杖，讓這個頁面可以把資料寫回 repo。做法：
-      </p>
-      <ol>
-        <li>開 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub 權杖設定頁</a></li>
-        <li>Repository access 選 <code>Only select repositories</code> → 勾 <code>188-sale</code></li>
-        <li>Permissions → Repository permissions → <code>Contents</code> 設成 <code>Read and write</code></li>
-        <li>建立後把權杖貼到下面，按儲存</li>
-      </ol>
+        權杖用你的密碼加密後存在這台裝置。換了權杖或想改密碼，就在下面重設。</p>
       <div class="fld">
-        <label for="tokin">權杖</label>
-        <input id="tokin" type="password" autocomplete="off" placeholder="github_pat_…">
-        <span class="hint">只存在這台裝置的瀏覽器裡，不會上傳到任何地方。</span>
+        <label for="npw">新密碼</label>
+        <input id="npw" type="password" autocomplete="new-password" placeholder="至少 6 個字">
+      </div>
+      <div class="fld">
+        <label for="ntk">GitHub 權杖</label>
+        <input id="ntk" type="password" autocomplete="off" placeholder="github_pat_…">
+        <span class="hint">留空的話沿用目前這一組，只換密碼。</span>
       </div>
       <div class="warnbox">
-        這個後台頁面本身是公開網址，任何人都打得開、看得到商品資料，但沒有你的權杖就不能發佈。
-        別人用不到的內部備註就別寫進備註欄。
+        這個後台網址是公開的，任何人都打得開；密碼只是擋住路過的人，
+        真正防的是沒有密碼就解不開權杖、發佈不了。
+        商品資料在 GitHub 上是公開的，內部備註不要寫進備註欄。
       </div>
+      <div class="lockerr" id="setuperr"></div>
     </div>
     <div class="ed-foot">
-      <button class="act" id="toksave">儲存</button>
+      <button class="act" id="toksave">重設</button>
+      <button class="act ghost" id="lockbtn">立即鎖定</button>
       <button class="act ghost" id="tokcancel">關閉</button>
     </div>`;
   dlg.querySelector('#tokcancel').onclick = () => dlg.close();
-  const clr = dlg.querySelector('#tokclear');
-  if (clr) clr.onclick = () => { setToken(''); dlg.close(); render(); };
-  dlg.querySelector('#toksave').onclick = () => {
-    const v = dlg.querySelector('#tokin').value.trim();
-    if (v) setToken(v);
+  dlg.querySelector('#lockbtn').onclick = () => {
+    try { sessionStorage.removeItem(SESS_KEY); } catch(e){}
+    token = ''; dlg.close(); lockScreen();
+  };
+  dlg.querySelector('#toksave').onclick = async () => {
+    const pw = dlg.querySelector('#npw').value;
+    const tk = dlg.querySelector('#ntk').value.trim() || token;
+    const err = t => { dlg.querySelector('#setuperr').textContent = t; };
+    if (pw.length < 6){ err('密碼至少 6 個字。'); return; }
+    if (!tk){ err('沒有可用的權杖。'); return; }
+    await lockVault(pw, tk);
+    token = tk;
+    try { sessionStorage.setItem(SESS_KEY, token); } catch(e){}
     dlg.close(); render();
   };
   dlg.showModal();
@@ -509,7 +641,7 @@ function render(){
       ${d ? '有 <b>尚未發佈</b> 的修改' : '<b>已是最新</b>，沒有待發佈的修改'}
     </span>
     <span class="pubmsg" id="pubmsg"></span>
-    <button class="act ghost" id="setupbtn">${hasTok ? '設定' : '設定發佈權杖'}</button>
+    <button class="act ghost" id="setupbtn">設定</button>
     <button class="act big" id="pubbtn" ${(!d || publishing) ? 'disabled' : ''}>
       ${publishing ? '發佈中…' : '發佈到前台'}</button>
   </div></div>
@@ -665,7 +797,7 @@ window.addEventListener('beforeunload', e => {
   if (D && dirty()){ e.preventDefault(); e.returnValue = ''; }
 });
 
-load();
+boot();
 </script>
 </body>
 </html>
