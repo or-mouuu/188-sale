@@ -5,7 +5,8 @@ import json, html, os, re, subprocess
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 ROOT = '1vdIQlWOaWGTyM2M1WwWyyHIpYoAiBikS'
-src = json.load(open(os.path.join(BASE, 'data.json'), encoding='utf-8'))
+DATA = os.path.join(os.path.dirname(BASE), 'data', 'data.json')
+src = json.load(open(DATA, encoding='utf-8'))
 
 FILE_RE = re.compile(r'/file/d/([A-Za-z0-9_-]{20,})')
 FOLDER_RE = re.compile(r'/folders/([A-Za-z0-9_-]{20,})')

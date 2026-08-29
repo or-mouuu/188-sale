@@ -11,7 +11,7 @@ import json, os, sys
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 photos_arg = sys.argv[1] if len(sys.argv) > 1 else '-'
-dest = sys.argv[2] if len(sys.argv) > 2 else os.path.join(BASE, 'index.html')
+dest = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(BASE), 'index.html')
 if not os.path.isabs(dest):
     dest = os.path.join(BASE, dest)
 

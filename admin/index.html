@@ -1,9 +1,13 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>青年路二手拍盤點</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<style id="css">
+<style>
 :root{
   --ground:#F3F5F1; --surface:#FFFFFF; --surface-2:#FAFBF8;
   --ink:#17211E; --ink-2:#3E4A46; --muted:#727C77;
@@ -48,7 +52,6 @@ body{
   font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased;
 }
 .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
-.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
 :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 .boot{padding:80px 20px; text-align:center; color:var(--muted);
   font-family:"IBM Plex Mono",monospace; font-size:13px}
@@ -61,6 +64,7 @@ h1{font-family:"Noto Serif TC",Georgia,serif; font-weight:700;
   font-size:clamp(28px,4.6vw,44px); line-height:1.2; margin:0 0 10px;
   text-wrap:balance; letter-spacing:-.01em}
 .lede{max-width:60ch; color:var(--ink-2); margin:0 0 22px; font-size:14.5px}
+.lede a{color:var(--accent)}
 .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(132px,1fr));
   gap:1px; background:var(--line); border-top:1px solid var(--line)}
 .stat{background:var(--surface); padding:15px 20px}
@@ -72,8 +76,19 @@ h1{font-family:"Noto Serif TC",Georgia,serif; font-weight:700;
 .stat.s-ok .v{color:var(--ok)} .stat.s-alert .v{color:var(--alert)} .stat.s-warn .v{color:var(--warn)}
 .stat.s-sold .v{color:var(--muted)}
 
+/* ---- 發佈列 ---- */
+.pubbar{position:sticky; top:0; z-index:30; background:var(--surface);
+  border-bottom:1px solid var(--line); padding:9px 0}
+.pubbar .row{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.pubstate{font-size:13px; color:var(--muted); flex:1; min-width:160px}
+.pubstate b{color:var(--alert)}
+.pubstate.clean b{color:var(--ok)}
+.pubmsg{font-size:12.5px; color:var(--muted)}
+.pubmsg.err{color:var(--crit)}
+.pubmsg.ok{color:var(--ok)}
+
 /* ---- controls ---- */
-.controls{position:sticky; top:0; z-index:20; background:var(--surface);
+.controls{position:sticky; top:47px; z-index:20; background:var(--surface);
   border-bottom:1px solid var(--line); padding:11px 0}
 .ctl-row{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
 .ctl-row + .ctl-row{margin-top:8px}
@@ -101,10 +116,11 @@ button.act:hover{filter:brightness(1.1)}
 button.act.ghost{background:transparent; color:var(--accent)}
 button.act.ghost:hover{background:var(--accent-soft); filter:none}
 button.act[disabled]{opacity:.45; cursor:not-allowed}
+button.act.big{padding:7px 18px; font-size:14px}
 
 /* ---- sections ---- */
 main{padding:30px 0 60px}
-.cat{margin-bottom:32px; scroll-margin-top:100px}
+.cat{margin-bottom:32px}
 .cat-head{display:flex; align-items:baseline; gap:10px; padding-bottom:8px;
   border-bottom:2px solid var(--ink); margin-bottom:14px}
 .cat-head h2{font-family:"Noto Serif TC",Georgia,serif; font-size:20px; font-weight:700; margin:0}
@@ -122,7 +138,6 @@ main{padding:30px 0 60px}
 .card.warn{border-left-color:var(--warn)}
 .card.alert{border-left-color:var(--alert)}
 .card.crit{border-left-color:var(--crit)}
-/* 已售出：整張淡掉，品名劃線，不再是「待處理」的顏色 */
 .card.sold{border-left-color:var(--muted); background:var(--surface-2)}
 .card.sold .card-top h3{text-decoration:line-through; text-decoration-thickness:1px;
   text-underline-offset:2px; color:var(--muted)}
@@ -141,8 +156,7 @@ main{padding:30px 0 60px}
 dl.spec{display:grid; grid-template-columns:auto 1fr; gap:2px 10px; margin:0; font-size:13px}
 dl.spec dt{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.08em;
   text-transform:uppercase; color:var(--muted); padding-top:3px; white-space:nowrap}
-dl.spec dd{margin:0; color:var(--ink-2); font-variant-numeric:tabular-nums;
-  overflow-wrap:anywhere}
+dl.spec dd{margin:0; color:var(--ink-2); font-variant-numeric:tabular-nums; overflow-wrap:anywhere}
 .price{color:var(--ink); font-weight:700}
 dd.linked{color:var(--accent)}
 dd.cover{font-family:"IBM Plex Mono",monospace; font-size:12px}
@@ -151,12 +165,8 @@ dd.cover{font-family:"IBM Plex Mono",monospace; font-size:12px}
   letter-spacing:.1em; color:var(--muted)}
 .need{font-size:11.5px; padding:1.5px 7px; border-radius:2px;
   background:var(--warn-bg); color:var(--warn)}
-.need.photo{background:var(--alert-bg); color:var(--alert)}
 .foot{display:flex; align-items:center; justify-content:space-between; gap:10px;
   padding-top:8px; border-top:1px solid var(--line-2); font-size:12.5px}
-.foot a{color:var(--accent); text-decoration:none; font-weight:500;
-  border-bottom:1px solid var(--accent-soft); padding-bottom:1px}
-.foot a:hover{border-bottom-color:var(--accent)}
 .ph-link{color:var(--accent); font-weight:500; cursor:pointer}
 .ph-link:hover{text-decoration:underline}
 .nophoto{color:var(--alert); font-family:"IBM Plex Mono",monospace; font-size:11.5px}
@@ -166,28 +176,6 @@ dd.cover{font-family:"IBM Plex Mono",monospace; font-size:12px}
 .note.flag{background:var(--crit-bg); color:var(--crit)}
 .empty{text-align:center; padding:60px 20px; color:var(--muted);
   font-family:"IBM Plex Mono",monospace; font-size:13px}
-
-/* ---- conflicts ---- */
-.conflicts{border-top:1px solid var(--line); padding-top:32px; margin-top:6px; scroll-margin-top:100px}
-.conflicts h2{font-family:"Noto Serif TC",Georgia,serif; font-size:22px; margin:0 0 6px}
-.conflicts p.sub{color:var(--ink-2); margin:0 0 18px; max-width:62ch; font-size:14px}
-ul.iss{list-style:none; margin:0; padding:0; display:grid; gap:1px; background:var(--line);
-  border:1px solid var(--line); border-radius:3px; overflow:hidden}
-ul.iss li{background:var(--surface); padding:13px 16px; display:grid; gap:5px;
-  grid-template-columns:26px minmax(110px,168px) 1fr; align-items:start}
-ul.iss li.done{opacity:.45}
-ul.iss li.done .t, ul.iss li.done .b{text-decoration:line-through}
-ul.iss .tick{appearance:none; width:17px; height:17px; margin-top:4px; border-radius:3px;
-  border:1.5px solid var(--line); background:var(--surface-2); cursor:pointer}
-ul.iss .tick:checked{background:var(--ok); border-color:var(--ok)}
-ul.iss .t{font-weight:700; font-size:14.5px}
-ul.iss .b{color:var(--ink-2); font-size:13.5px}
-ul.iss .fix{grid-column:3; font-size:13px; color:var(--accent);
-  padding-left:13px; border-left:2px solid var(--accent-soft)}
-@media (max-width:640px){
-  ul.iss li{grid-template-columns:26px 1fr}
-  ul.iss .fix{grid-column:2}
-}
 
 /* ---- editor ---- */
 dialog.editor{border:none; padding:0; border-radius:4px; max-width:560px; width:calc(100% - 32px);
@@ -207,7 +195,6 @@ dialog.editor::backdrop{background:rgba(10,16,14,.55)}
 .fld .hint{font-size:11.5px; color:var(--muted)}
 .two{display:grid; grid-template-columns:1fr 1fr; gap:12px}
 @media (max-width:520px){.two{grid-template-columns:1fr}}
-/* 已售出開關 */
 .soldbar{display:flex; align-items:center; gap:12px; padding:11px 13px; border-radius:3px;
   background:var(--surface-2); border:1px solid var(--line)}
 .soldbar input{appearance:none; width:42px; height:24px; border-radius:999px; flex:none;
@@ -227,8 +214,30 @@ dialog.editor::backdrop{background:rgba(10,16,14,.55)}
 button.danger{font:inherit; font-size:13px; cursor:pointer; padding:5px 12px; border-radius:999px;
   border:1px solid var(--line); background:transparent; color:var(--crit)}
 button.danger:hover{background:var(--crit-bg)}
-.ro-note{padding:9px 14px; background:var(--warn-bg); color:var(--warn);
-  font-size:12.5px; border-radius:3px; margin-bottom:14px}
+
+/* ---- 設定（GitHub 權杖）---- */
+dialog.setup{border:none; padding:0; border-radius:4px; max-width:560px; width:calc(100% - 32px);
+  background:var(--surface); color:var(--ink); box-shadow:0 24px 60px -20px rgba(0,0,0,.5)}
+dialog.setup::backdrop{background:rgba(10,16,14,.55)}
+.setup-body{padding:18px 22px; display:grid; gap:12px; max-height:70vh; overflow-y:auto}
+.setup-body h2{font-family:"Noto Serif TC",Georgia,serif; font-size:19px; margin:0}
+.setup-body ol{margin:0; padding-left:20px; font-size:13.5px; color:var(--ink-2); line-height:1.8}
+.setup-body code{font-family:"IBM Plex Mono",monospace; font-size:12px;
+  background:var(--surface-2); padding:1px 5px; border-radius:2px}
+.setup-body a{color:var(--accent)}
+.tokstate{font-size:13px; padding:9px 12px; border-radius:3px; background:var(--surface-2);
+  border:1px solid var(--line); display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.tokstate .dot{width:8px; height:8px; border-radius:50%; background:var(--alert); flex:none}
+.tokstate.on .dot{background:var(--ok)}
+.warnbox{padding:10px 13px; border-radius:3px; background:var(--warn-bg); color:var(--warn);
+  font-size:12.5px; line-height:1.6}
+
+.banner{padding:10px 14px; border-radius:3px; font-size:13px; margin:14px 0 0;
+  display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+.banner.draft{background:var(--warn-bg); color:var(--warn)}
+.banner.err{background:var(--crit-bg); color:var(--crit)}
+.banner button{font:inherit; font-size:12.5px; cursor:pointer; padding:4px 11px;
+  border-radius:999px; border:1px solid currentColor; background:transparent; color:inherit}
 
 footer.end{border-top:1px solid var(--line); padding:22px 0 50px; color:var(--muted);
   font-size:12.5px; line-height:1.7}
@@ -238,34 +247,169 @@ footer.end code{font-family:"IBM Plex Mono",monospace; font-size:11.5px;
   background:var(--surface-2); padding:1px 5px; border-radius:2px; color:var(--ink-2)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
 </style>
+</head>
+<body>
 <div id="root"><p class="boot">載入中…</p></div>
-<script type="application/json" id="data">{"items":[{"id":1,"c":"大型傢俱","n":"單人床組","m":"宜得利","s":"108.4×197×69 cm","buy":"10,265（2024.10）","sell":"2,000（床墊+床包+床架合售）","when":"11月可搬走","ph":3,"url":"https://drive.google.com/drive/folders/1pGAZTE1LRneTKKz-7JPpdKMCOWx6vC4Z?usp=drive_link","link":"","cover":"","note":"床墊：宜得利 T-FLUM2 TW 記憶床墊（105×186×19 cm）\n床包：宜得利 伸縮床包 N FIT EVE2 DBR 單人\n床架：宜得利 床座 PACK4 NA-S (EC)","sold":false},{"id":4,"c":"大型傢俱","n":"書桌（2張）","m":"IKEA LINNMON/ADILS 染白橡木紋/黑","s":"120×60×74 cm","buy":"999（2023.08）","sell":"300","when":"明年1月可搬走","ph":0,"url":"","link":"","cover":"","note":"單張售300，兩張一起買500","sold":false},{"id":5,"c":"大型傢俱","n":"宜得利書架","m":"宜得利 N STAIN 1680 BR (EC)","s":"80×40×160 cm","buy":"3,490（2023.08）","sell":"500","when":"明年1月可搬走","ph":2,"url":"https://drive.google.com/drive/folders/1Dnq8Qe3o49DuWoSjBO4ofT738-Bnxcqp","link":"","cover":"","note":"","sold":false},{"id":6,"c":"大型傢俱","n":"宜得利皮餐椅","m":"宜得利 N SHIELD GEARIG 3 (EC)","s":"47×53.5×80 cm","buy":"2,490（2023.08）","sell":"500","when":"現在可搬走","ph":1,"url":"https://drive.google.com/file/d/1j1bY13NcGeJdbATfMwUmBKSVtQt6sOGo/view","link":"","cover":"","note":"","sold":false},{"id":7,"c":"大型傢俱","n":"餐椅（方形曲木椅）","m":"方形曲木椅（絕版）","s":"45×51×87 cm（座高45）","buy":"800（2023.08）","sell":"400","when":"現在可搬走","ph":1,"url":"https://drive.google.com/file/d/1DyO3dV7F54QfbAV1gZjAiPt2ncrXxIFy/view","link":"","cover":"","note":"","sold":false},{"id":8,"c":"大型傢俱","n":"餐桌","m":"宜得利 SI01 S 120cm 中褐色 櫸木實木貼皮","s":"120×78×70 cm","buy":"3,400（2023.08）","sell":"300","when":"明年1月可搬走","ph":3,"url":"https://drive.google.com/drive/folders/1BJHlyePN9sWgM48gNWnv_4c0xldywpfg?usp=drive_link","link":"","cover":"","note":"","sold":false},{"id":9,"c":"大型傢俱","n":"電視櫃","m":"IKEA TULLSTORP（絕版）","s":"114×35×53 cm","buy":"2,000（2023.08）","sell":"700","when":"明年1月可搬走","ph":1,"url":"https://drive.google.com/file/d/1mB_I5q_JZRF-XqQwrdR_B4ox_PkYStum/view","link":"","cover":"","note":"","sold":false},{"id":10,"c":"大型傢俱","n":"白色床邊櫃","m":"IKEA","s":"45×38×57 cm","buy":"0","sell":"0（免費贈送）","when":"10月初可搬走","ph":2,"url":"https://drive.google.com/drive/folders/1YEW0ybka6zZeuiTDEZUY2rmEYwBMjS1I","link":"","cover":"","note":"","sold":false},{"id":11,"c":"大型傢俱","n":"黑色抽屜邊櫃","m":"IKEA","s":"","buy":"0","sell":"0（免費贈送）","when":"10月初可搬走","ph":1,"url":"https://drive.google.com/file/d/113sOgMFk7nVu3LGWQ5JB8SPqIxls8rQz/view","link":"","cover":"","note":"","sold":false},{"id":12,"c":"大型傢俱","n":"沙發旁的層櫃","m":"無印良品 紙板層櫃（絕版）","s":"","buy":"700（2023.08）","sell":"100","when":"明年1月可搬走","ph":0,"url":"","link":"","cover":"","note":"","sold":false},{"id":13,"c":"大型傢俱","n":"Karimoku 雜誌架","m":"Karimoku","s":"46×22×46 cm","buy":"3000","sell":"2200","when":"10月初可搬走","ph":3,"url":"https://drive.google.com/drive/folders/1W0I7aHCHs3Frh780EI9w6yoy-0a9xxdL","link":"","cover":"","note":"照片有、清單未列","sold":false},{"id":14,"c":"大型傢俱","n":"十八紙椅凳","m":"十八紙 風琴摺疊三人長凳（棕/42CM）","s":"","buy":"","sell":"","when":"","ph":0,"url":"","link":"","cover":"","note":"清單列於「待確認」","sold":false},{"id":15,"c":"大型傢俱","n":"茶几（日本古物）","m":"1983 日本古物","s":"86.5×45×35 cm","buy":"6,800（2023.08）","sell":"4000","when":"現在可搬走","ph":3,"url":"https://drive.google.com/drive/folders/1FVH94Jak2gA-4JxjuSk8eOd-E8btxmjh","link":"","cover":"","note":"","sold":false},{"id":16,"c":"大型傢俱","n":"電腦椅","m":"","s":"","buy":"","sell":"","when":"","ph":0,"url":"","link":"","cover":"","note":"⚠️ 採購清單標為「現有（帶去新家）」，此處卻列出清，需確認","sold":false},{"id":17,"c":"家電","n":"冷氣（2台）","m":"SAMPO AM-SF36DC、AM-SF50DC","s":"","buy":"56,000（2023.08）","sell":"15,000","when":"11月可拆（需討論怎麼拆）","ph":0,"url":"","link":"","cover":"","note":"單價最高的一項，照片與拆機方式最該優先補","sold":false},{"id":18,"c":"家電","n":"除濕機1","m":"Panasonic FY12EM（2020年製，6L/日）","s":"53×29×23 cm","buy":"","sell":"2,000","when":"現在可搬走","ph":1,"url":"https://drive.google.com/file/d/1ukekhaWI7S4PHI6ye_1mxn67pS58r7n_/view","link":"","cover":"","note":"較新","sold":false},{"id":19,"c":"家電","n":"除濕機2","m":"Panasonic FY12BMW（2015年製，6L/日）","s":"53×29×23 cm","buy":"","sell":"500","when":"11月可搬走","ph":0,"url":"","link":"","cover":"","note":"較舊；1 與 2 外觀相近，建議分開拍並標貼標籤","sold":false},{"id":20,"c":"家電","n":"微波爐","m":"one amadana 17L 機械式 STWM-0101","s":"31.5×45.5×26.5 cm・11.3kg","buy":"2,000（2022）","sell":"500","when":"明年1月可搬走","ph":1,"url":"https://drive.google.com/drive/folders/140pwlGRmo-hsH-a5m2_omcNV_Ue56N6h","link":"https://www.citiesocial.com/products/17l-stwm-0101","cover":"","note":"","sold":false},{"id":21,"c":"家電","n":"烤箱","m":"TOSHIBA 32L 雙溫控旋風電烤箱 TL1-MC32AZT","s":"49.5×32.5×40.5 cm・9.1kg","buy":"3,000（2023.08）","sell":"800","when":"11-12月可搬走","ph":1,"url":"https://drive.google.com/file/d/168m0GEDpjdVBP_jCySd-a7Cp0IktWVYF/view","link":"https://tw.buy.yahoo.com/gdsale/%E6%97%A5%E6%9C%AC%E6%9D%B1%E8%8A%9DTOSHIBA-32%E5%85%AC%E5%8D%87%E9%9B%99%E6%BA%AB%E6%8E%A7%E6%97%8B%E9%A2%A8%E9%9B%BB%E7%83%A4%E7%AE%B1-TL1-MC32AZT-GR-9875905.html","cover":"","note":"","sold":false},{"id":22,"c":"家電","n":"電磁爐","m":"AmadanaONE STCI-0205 IH","s":"28×36×6.5 cm・2.5kg","buy":"2,000（2021）","sell":"500","when":"現在可搬走","ph":2,"url":"https://drive.google.com/drive/folders/1OpYiqxdhaG3RdXsKRI57oOR1YWPgLCP6","link":"","cover":"","note":"","sold":false},{"id":23,"c":"家電","n":"掛燙機","m":"Electrolux 極淨呵護700 直立式蒸氣掛燙機（燕麥白）1600W","s":"30×34×170 cm","buy":"2,990（2025）","sell":"500","when":"現在可搬走","ph":3,"url":"https://drive.google.com/drive/folders/1wR9FXISVdSM6RlwrIiRBtooitIJpkxlE","link":"","cover":"","note":"清單品牌欄可補上「Electrolux」","sold":false},{"id":24,"c":"家電","n":"真空機","m":"工業抽吸式 UV400N","s":"50×31×16 cm・12kg","buy":"","sell":"0（免費贈送）","when":"現在可搬走","ph":0,"url":"","link":"","cover":"","note":"","sold":false},{"id":25,"c":"家電","n":"簡易氣泡水機","m":"附氣瓶","s":"","buy":"","sell":"100","when":"現在可搬走","ph":1,"url":"https://drive.google.com/file/d/1p4eIwX0Q9DvjhzDbbFraudai7UTUSnL9/view","link":"","cover":"","note":"","sold":false},{"id":26,"c":"家電","n":"伊日生活 無水香氛機","m":"伊日生活","s":"","buy":"","sell":"","when":"","ph":3,"url":"https://drive.google.com/drive/folders/11LlDM_5KIrid4CgdfW3nK7W-CXTh7FRN","link":"","cover":"","note":"照片有、清單未列","sold":false},{"id":27,"c":"家電","n":"洗衣機","m":"","s":"（採購清單記 54×56×93 cm）","buy":"","sell":"","when":"","ph":0,"url":"","link":"","cover":"","note":"⚠️ 採購清單標為「現有（帶去新家）」，出清清單「待確認」也有，需確認","sold":false},{"id":28,"c":"家電","n":"無印循環扇","m":"無印良品","s":"","buy":"","sell":"","when":"","ph":3,"url":"https://drive.google.com/drive/folders/1i5kqkK5Ic7Yw8sb7q6YfqYdQWgrJKXud?usp=drive_link","link":"","cover":"","note":"","sold":false},{"id":29,"c":"家電","n":"暖爐","m":"CORONA SL6625 煤油暖爐","s":"46×46×60 cm","buy":"6990","sell":"3500","when":"現在可搬走","ph":1,"url":"https://drive.google.com/file/d/1uNTnKgIJ93s8qJcEAXwf-zQatA7P0LiS/view","link":"","cover":"","note":"","sold":false},{"id":30,"c":"家電","n":"嬰兒體重計（貓用）","m":"無品牌","s":"54×32×2.6 cm","buy":"990","sell":"300","when":"現在可搬走","ph":3,"url":"https://drive.google.com/drive/folders/1pBHDMot6hqLGd3GBVFzLjFqaSjRD1K5f","link":"https://www.momoshop.com.tw/product/13936371","cover":"","note":"","sold":false},{"id":31,"c":"家電","n":"探針溫度計","m":"","s":"","buy":"","sell":"","when":"","ph":1,"url":"https://drive.google.com/file/d/1B2cKUgyJhgFm0PkQLvHew50izbgahMKN/view","link":"","cover":"","note":"照片有、清單未列","sold":false},{"id":32,"c":"燈具","n":"紙立燈","m":"IKEA（二手購入）","s":"","buy":"300","sell":"100","when":"11月可搬走","ph":3,"url":"https://drive.google.com/drive/folders/1qwfz9sJTu9ZFPF-xRaXog0A8Y_CshOPo","link":"","cover":"","note":"清單寫「紙燈」，照片資料夾為「IKEA紙立燈」","sold":false},{"id":33,"c":"燈具","n":"IKEA 黑色桌上立燈","m":"IKEA","s":"","buy":"","sell":"","when":"","ph":2,"url":"https://drive.google.com/drive/folders/1Tpq-8VxDhfhopl61ZQ95Qg3ECPXTKNY1","link":"","cover":"","note":"照片有、清單未列","sold":false},{"id":34,"c":"燈具","n":"蠟燭掛燈","m":"","s":"","buy":"","sell":"","when":"","ph":2,"url":"https://drive.google.com/drive/folders/1MCs27rs1DxQMdEXltS54sHtXDYkSCrlW","link":"","cover":"","note":"照片有、清單未列","sold":false},{"id":35,"c":"廚房用品","n":"蘆筍鍋","m":"Resto demeyere（德國雙人牌代理）口徑16cm，可煮義大利麵","s":"口徑16cm（內）×高23cm・2kg","buy":"","sell":"","when":"","ph":0,"url":"","link":"","cover":"","note":"無盒；清單列於「待確認」","sold":false},{"id":36,"c":"廚房用品","n":"濾水壺","m":"BRITA MARELLA 2.4L 藍色","s":"2.4L","buy":"800（2023.08）","sell":"500","when":"","ph":0,"url":"","link":"","cover":"","note":"送 3 個濾芯","sold":false},{"id":37,"c":"廚房用品","n":"小砂鍋","m":"","s":"","buy":"","sell":"","when":"","ph":2,"url":"https://drive.google.com/drive/folders/1u-KDH99kCp0ZSexIV_SgZUQ27z3hihWW","link":"","cover":"","note":"照片有、清單未列","sold":false},{"id":38,"c":"廚房用品","n":"迷你蒸籠","m":"","s":"","buy":"","sell":"","when":"","ph":2,"url":"https://drive.google.com/drive/folders/1pxV2DGudX2l7ncgDvkIRhE5at66AtDiD","link":"","cover":"","note":"照片有、清單未列","sold":false},{"id":39,"c":"廚房用品","n":"鍋上白鐵蒸籠","m":"","s":"","buy":"","sell":"","when":"","ph":1,"url":"https://drive.google.com/file/d/1fq_uYuEtBJUY2-aOM_NhIHxWpdAFCCJD/view","link":"","cover":"","note":"照片有、清單未列；建議註明可搭配的鍋徑","sold":false},{"id":40,"c":"廚房用品","n":"玉子燒不沾鍋","m":"","s":"","buy":"","sell":"","when":"","ph":2,"url":"https://drive.google.com/drive/folders/13N8aR5tUhMIT86KF3IQWoHHzAOlbCDlD","link":"","cover":"","note":"照片有、清單未列","sold":false},{"id":41,"c":"廚房用品","n":"紅蘿蔔造型切片器","m":"","s":"","buy":"","sell":"","when":"","ph":2,"url":"https://drive.google.com/drive/folders/1oySvWrArKcRQxNhMHgxBmWmKVXh1YX6d","link":"","cover":"","note":"照片有、清單未列","sold":false},{"id":42,"c":"廚房用品","n":"耐熱矽膠料理配件（5入）","m":"","s":"","buy":"","sell":"","when":"","ph":1,"url":"https://drive.google.com/drive/folders/1cdEiH3XcRBSZ7pappeq95je3f2Ex4EGk","link":"","cover":"","note":"照片有、清單未列；僅 1 張","sold":false},{"id":43,"c":"廚房用品","n":"餅乾模具","m":"","s":"","buy":"","sell":"","when":"","ph":1,"url":"https://drive.google.com/file/d/1FazclVpPUwggI2kUK4tcWGKcBWlJdfrX/view","link":"","cover":"","note":"⚠️ Drive 有同名空資料夾，照片是外層單檔，建議整理歸位　規格欄請補「數量」","sold":false},{"id":44,"c":"廚房用品","n":"廚房便利垃圾桶架","m":"","s":"","buy":"","sell":"","when":"","ph":1,"url":"https://drive.google.com/file/d/1nfxCFfmuQg4IJAMmvxQJWQz0NieeWKNC/view","link":"","cover":"","note":"照片有、清單未列","sold":false},{"id":45,"c":"杯盤餐具","n":"有深度的中碗","m":"","s":"","buy":"","sell":"","when":"","ph":3,"url":"https://drive.google.com/drive/folders/1RPHydBydLDQ_PhVOZFe2VyONSjb7r831","link":"","cover":"","note":"照片有、清單未列　規格欄請補「數量」","sold":false},{"id":46,"c":"杯盤餐具","n":"日本手繪龍拉麵碗","m":"日本","s":"","buy":"","sell":"","when":"","ph":2,"url":"https://drive.google.com/drive/folders/1zLfJ_OYVuHXRFwmcsVELC2VNiTLFjCvP","link":"","cover":"","note":"照片有、清單未列　規格欄請補「數量」","sold":false},{"id":47,"c":"杯盤餐具","n":"日本中華料理八角盤","m":"日本","s":"","buy":"","sell":"","when":"","ph":3,"url":"https://drive.google.com/drive/folders/1K7D5zVTd33aGkPAgZN5JkWR0WiUcjtNO","link":"","cover":"","note":"照片有、清單未列　規格欄請補「數量」","sold":false},{"id":48,"c":"杯盤餐具","n":"古手繪花盤 1","m":"古物","s":"","buy":"","sell":"","when":"","ph":4,"url":"https://drive.google.com/drive/folders/12vGoa1mCI3wGdGgyn6nSgPfi44BI02XZ","link":"","cover":"","note":"照片有、清單未列　規格欄請補「數量」","sold":false},{"id":49,"c":"杯盤餐具","n":"古手繪花盤 2","m":"古物","s":"","buy":"","sell":"","when":"","ph":4,"url":"https://drive.google.com/drive/folders/1Z2mWG33BNHu4zBhektbEwR195Pl9h6Yh","link":"","cover":"","note":"照片有、清單未列　規格欄請補「數量」","sold":false},{"id":50,"c":"杯盤餐具","n":"古手繪花盤 3","m":"古物","s":"","buy":"","sell":"","when":"","ph":3,"url":"https://drive.google.com/drive/folders/11HbhYGCWitNgPpnqxyPbTvH4_yzBnppd","link":"","cover":"","note":"照片有、清單未列　規格欄請補「數量」","sold":false},{"id":51,"c":"杯盤餐具","n":"古藍色花腰子盤","m":"古物","s":"","buy":"","sell":"","when":"","ph":3,"url":"https://drive.google.com/drive/folders/1spngDA0ADUirJ93nMvuoNSQct1PZ-Bw5","link":"","cover":"","note":"照片有、清單未列　規格欄請補「數量」","sold":false},{"id":52,"c":"杯盤餐具","n":"Crate&Barrel 藍小圓盤","m":"Crate&Barrel","s":"","buy":"","sell":"","when":"","ph":2,"url":"https://drive.google.com/drive/folders/1EqU-UXjlLlE3p9hAllErXdT-1Afwez54","link":"","cover":"","note":"照片有、清單未列　規格欄請補「數量」","sold":false},{"id":53,"c":"杯盤餐具","n":"Crate&Barrel 白大圓盤","m":"Crate&Barrel","s":"","buy":"","sell":"","when":"","ph":3,"url":"https://drive.google.com/drive/folders/1ddfsoRkXigU9yiLMyMGVhZwA2bRgvKeM","link":"","cover":"","note":"照片有、清單未列　規格欄請補「數量」","sold":false},{"id":54,"c":"杯盤餐具","n":"Zara Home 小花盤","m":"Zara Home","s":"","buy":"","sell":"","when":"","ph":3,"url":"https://drive.google.com/drive/folders/1QuBj1FN4EWHfZTsPi1cU_UpQjR9nzgOF","link":"","cover":"","note":"照片有、清單未列　規格欄請補「數量」","sold":false},{"id":55,"c":"杯盤餐具","n":"studio M 盤子 ×2","m":"studio M'","s":"","buy":"","sell":"","when":"","ph":2,"url":"https://drive.google.com/drive/folders/1ntFYrmJZiQwIHsyZ7_g80ldAZka_diO8","link":"","cover":"","note":"照片有、清單未列；2 只","sold":false},{"id":56,"c":"杯盤餐具","n":"有腳小盤子","m":"","s":"","buy":"","sell":"","when":"","ph":2,"url":"https://drive.google.com/drive/folders/1tFw1sgtm__Nzk9bXOuIDfBTXX4ZmXvnK","link":"","cover":"","note":"照片有、清單未列　規格欄請補「數量」","sold":false},{"id":57,"c":"杯盤餐具","n":"intel 保溫杯","m":"Intel（企業贈品）","s":"","buy":"","sell":"","when":"","ph":2,"url":"https://drive.google.com/drive/folders/1P7bp7Ncr7e6ESERY65uYgX6eqmPfcE2_","link":"","cover":"","note":"照片有、清單未列　規格欄請補「容量」","sold":false},{"id":58,"c":"杯盤餐具","n":"捷元保溫杯","m":"捷元（企業贈品）","s":"","buy":"","sell":"","when":"","ph":1,"url":"https://drive.google.com/file/d/1UjVXCHvOwxweNPg8nF-lA5ArWoLxf6jQ/view","link":"","cover":"","note":"照片有、清單未列　規格欄請補「容量」","sold":false},{"id":59,"c":"杯盤餐具","n":"北臉保溫杯","m":"The North Face","s":"","buy":"","sell":"","when":"","ph":1,"url":"https://drive.google.com/file/d/1wsZ0wmgUdegIUBz0rFKxgENQBIFaVBzM/view","link":"","cover":"","note":"照片有、清單未列　規格欄請補「容量」","sold":false},{"id":60,"c":"杯盤餐具","n":"ThermoFlask 保溫壺","m":"ThermoFlask","s":"","buy":"","sell":"","when":"","ph":1,"url":"https://drive.google.com/drive/folders/1YhKOhDHSYSgo7etaBcgzVit4CJUvwipW","link":"","cover":"","note":"照片有、清單未列；僅 1 張　規格欄請補「容量」","sold":false},{"id":61,"c":"生活雜物","n":"螢幕架","m":"","s":"","buy":"","sell":"","when":"","ph":0,"url":"","link":"","cover":"","note":"","sold":false},{"id":62,"c":"大型傢俱","n":"無印鏡子","m":"無印良品","s":"","buy":"","sell":"","when":"10月初可搬走","ph":2,"url":"https://drive.google.com/file/d/1rOBtYele3kcoHJFbWyDIGCpx2_ckuXk1/view","link":"","cover":"","note":"","sold":false},{"id":63,"c":"生活雜物","n":"寵物水碗","m":"","s":"","buy":"","sell":"","when":"","ph":1,"url":"https://drive.google.com/file/d/1w-p1rbodRq124ttkFGJ09meZZ3AKxPzD/view","link":"","cover":"","note":"照片有、清單未列","sold":false},{"id":64,"c":"衣物","n":"Uiscel 黑色外套","m":"Uiscel","s":"","buy":"","sell":"","when":"","ph":3,"url":"https://drive.google.com/drive/folders/1h3d7Dlor3jTXc24IPfPF54h4tAivnnSC","link":"","cover":"","note":"照片有、清單未列　規格欄請補「尺碼」","sold":false},{"id":65,"c":"衣物","n":"軍綠古著外套","m":"古著","s":"","buy":"","sell":"","when":"","ph":1,"url":"https://drive.google.com/drive/folders/1Ys3Z5OOTZuf7Ec8P8OaIdkcQ0BGRipmN","link":"","cover":"","note":"照片有、清單未列；僅 1 張　規格欄請補「尺碼」","sold":false},{"id":66,"c":"衣物","n":"牛仔外套","m":"","s":"","buy":"","sell":"","when":"","ph":4,"url":"https://drive.google.com/drive/folders/1aHjuOoYh6uv0UPaNvnblV-kW9toeG4Xz","link":"","cover":"","note":"照片有、清單未列　規格欄請補「尺碼」","sold":false},{"id":67,"c":"衣物","n":"UQ 軍綠羽絨外套","m":"UNIQLO","s":"","buy":"","sell":"","when":"","ph":4,"url":"https://drive.google.com/drive/folders/12CFw66gMc1GmDAccSfwWC4KUYsK9eyzB","link":"","cover":"","note":"照片有、清單未列　規格欄請補「尺碼」","sold":false}],"cats":["大型傢俱","家電","燈具","廚房用品","杯盤餐具","生活雜物","衣物"],"issues":[{"t":"電腦椅","b":"採購清單把它標成「現有」＝要帶去新家，出清清單卻也列了一張。","f":"確認是同一張還是兩張；只有一張的話決定留或賣。","done":false},{"t":"洗衣機","b":"採購清單標「現有・54×56×93」要帶走，出清清單「待確認」區也有。","f":"確認是否真的要賣。","done":true},{"t":"茶几","b":"採購清單「已購買・客廳茶几 NT$6,800」，出清清單「茶几 1983日本古物 6,800（2023.08購入）」，金額一模一樣。","f":"確認是不是同一張桌子被記在兩邊。","done":true},{"t":"冷氣","b":"售價 15,000（兩台）是全場最貴的一項，但完全沒有照片，也沒寫拆機費由誰出。","f":"優先補拍室內外機，並談定拆裝費用歸屬。","done":false},{"t":"床組","b":"床墊、床包、床架分成三行，售價 2,000 是三件合計。","f":"決定要當一組上架，還是拆開賣。","done":false},{"t":"書桌","b":"備註寫「2張」，售價欄只有 300。","f":"確認 300 是單張還是兩張的價格。","done":false},{"t":"除濕機 1／2","b":"兩台 Panasonic 外觀相近，只有除濕機1 有照片。","f":"一起入鏡並貼標籤，避免買家搞混。","done":false},{"t":"餅乾模具","b":"Drive 裡有一個空的「餅乾模具」資料夾，照片其實放在外層。","f":"把照片移進資料夾，或把空資料夾刪掉。","done":true},{"t":"微波爐／烤箱／電磁爐","b":"舊機要出清，採購清單另外編了微波爐 8,000、烤箱 10,000 的預算。","f":"沒有衝突，但交貨時間要排在新機到貨之後。","done":false}],"updated":"2026-08-28"}</script>
-<script id="app">
-const HEAD = '<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">'
-  + '<title>青年路二手拍盤點<\/title>'
-  + '<link rel="preconnect" href="https://fonts.googleapis.com">'
-  + '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
-  + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700&family=IBM+Plex+Mono:wght@400;500&display=swap">';
+<dialog class="editor" id="ed"></dialog>
+<dialog class="setup" id="setup"></dialog>
 
-const D = JSON.parse(document.getElementById('data').textContent);
-const REQ = [['m','品牌／型號'],['s','規格／尺寸'],
-             ['sell','售價'],['when','可搬走時間']];
+<script>
+"use strict";
+
+const REPO = 'or-mouuu/188-sale';
+const DATA_PATH = 'data/data.json';
+const TOKEN_KEY = 'qnl-github-token';
+const DRAFT_KEY = 'qnl-draft';
+
+let D = null;                 // 目前編輯中的資料
+let remote = null;            // 線上版（用來判斷有沒有未發佈的變更）
+let fCat = 'all', fSt = 'all', fQ = '';
+let publishing = false, loadError = '';
+
+const REQ = [['m','品牌／型號'],['s','規格／尺寸'],['sell','售價'],['when','可搬走時間']];
 const SEVC = {ok:'ok', warn:'warn', alert:'alert', crit:'crit', sold:'sold'};
-const ST = {ok:'完整', warn:'缺資訊', alert:'缺照片',
-            crit:'缺照片＋缺資訊', sold:'已售出'};
+const ST = {ok:'完整', warn:'缺資訊', alert:'缺照片', crit:'缺照片＋缺資訊', sold:'已售出'};
 
-let api = null, canWrite = false, fCat = 'all', fSt = 'all', fQ = '', dirty = false;
-
+const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const missOf = d => REQ.filter(([k]) => !String(d[k] || '').trim()).map(([, l]) => l);
 function sevOf(d){
-  if (d.sold) return 'sold';                        // 賣掉了就不再算它缺什麼
+  if (d.sold) return 'sold';
   const noP = !(d.ph > 0), noI = missOf(d).length > 0;
   return noP && noI ? 'crit' : noP ? 'alert' : noI ? 'warn' : 'ok';
 }
 const live = () => D.items.filter(d => !d.sold);
+const json = o => JSON.stringify(o);
+const dirty = () => remote !== null && json(D) !== remote;
 
-/* ---------- rendering ---------- */
+/* ---------- 權杖：只存在這台裝置的瀏覽器裡 ---------- */
+const getToken = () => { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch(e){ return ''; } };
+const setToken = v => { try { v ? localStorage.setItem(TOKEN_KEY, v) : localStorage.removeItem(TOKEN_KEY); } catch(e){} };
+
+/* ---------- 草稿：避免關掉分頁就白改 ---------- */
+function saveDraft(){ try { localStorage.setItem(DRAFT_KEY, json(D)); } catch(e){} }
+function clearDraft(){ try { localStorage.removeItem(DRAFT_KEY); } catch(e){} }
+function readDraft(){
+  try { const s = localStorage.getItem(DRAFT_KEY); return s ? JSON.parse(s) : null; } catch(e){ return null; }
+}
+
+/* ---------- 載入 ---------- */
+async function load(){
+  try {
+    const r = await fetch('../data/data.json?t=' + Date.now(), {cache:'no-store'});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const fresh = await r.json();
+    remote = json(fresh);
+    const draft = readDraft();
+    D = (draft && json(draft) !== remote) ? draft : fresh;
+  } catch(e){
+    loadError = '讀不到 data/data.json（' + e.message + '）。如果 GitHub Pages 剛開啟，等一分鐘再重整。';
+    const draft = readDraft();
+    if (draft){ D = draft; }
+  }
+  if (D) render();
+  else $('root').innerHTML = '<p class="boot">' + esc(loadError) + '</p>';
+}
+
+/* ---------- 發佈 ---------- */
+async function publish(){
+  if (publishing) return;
+  const token = getToken();
+  if (!token){ openSetup(); return; }
+  publishing = true; render();
+  const msgEl = $('pubmsg');
+  const say = (t, cls) => { const m = $('pubmsg'); if (m){ m.textContent = t; m.className = 'pubmsg ' + (cls||''); } };
+  const headers = {
+    'Authorization': 'Bearer ' + token,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+  const api = 'https://api.github.com/repos/' + REPO + '/contents/' + DATA_PATH;
+  try {
+    say('讀取線上版本…');
+    const g = await fetch(api + '?t=' + Date.now(), {headers, cache:'no-store'});
+    if (g.status === 401) throw new Error('權杖無效或已過期，請到「設定」重新貼一次。');
+    if (g.status === 403) throw new Error('權杖沒有這個 repo 的寫入權限。');
+    if (!g.ok) throw new Error('讀取失敗（HTTP ' + g.status + '）');
+    const cur = await g.json();
+
+    say('上傳中…');
+    const body = {
+      message: '後台發佈：更新商品資料',
+      content: b64(JSON.stringify(D, null, 1) + '\n'),
+      sha: cur.sha
+    };
+    const p = await fetch(api, {method:'PUT', headers, body: JSON.stringify(body)});
+    if (p.status === 409) throw new Error('線上版本剛剛被別人改過，請重整頁面後再發佈一次。');
+    if (!p.ok){
+      let detail = '';
+      try { detail = (await p.json()).message || ''; } catch(e){}
+      throw new Error('發佈失敗（HTTP ' + p.status + '）' + (detail ? '：' + detail : ''));
+    }
+    remote = json(D);
+    clearDraft();
+    publishing = false; render();
+    say('已發佈。網站約 2 分鐘後更新完成。', 'ok');
+  } catch(e){
+    publishing = false; render();
+    say(e.message, 'err');
+  }
+}
+
+function b64(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+
+/* ---------- 設定視窗 ---------- */
+function openSetup(){
+  const dlg = $('setup');
+  const has = !!getToken();
+  dlg.innerHTML = `
+    <div class="setup-body">
+      <h2>發佈設定</h2>
+      <div class="tokstate ${has ? 'on' : ''}">
+        <span class="dot"></span>
+        <span>${has ? '已設定發佈權杖，可以直接按發佈。' : '尚未設定發佈權杖。'}</span>
+        ${has ? '<button class="act ghost" id="tokclear" style="margin-left:auto">清除</button>' : ''}
+      </div>
+      <p style="margin:0; font-size:13.5px; color:var(--ink-2)">
+        發佈需要一組 GitHub 權杖，讓這個頁面可以把資料寫回 repo。做法：
+      </p>
+      <ol>
+        <li>開 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub 權杖設定頁</a></li>
+        <li>Repository access 選 <code>Only select repositories</code> → 勾 <code>188-sale</code></li>
+        <li>Permissions → Repository permissions → <code>Contents</code> 設成 <code>Read and write</code></li>
+        <li>建立後把權杖貼到下面，按儲存</li>
+      </ol>
+      <div class="fld">
+        <label for="tokin">權杖</label>
+        <input id="tokin" type="password" autocomplete="off" placeholder="github_pat_…">
+        <span class="hint">只存在這台裝置的瀏覽器裡，不會上傳到任何地方。</span>
+      </div>
+      <div class="warnbox">
+        這個後台頁面本身是公開網址，任何人都打得開、看得到商品資料，但沒有你的權杖就不能發佈。
+        別人用不到的內部備註就別寫進備註欄。
+      </div>
+    </div>
+    <div class="ed-foot">
+      <button class="act" id="toksave">儲存</button>
+      <button class="act ghost" id="tokcancel">關閉</button>
+    </div>`;
+  dlg.querySelector('#tokcancel').onclick = () => dlg.close();
+  const clr = dlg.querySelector('#tokclear');
+  if (clr) clr.onclick = () => { setToken(''); dlg.close(); render(); };
+  dlg.querySelector('#toksave').onclick = () => {
+    const v = dlg.querySelector('#tokin').value.trim();
+    if (v) setToken(v);
+    dlg.close(); render();
+  };
+  dlg.showModal();
+}
+
+/* ---------- 畫面 ---------- */
 function statsHTML(){
   const it = live();
   const ok = it.filter(d => sevOf(d) === 'ok').length;
@@ -286,7 +430,7 @@ function chipsHTML(){
   const cnt = f => D.items.filter(f).length;
   const chip = (g, v, label, n, cls) =>
     `<button class="chip ${cls || ''}" data-g="${g}" data-v="${esc(v)}" aria-pressed="${
-      (g === 'cat' ? fCat : fSt) === v}">${esc(label)}<span class="n">${n}<\/span><\/button>`;
+      (g === 'cat' ? fCat : fSt) === v}">${esc(label)}<span class="n">${n}</span></button>`;
   const cats = chip('cat', 'all', '全部', D.items.length)
     + D.cats.map(c => chip('cat', c, c, cnt(d => d.c === c))).join('');
   const sts = chip('st', 'all', '全部', D.items.length)
@@ -297,26 +441,25 @@ function chipsHTML(){
 
 function cardHTML(d){
   const sev = sevOf(d), miss = d.sold ? [] : missOf(d);
-  const row = (l, v, cls) => v ? `<dt>${l}<\/dt><dd class="${cls || ''}">${esc(v)}<\/dd>` : '';
+  const row = (l, v, cls) => v ? `<dt>${l}</dt><dd class="${cls || ''}">${esc(v)}</dd>` : '';
   const spec = row('型號', d.m) + row('規格', d.s)
-    + row('售價', d.sell, 'price') + row('原價', d.buy)
-    + row('時間', d.when)
+    + row('售價', d.sell, 'price') + row('原價', d.buy) + row('時間', d.when)
     + row('網址', d.link ? d.link.replace(/^https?:\/\//, '').slice(0, 46) : '', 'linked')
     + row('封面', d.cover, 'cover');
   const needs = miss.length
-    ? `<div class="needs"><span class="need-label">還缺<\/span>${
-        miss.map(m => `<span class="need">${esc(m)}<\/span>`).join('')}<\/div>` : '';
+    ? `<div class="needs"><span class="need-label">還缺</span>${
+        miss.map(m => `<span class="need">${esc(m)}</span>`).join('')}</div>` : '';
   const note = d.note
-    ? `<div class="note${d.note.indexOf('⚠') === 0 ? ' flag' : ''}">${esc(d.note)}<\/div>` : '';
+    ? `<div class="note${d.note.indexOf('⚠') === 0 ? ' flag' : ''}">${esc(d.note)}</div>` : '';
   const foot = d.ph > 0
-    ? `<div class="foot"><span class="ph-link" data-url="${esc(d.url)}">看照片 ↗<\/span>
-       <span class="editcue">${d.ph} 張 ・ 點一下編輯<\/span><\/div>`
-    : `<div class="foot"><span class="nophoto">尚未拍照<\/span>
-       <span class="editcue">點一下編輯<\/span><\/div>`;
+    ? `<div class="foot"><span class="ph-link" data-url="${esc(d.url)}">看照片 ↗</span>
+       <span class="editcue">${d.ph} 張 ・ 點一下編輯</span></div>`
+    : `<div class="foot"><span class="nophoto">尚未拍照</span>
+       <span class="editcue">點一下編輯</span></div>`;
   return `<button type="button" class="card ${SEVC[sev]}" data-id="${d.id}">
-    <div class="card-top"><span class="idx">${String(d.id).padStart(2,'0')}<\/span>
-      <h3>${esc(d.n)}<\/h3><span class="badge ${SEVC[sev]}">${ST[sev]}<\/span><\/div>
-    ${spec ? `<dl class="spec">${spec}<\/dl>` : ''}${needs}${note}${foot}<\/button>`;
+    <div class="card-top"><span class="idx">${String(d.id).padStart(2,'0')}</span>
+      <h3>${esc(d.n)}</h3><span class="badge ${SEVC[sev]}">${ST[sev]}</span></div>
+    ${spec ? `<dl class="spec">${spec}</dl>` : ''}${needs}${note}${foot}</button>`;
 }
 
 function listHTML(){
@@ -332,133 +475,88 @@ function listHTML(){
     const np = sub.filter(d => !d.sold && !(d.ph > 0)).length;
     const ns = sub.filter(d => d.sold).length;
     const tags = [np ? `${np} 項待拍照` : '', ns ? `${ns} 項已售出` : ''].filter(Boolean);
-    out += `<section class="cat"><div class="cat-head"><h2>${esc(c)}<\/h2>
-      <span class="c">${sub.length} 項${tags.length ? ' ・ ' + tags.join(' ・ ') : ''}<\/span><\/div>
-      <div class="grid">${sub.map(cardHTML).join('')}<\/div><\/section>`;
+    out += `<section class="cat"><div class="cat-head"><h2>${esc(c)}</h2>
+      <span class="c">${sub.length} 項${tags.length ? ' ・ ' + tags.join(' ・ ') : ''}</span></div>
+      <div class="grid">${sub.map(cardHTML).join('')}</div></section>`;
   }
-  return {html: out || '<p class="empty">沒有符合條件的品項。<\/p>',
-          n: rows.length};
-}
-
-function issuesHTML(){
-  return D.issues.map((s, i) =>
-    `<li class="${s.done ? 'done' : ''}"><input class="tick" type="checkbox" data-i="${i}"
-       ${s.done ? 'checked' : ''} ${canWrite ? '' : 'disabled'}
-       aria-label="標記已處理：${esc(s.t)}">
-     <span class="t">${esc(s.t)}<\/span><span class="b">${esc(s.b)}<\/span>
-     <span class="fix">${esc(s.f)}<\/span><\/li>`).join('');
-}
-
-function shellHTML(){
-  const {cats, sts} = chipsHTML();
-  const L = listHTML();
-  const roNote = canWrite ? '' :
-    `<div class="wrap"><div class="ro-note">目前是只讀模式，編輯後不會被儲存。<\/div><\/div>`;
-  return `<header class="top">
-    <div class="wrap">
-      <p class="eyebrow">出清盤點 ・ 更新於 ${esc(D.updated)}<\/p>
-      <h1>青年路搬家二手拍<\/h1>
-      <p class="lede">把 Google Sheet 的出清清單和 Drive 的照片資料夾合起來看。
-        卡片左側的顏色就是它離「可以上架」還差多遠。
-        <strong>點任何一張卡片就能直接補資料<\/strong>，存檔後會自動存成新的一版。<\/p>
-    <\/div>
-    <div class="stats">${statsHTML()}<\/div>
-  <\/header>
-  <div class="controls"><div class="wrap">
-    <div class="ctl-row"><span class="ctl-label">分類<\/span>${cats}<\/div>
-    <div class="ctl-row"><span class="ctl-label">狀態<\/span>${sts}
-      <input id="q" class="search" type="search" placeholder="搜尋品項、品牌、規格…"
-        aria-label="搜尋品項" value="${esc(fQ)}">
-      <span class="spacer"><\/span>
-      <span class="count" id="count">顯示 ${L.n} / ${D.items.length} 項<\/span>
-      ${canWrite ? '<button class="act ghost" id="add">＋ 新增品項<\/button>' : ''}
-    <\/div>
-  <\/div><\/div>
-  ${roNote}
-  <main class="wrap"><div id="list">${L.html}<\/div>
-    <section class="conflicts">
-      <h2>開始做網站之前，這幾件先確認<\/h2>
-      <p class="sub">兩份資料互相打架、或是同一件東西被記了兩次的地方。處理完就勾起來。<\/p>
-      <ul class="iss" id="iss">${issuesHTML()}<\/ul>
-    <\/section>
-  <\/main>
-  <footer class="end"><div class="wrap">
-    資料來源：
-    <a href="https://docs.google.com/spreadsheets/d/1DvWjIy7WtkCWJJ1TP291hnVmpaWyzKXuRiyT4nVdIYQ/edit" target="_blank" rel="noopener">出清清單 Google Sheet<\/a>
-    ・
-    <a href="https://drive.google.com/drive/folders/1vdIQlWOaWGTyM2M1WwWyyHIpYoAiBikS" target="_blank" rel="noopener">照片 Drive 資料夾<\/a>
-    ・
-    <a href="https://claude.ai/code/artifact/e9dfb950-06d0-4a8b-b129-eaf990cc14bb" target="_blank" rel="noopener">買家看的前台<\/a>
-    <div class="rules">
-      <span>「缺資訊」的判定：品牌／型號、規格／尺寸、售價、可搬走時間這四項只要有一項空著就算。<\/span>
-      <span>標成<strong>已售出<\/strong>的品項不會出現在前台，也不再計入待補統計。<\/span>
-      <span>列表<strong>預覽圖<\/strong>：Drive 檔名裡含 <code>封面<\/code> 或 <code>cover<\/code>、或開頭是 <code>*<\/code> 的那張優先；都沒有就用資料夾裡的第一張。要指定別張時，把檔名填進「列表預覽圖」欄位。<\/span>
-      <span>改完資料後，跟 Claude 說一聲就會重建前台。<\/span>
-    <\/div>
-  <\/div><\/footer>
-  <dialog class="editor" id="ed"><\/dialog>`;
+  return {html: out || '<p class="empty">沒有符合條件的品項。</p>', n: rows.length};
 }
 
 function render(){
-  document.getElementById('root').innerHTML = shellHTML();
+  const {cats, sts} = chipsHTML();
+  const L = listHTML();
+  const d = dirty();
+  const hasTok = !!getToken();
+  const banner = loadError ? `<div class="banner err">${esc(loadError)}</div>` : '';
+  const draftNote = (d && readDraft())
+    ? `<div class="banner draft">這台裝置上有還沒發佈的修改。
+         <button id="dropdraft">捨棄，改用線上版</button></div>` : '';
+
+  $('root').innerHTML = `<header class="top">
+    <div class="wrap">
+      <p class="eyebrow">出清盤點</p>
+      <h1>青年路搬家二手拍</h1>
+      <p class="lede">改完資料按右上角<strong>發佈到前台</strong>，
+        買家看的網站會自動重建，約兩分鐘後生效。
+        <a href="../" target="_blank" rel="noopener">看前台</a> ・
+        <a href="https://github.com/${REPO}/actions" target="_blank" rel="noopener">看重建進度</a></p>
+      ${banner}${draftNote}
+    </div>
+    <div class="stats">${statsHTML()}</div>
+  </header>
+  <div class="pubbar"><div class="wrap row">
+    <span class="pubstate ${d ? '' : 'clean'}">
+      ${d ? '有 <b>尚未發佈</b> 的修改' : '<b>已是最新</b>，沒有待發佈的修改'}
+    </span>
+    <span class="pubmsg" id="pubmsg"></span>
+    <button class="act ghost" id="setupbtn">${hasTok ? '設定' : '設定發佈權杖'}</button>
+    <button class="act big" id="pubbtn" ${(!d || publishing) ? 'disabled' : ''}>
+      ${publishing ? '發佈中…' : '發佈到前台'}</button>
+  </div></div>
+  <div class="controls"><div class="wrap">
+    <div class="ctl-row"><span class="ctl-label">分類</span>${cats}</div>
+    <div class="ctl-row"><span class="ctl-label">狀態</span>${sts}
+      <input id="q" class="search" type="search" placeholder="搜尋品項、品牌、規格…"
+        aria-label="搜尋品項" value="${esc(fQ)}">
+      <span class="spacer"></span>
+      <span class="count" id="count">顯示 ${L.n} / ${D.items.length} 項</span>
+      <button class="act ghost" id="add">＋ 新增品項</button>
+    </div>
+  </div></div>
+  <main class="wrap"><div id="list">${L.html}</div></main>
+  <footer class="end"><div class="wrap">
+    資料來源：
+    <a href="https://drive.google.com/drive/folders/1vdIQlWOaWGTyM2M1WwWyyHIpYoAiBikS" target="_blank" rel="noopener">照片 Drive 資料夾</a>
+    ・
+    <a href="https://github.com/${REPO}" target="_blank" rel="noopener">GitHub repo</a>
+    <div class="rules">
+      <span>「缺資訊」的判定：品牌／型號、規格／尺寸、售價、可搬走時間這四項只要有一項空著就算。</span>
+      <span>標成<strong>已售出</strong>的品項不會出現在前台，也不再計入待補統計。</span>
+      <span>列表<strong>預覽圖</strong>：Drive 檔名裡含 <code>封面</code> 或 <code>cover</code>、或開頭是 <code>*</code> 的那張優先；都沒有就用資料夾裡的第一張。要指定別張時，把檔名填進「列表預覽圖」欄位。</span>
+      <span>新增照片只要放進 Drive 對應的資料夾，發佈時會自動抓下來。</span>
+    </div>
+  </div></footer>`;
 }
 
-/* ---------- publishing ---------- */
-function serialize(){
-  const css = document.getElementById('css').textContent;
-  const app = document.getElementById('app').textContent;
-  const json = JSON.stringify(D).replace(/</g, '\\u003c');
-  return '<!doctype html><html lang="zh-Hant"><head>' + HEAD
-    + '<style id="css">' + css + '<\/style><\/head><body>'
-    + '<script type="application/json" id="data">' + json + '<\/script>'
-    + '<div id="root"><p class="boot">載入中…<\/p><\/div>'
-    + '<script id="app">' + app + '<\/script><\/body><\/html>';
-}
-
-async function save(msgEl){
-  if (!api){ return false; }
-  try{
-    if (msgEl){ msgEl.textContent = '儲存中…'; msgEl.className = 'msg'; }
-    await api.publish(serialize());
-    return true;
-  }catch(e){
-    const code = e && e.code;
-    if (code === 'conflict') return true;           // 頁面會自動重新載入到最新版
-    if (code === 'not_writer' || code === 'not_granted' || code === 'not_declared'){
-      canWrite = false; render();
-      if (msgEl){ msgEl.textContent = '這個視窗沒有編輯權限。'; msgEl.className = 'msg err'; }
-      return false;
-    }
-    if (msgEl){
-      msgEl.textContent = code === 'rate_limited'
-        ? '儲存太頻繁，請稍等幾秒再試。'
-        : '儲存失敗，請再試一次。';
-      msgEl.className = 'msg err';
-    }
-    return false;
-  }
-}
-
-/* ---------- editor dialog ---------- */
+/* ---------- 編輯視窗 ---------- */
 const F = [
   ['n', '品項名稱', 'input', true, ''],
   ['c', '分類', 'select', true, ''],
   ['m', '品牌／型號', 'input', true, '例：宜得利 N STAIN 1680 BR、古物、無品牌'],
   ['s', '規格／尺寸', 'input', true, '例：80×40×160 cm、500ml、L 號、一組2只'],
-  ['sell', '售價', 'input', true, '例：500、免費贈送、含於床組合售'],
+  ['sell', '售價', 'input', true, '例：500、0（免費贈送）、含於床組合售'],
   ['buy', '原購入價', 'input', false, '選填，例：3,490（2023.08）'],
   ['when', '可搬走時間', 'input', true, '例：現在可搬走、11月可搬走'],
-  ['ph', '照片張數', 'number', false, '0 = 還沒拍'],
+  ['ph', '照片張數', 'number', false, '0 = 還沒拍。前台以 Drive 實際張數為準，這裡只是提醒用'],
   ['url', '照片連結', 'input', false, 'Drive 資料夾或檔案的網址'],
   ['link', '商品參考網址', 'input', false, '選填。填了前台會出現「看這件商品的原始頁面」'],
   ['cover', '列表預覽圖', 'input', false,
-   '選填。填 Drive 裡的檔名（例 IMG_5090.HEIC）指定哪張當預覽圖。留空的話，用檔名含「封面」或 cover、開頭是 * 的那張；再沒有就用第一張'],
-  ['note', '備註', 'textarea', false, '寫給買家看的。內部提醒也可以寫，做前台時會過濾掉']
+   '選填。填 Drive 裡的檔名（例 IMG_5090.HEIC）指定哪張當預覽圖'],
+  ['note', '備註', 'textarea', false, '寫給買家看的。這份資料是公開的，內部提醒請不要寫在這裡']
 ];
 
 function openEditor(id){
-  if (!canWrite) return;
-  const dlg = document.getElementById('ed');
+  const dlg = $('ed');
   const isNew = id == null;
   const d = isNew
     ? {id: Math.max(0, ...D.items.map(x => x.id)) + 1, c: D.cats[0], n: '', m: '', s: '',
@@ -471,78 +569,83 @@ function openEditor(id){
     let ctl;
     if (type === 'select')
       ctl = `<select name="${k}">${D.cats.map(c =>
-        `<option value="${esc(c)}"${c === d.c ? ' selected' : ''}>${esc(c)}<\/option>`).join('')}<\/select>`;
-    else if (type === 'textarea') ctl = `<textarea name="${k}">${v}<\/textarea>`;
+        `<option value="${esc(c)}"${c === d.c ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select>`;
+    else if (type === 'textarea') ctl = `<textarea name="${k}">${v}</textarea>`;
     else if (type === 'number') ctl = `<input name="${k}" type="number" min="0" value="${v}">`;
     else ctl = `<input name="${k}" type="text" value="${v}">`;
-    return `<div class="fld"><label>${label}${req ? '<span class="req">必填<\/span>' : ''}<\/label>
-      ${ctl}${hint ? `<span class="hint">${hint}<\/span>` : ''}<\/div>`;
+    return `<div class="fld"><label>${label}${req ? '<span class="req">必填</span>' : ''}</label>
+      ${ctl}${hint ? `<span class="hint">${hint}</span>` : ''}</div>`;
   };
   const byKey = k => field(F.find(f => f[0] === k));
 
   dlg.innerHTML = `<form method="dialog" id="edform">
     <div class="ed-head">
-      <h2>${isNew ? '新增品項' : esc(d.n)}<\/h2>
-      <p>四個必填欄位都填完、且照片張數大於 0，狀態就會變成「完整」。<\/p>
-    <\/div>
+      <h2>${isNew ? '新增品項' : esc(d.n)}</h2>
+      <p>改完會先存在這台裝置，按上面的「發佈到前台」才會更新網站。</p>
+    </div>
     <div class="ed-body">
       <label class="soldbar">
         <input type="checkbox" name="sold"${d.sold ? ' checked' : ''}>
-        <span class="txt"><span class="lbl">已售出<\/span>
-          <span class="sub">打開之後這件不會出現在買家看的前台<\/span><\/span>
-      <\/label>
+        <span class="txt"><span class="lbl">已售出</span>
+          <span class="sub">打開之後這件不會出現在買家看的前台</span></span>
+      </label>
       ${byKey('n')}${byKey('c')}${byKey('m')}${byKey('s')}
-      <div class="two">${byKey('sell')}${byKey('buy')}<\/div>
+      <div class="two">${byKey('sell')}${byKey('buy')}</div>
       ${byKey('when')}
-      <div class="two">${byKey('ph')}${byKey('url')}<\/div>
+      <div class="two">${byKey('ph')}${byKey('url')}</div>
       ${byKey('cover')}
       ${byKey('link')}
       ${byKey('note')}
-    <\/div>
+    </div>
     <div class="ed-foot">
-      <button class="act" type="submit" value="save">儲存<\/button>
-      <button class="act ghost" type="button" data-x="cancel">取消<\/button>
-      ${isNew ? '' : '<button class="danger" type="button" data-x="del">刪除這項<\/button>'}
-      <span class="msg" id="edmsg"><\/span>
-    <\/div><\/form>`;
+      <button class="act" type="submit" value="save">確定</button>
+      <button class="act ghost" type="button" data-x="cancel">取消</button>
+      ${isNew ? '' : '<button class="danger" type="button" data-x="del">刪除這項</button>'}
+      <span class="msg" id="edmsg"></span>
+    </div></form>`;
 
   const msg = dlg.querySelector('#edmsg');
   dlg.querySelector('[data-x="cancel"]').onclick = () => dlg.close();
   const del = dlg.querySelector('[data-x="del"]');
-  if (del) del.onclick = async () => {
+  if (del) del.onclick = () => {
     if (del.dataset.armed !== '1'){
       del.dataset.armed = '1';
       del.textContent = '再按一次確定刪除';
       return;
     }
     D.items = D.items.filter(x => x.id !== d.id);
-    if (await save(msg)){ render(); dlg.close(); } else { render(); }
+    saveDraft(); render(); dlg.close();
   };
 
-  dlg.querySelector('#edform').onsubmit = async ev => {
+  dlg.querySelector('#edform').onsubmit = ev => {
     ev.preventDefault();
     const fd = new FormData(ev.target);
     const next = Object.assign({}, d);
     for (const f of F) next[f[0]] = String(fd.get(f[0]) ?? '').trim();
     next.ph = Math.max(0, parseInt(next.ph, 10) || 0);
-    next.sold = fd.get('sold') != null;   // 沒勾的 checkbox 不會出現在 FormData
+    next.sold = fd.get('sold') != null;
     next.id = d.id;
     if (!next.n){ msg.textContent = '品項名稱不能空白。'; msg.className = 'msg err'; return; }
     if (isNew) D.items.push(next);
     else D.items[D.items.findIndex(x => x.id === d.id)] = next;
-    if (await save(msg)){ render(); dlg.close(); }
+    saveDraft(); render(); dlg.close();
   };
   dlg.showModal();
 }
 
-/* ---------- events ---------- */
-document.addEventListener('click', async e => {
+/* ---------- 事件 ---------- */
+document.addEventListener('click', e => {
   const chip = e.target.closest('button.chip');
   if (chip){
     if (chip.dataset.g === 'cat') fCat = chip.dataset.v; else fSt = chip.dataset.v;
     render(); return;
   }
   if (e.target.closest('#add')){ openEditor(null); return; }
+  if (e.target.closest('#pubbtn')){ publish(); return; }
+  if (e.target.closest('#setupbtn')){ openSetup(); return; }
+  if (e.target.closest('#dropdraft')){
+    clearDraft(); D = JSON.parse(remote); render(); return;
+  }
   const link = e.target.closest('.ph-link');
   if (link){ e.stopPropagation(); window.open(link.dataset.url, '_blank', 'noopener'); return; }
   const card = e.target.closest('button.card');
@@ -553,25 +656,16 @@ document.addEventListener('input', e => {
   if (e.target.id === 'q'){
     fQ = e.target.value;
     const L = listHTML();
-    document.getElementById('list').innerHTML = L.html;
-    document.getElementById('count').textContent =
-      `顯示 ${L.n} / ${D.items.length} 項`;
+    $('list').innerHTML = L.html;
+    $('count').textContent = `顯示 ${L.n} / ${D.items.length} 項`;
   }
 });
 
-document.addEventListener('change', async e => {
-  const t = e.target.closest('.tick');
-  if (!t || !canWrite) return;
-  D.issues[Number(t.dataset.i)].done = t.checked;
-  t.closest('li').classList.toggle('done', t.checked);
-  await save(null);
+window.addEventListener('beforeunload', e => {
+  if (D && dirty()){ e.preventDefault(); e.returnValue = ''; }
 });
 
-render();
-
-claude.use('artifact').then(a => {
-  api = a;
-  canWrite = !!a;
-  render();
-}).catch(() => {});
+load();
 </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 # 本機工作檔，不進版控
-build/orig/
-build/inline/
+orig/
+inline/
+build/photos-inline.json
 _oldver/
 .DS_Store
