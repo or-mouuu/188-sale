@@ -1,0 +1,736 @@
+<meta charset="utf-8">
+<title>青年路二手拍</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --paper:#EEF1EA; --card:#FFFFFF; --card-2:#F7F9F4;
+  --ink:#141A18; --ink-2:#3D4844; --muted:#6B756F;
+  --line:#D9DFD5; --line-2:#E9EDE5;
+  --accent:#1E5A61; --accent-ink:#FFFFFF; --accent-soft:#DBEAEA;
+  --gift:#3C6E4B; --gift-bg:#E3EFE5;
+  --shadow:0 1px 2px rgba(20,26,24,.05), 0 10px 30px -20px rgba(20,26,24,.35);
+  --shadow-lift:0 2px 6px rgba(20,26,24,.07), 0 18px 42px -22px rgba(20,26,24,.45);
+
+  /* 七個分類各有一個極淡底色，用在無照片字卡與分類標籤 */
+  --t-furniture:#E4E9DF; --t-appliance:#E1E8EA; --t-lamp:#EFE9DA;
+  --t-kitchen:#E6E5DD; --t-tableware:#E7E4E8; --t-misc:#E2E7E4; --t-clothes:#EAE4E1;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#101413; --card:#191F1D; --card-2:#1E2523;
+    --ink:#E8ECE6; --ink-2:#B4BDB7; --muted:#87918B;
+    --line:#293230; --line-2:#212927;
+    --accent:#7FBEC1; --accent-ink:#0E1A1B; --accent-soft:#1C3335;
+    --gift:#82C296; --gift-bg:#1A2C21;
+    --shadow:0 1px 2px rgba(0,0,0,.45), 0 10px 30px -20px rgba(0,0,0,.8);
+    --shadow-lift:0 2px 6px rgba(0,0,0,.5), 0 18px 42px -22px rgba(0,0,0,.9);
+    --t-furniture:#242C26; --t-appliance:#212B2D; --t-lamp:#2C2820;
+    --t-kitchen:#272722; --t-tableware:#282430; --t-misc:#222A27; --t-clothes:#2B2523;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101413; --card:#191F1D; --card-2:#1E2523;
+  --ink:#E8ECE6; --ink-2:#B4BDB7; --muted:#87918B;
+  --line:#293230; --line-2:#212927;
+  --accent:#7FBEC1; --accent-ink:#0E1A1B; --accent-soft:#1C3335;
+  --gift:#82C296; --gift-bg:#1A2C21;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 10px 30px -20px rgba(0,0,0,.8);
+  --shadow-lift:0 2px 6px rgba(0,0,0,.5), 0 18px 42px -22px rgba(0,0,0,.9);
+  --t-furniture:#242C26; --t-appliance:#212B2D; --t-lamp:#2C2820;
+  --t-kitchen:#272722; --t-tableware:#282430; --t-misc:#222A27; --t-clothes:#2B2523;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  padding-bottom:96px;
+}
+.wrap{max-width:1240px; margin:0 auto; padding:0 20px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:2px}
+button{font:inherit; color:inherit; cursor:pointer}
+a{color:var(--accent)}
+
+/* ============ 公告板式的抬頭 ============ */
+header.top{background:var(--card); border-bottom:1px solid var(--line)}
+.top__inner{padding:38px 0 26px}
+h1{font-family:"Noto Serif TC",Georgia,serif; font-weight:700;
+  font-size:clamp(30px,5.2vw,50px); line-height:1.15; margin:0 0 14px;
+  letter-spacing:-.015em; text-wrap:balance}
+/* ============ 篩選列 ============ */
+.tools{position:sticky; top:0; z-index:30; background:var(--paper);
+  border-bottom:1px solid var(--line); padding:12px 0}
+.tools__inner{display:flex; gap:14px; align-items:center; flex-wrap:wrap}
+.chips{display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; flex:1 1 320px;
+  padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap; border:1px solid var(--line); background:var(--card);
+  color:var(--ink-2); padding:6px 14px; border-radius:999px; font-size:13.5px;
+  transition:background .15s, border-color .15s, color .15s}
+.chip:hover{border-color:var(--accent); color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent);
+  color:var(--accent-ink); font-weight:500}
+.chip .n{font-family:"IBM Plex Mono",monospace; font-size:11px; opacity:.65; margin-left:6px}
+.tools__right{display:flex; gap:8px; align-items:center; flex:0 0 auto}
+.search{position:relative}
+.search input{border:1px solid var(--line); background:var(--card); color:var(--ink);
+  border-radius:999px; padding:7px 14px 7px 32px; font-size:13.5px; width:170px;
+  transition:width .2s, border-color .15s}
+.search input:focus{width:210px; border-color:var(--accent); outline:none}
+.search svg{position:absolute; left:11px; top:50%; transform:translateY(-50%);
+  width:14px; height:14px; stroke:var(--muted); fill:none; stroke-width:2}
+select.sort{border:1px solid var(--line); background:var(--card); color:var(--ink-2);
+  border-radius:999px; padding:7px 12px; font-size:13.5px}
+
+/* ============ 商品格狀陣列 ============ */
+main{padding:28px 0 60px}
+.count{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted);
+  letter-spacing:.06em; margin:0 0 16px}
+.grid{display:grid; gap:22px;
+  grid-template-columns:repeat(auto-fill,minmax(228px,1fr))}
+.card{background:var(--card); border:1px solid var(--line-2); border-radius:5px;
+  overflow:hidden; text-align:left; padding:0; display:flex; flex-direction:column;
+  box-shadow:var(--shadow); transition:box-shadow .18s ease, transform .18s ease;
+  position:relative}
+.card:hover{box-shadow:var(--shadow-lift); transform:translateY(-2px)}
+.card__media{aspect-ratio:1/1; background:var(--card-2); overflow:hidden; position:relative;
+  border-bottom:1px solid var(--line-2)}
+.card__media img{width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .4s ease}
+.card:hover .card__media img{transform:scale(1.035)}
+
+/* 沒有照片的商品：分類色字卡，而不是灰色破洞 */
+.tile{width:100%; height:100%; display:flex; flex-direction:column;
+  justify-content:space-between; padding:16px 16px 18px; background:var(--tint)}
+.tile__cat{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.16em;
+  color:var(--muted); text-transform:uppercase}
+.tile__name{font-family:"Noto Serif TC",Georgia,serif; font-weight:600; font-size:22px;
+  line-height:1.3; color:var(--ink-2); text-wrap:balance}
+.tile__hint{font-size:11px; color:var(--muted); letter-spacing:.04em}
+
+/* 資訊區只留品名與售價，行距壓到最小，空間讓給照片 */
+.card__body{padding:7px 12px 8px; display:flex; flex-direction:column; gap:0; flex:1}
+.card__name{font-size:14px; font-weight:500; line-height:1.3; margin:0;
+  display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden}
+.card__price{margin-top:auto; font-family:"IBM Plex Mono",monospace;
+  font-size:15px; font-weight:500; line-height:1.3; font-variant-numeric:tabular-nums}
+.card__price.is-open{font-size:12.5px; font-weight:400; color:var(--muted);
+  font-family:"Noto Sans TC",sans-serif}
+.card__price.is-gift{color:var(--gift)}
+.badge{position:absolute; top:10px; right:10px; z-index:2;
+  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.08em;
+  padding:3px 8px; border-radius:999px; background:var(--gift-bg); color:var(--gift)}
+.card.is-picked{border-color:var(--accent)}
+.card.is-picked::after{content:"已加入"; position:absolute; top:10px; left:10px; z-index:2;
+  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.08em;
+  padding:3px 8px; border-radius:999px; background:var(--accent); color:var(--accent-ink)}
+.photocount{position:absolute; bottom:8px; right:8px; z-index:2;
+  font-family:"IBM Plex Mono",monospace; font-size:10px; padding:2px 7px; border-radius:999px;
+  background:rgba(20,26,24,.62); color:#fff; letter-spacing:.05em}
+.empty{padding:60px 0; text-align:center; color:var(--muted); font-size:14px}
+
+/* ============ 商品詳細 pop-up ============ */
+.scrim{position:fixed; inset:0; z-index:100; background:rgba(20,26,24,.55);
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  opacity:0; pointer-events:none; transition:opacity .18s ease}
+.scrim.is-open{opacity:1; pointer-events:auto}
+.modal{background:var(--card); border-radius:6px; max-width:940px; width:100%;
+  max-height:min(92vh,860px); overflow:auto; box-shadow:var(--shadow-lift);
+  transform:translateY(8px); transition:transform .18s ease}
+.scrim.is-open .modal{transform:none}
+.modal__grid{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}
+@media (max-width:760px){ .modal__grid{grid-template-columns:1fr} }
+.gallery{background:var(--card-2); border-right:1px solid var(--line-2);
+  display:flex; flex-direction:column}
+@media (max-width:760px){ .gallery{border-right:none; border-bottom:1px solid var(--line-2)} }
+.gallery__main{aspect-ratio:1/1; overflow:hidden; background:var(--card-2)}
+.gallery__main img{width:100%; height:100%; object-fit:contain; display:block}
+.gallery__tile{width:100%; height:100%; display:flex; flex-direction:column;
+  justify-content:center; align-items:center; gap:8px; padding:28px; text-align:center;
+  background:var(--tint)}
+.gallery__tile .t{font-family:"Noto Serif TC",Georgia,serif; font-weight:600; font-size:26px;
+  color:var(--ink-2); line-height:1.3}
+.gallery__tile .s{font-size:12px; color:var(--muted)}
+.thumbs{display:flex; gap:7px; padding:10px 12px; overflow-x:auto; scrollbar-width:none}
+.thumbs::-webkit-scrollbar{display:none}
+.thumb{width:52px; height:52px; flex:0 0 auto; border-radius:3px; overflow:hidden;
+  border:1.5px solid transparent; background:none; padding:0}
+.thumb img{width:100%; height:100%; object-fit:cover; display:block}
+.thumb[aria-current="true"]{border-color:var(--accent)}
+
+.detail{padding:26px 28px 28px; display:flex; flex-direction:column; gap:0}
+.detail__cat{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.16em;
+  color:var(--accent); text-transform:uppercase; margin:0 0 8px}
+.detail h2{font-family:"Noto Serif TC",Georgia,serif; font-weight:700; font-size:25px;
+  line-height:1.3; margin:0 0 4px; text-wrap:balance}
+.detail__model{color:var(--muted); font-size:13px; margin:0 0 18px; line-height:1.5}
+.priceline{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+  padding:14px 0 16px; border-top:1px solid var(--line-2); border-bottom:1px solid var(--line-2)}
+.priceline__now{font-family:"IBM Plex Mono",monospace; font-size:30px; font-weight:500;
+  font-variant-numeric:tabular-nums; line-height:1}
+.priceline__now.is-open{font-size:19px; font-family:"Noto Sans TC",sans-serif;
+  color:var(--muted)}
+.priceline__now.is-gift{color:var(--gift)}
+.priceline__was{font-size:13px; color:var(--muted)}
+.priceline__was s{text-decoration-thickness:1px; text-underline-offset:2px}
+.pricenote{font-size:12.5px; color:var(--muted); margin:8px 0 0}
+dl.spec{margin:18px 0 0; display:grid; grid-template-columns:auto 1fr;
+  gap:9px 18px; font-size:13.5px; align-items:baseline}
+dl.spec dt{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.12em;
+  color:var(--muted); text-transform:uppercase; white-space:nowrap; padding-top:2px}
+dl.spec dd{margin:0; color:var(--ink-2); line-height:1.55; white-space:pre-line}
+.extlink{display:inline-flex; align-items:center; gap:6px; margin-top:18px; font-size:13.5px;
+  color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft);
+  padding-bottom:2px; width:fit-content}
+.extlink:hover{border-bottom-color:var(--accent)}
+.extlink svg{width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2}
+.detail__actions{margin-top:24px; display:flex; gap:10px}
+.btn{border:1px solid var(--accent); background:var(--accent); color:var(--accent-ink);
+  border-radius:4px; padding:11px 20px; font-size:14px; font-weight:500;
+  transition:filter .15s, background .15s}
+.btn:hover{filter:brightness(1.08)}
+.btn--ghost{background:transparent; color:var(--accent)}
+.btn--ghost:hover{background:var(--accent-soft); filter:none}
+.btn--wide{flex:1}
+.modal__close{position:sticky; top:0; float:right; z-index:3; margin:10px 10px 0 0;
+  width:32px; height:32px; border-radius:50%; border:1px solid var(--line);
+  background:var(--card); color:var(--ink-2); font-size:17px; line-height:1;
+  display:flex; align-items:center; justify-content:center}
+.modal__close:hover{border-color:var(--accent); color:var(--accent)}
+
+/* ============ 想買清單 ============ */
+.dock{position:fixed; left:0; right:0; bottom:0; z-index:60; background:var(--card);
+  border-top:1px solid var(--line); box-shadow:0 -8px 30px -22px rgba(20,26,24,.5);
+  transform:translateY(105%); transition:transform .22s ease}
+.dock.is-on{transform:none}
+.dock__bar{display:flex; align-items:center; gap:14px; padding:13px 0}
+.dock__sum{flex:1; min-width:0; font-size:13.5px; color:var(--ink-2)}
+.dock__sum b{font-family:"IBM Plex Mono",monospace; font-size:17px; font-weight:500;
+  color:var(--ink); font-variant-numeric:tabular-nums}
+.dock__sum .sub{display:block; font-size:12px; color:var(--muted)}
+
+.sheet{position:fixed; inset:0; z-index:90; background:rgba(20,26,24,.55);
+  display:flex; align-items:flex-end; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .18s ease}
+.sheet.is-open{opacity:1; pointer-events:auto}
+.sheet__panel{background:var(--card); width:100%; max-width:640px; border-radius:8px 8px 0 0;
+  max-height:88vh; overflow:auto; padding:24px 24px 28px;
+  transform:translateY(14px); transition:transform .2s ease}
+.sheet.is-open .sheet__panel{transform:none}
+@media (min-width:700px){
+  .sheet{align-items:center; padding:24px}
+  .sheet__panel{border-radius:8px}
+}
+.sheet__head{display:flex; align-items:center; justify-content:space-between; gap:12px;
+  margin-bottom:4px}
+.sheet__head h2{font-family:"Noto Serif TC",Georgia,serif; font-size:21px; font-weight:700;
+  margin:0}
+.sheet__note{font-size:12.5px; color:var(--muted); margin:0 0 18px}
+.picks{list-style:none; margin:0 0 4px; padding:0; border-top:1px solid var(--line-2)}
+.picks li{display:flex; align-items:center; gap:12px; padding:11px 0;
+  border-bottom:1px solid var(--line-2)}
+.picks__name{flex:1; min-width:0; font-size:14px; line-height:1.45}
+.picks__name span{display:block; font-size:11.5px; color:var(--muted);
+  font-family:"IBM Plex Mono",monospace}
+.picks__price{font-family:"IBM Plex Mono",monospace; font-size:14px;
+  font-variant-numeric:tabular-nums; white-space:nowrap}
+.picks__price.is-open{font-size:12px; color:var(--muted); font-family:"Noto Sans TC",sans-serif}
+.picks__del{border:none; background:none; color:var(--muted); font-size:18px; line-height:1;
+  padding:2px 4px; border-radius:3px}
+.picks__del:hover{color:#B1424F; background:var(--line-2)}
+.total{display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+  padding:14px 0 4px; font-size:14px}
+.total b{font-family:"IBM Plex Mono",monospace; font-size:22px; font-weight:500;
+  font-variant-numeric:tabular-nums}
+.total .sub{font-size:12px; color:var(--muted)}
+.fields{display:grid; gap:10px; margin:18px 0 0}
+@media (min-width:520px){ .fields{grid-template-columns:1fr 1fr} }
+.field label{display:block; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:5px}
+.field input{width:100%; border:1px solid var(--line); background:var(--card-2);
+  color:var(--ink); border-radius:4px; padding:9px 11px; font-size:14px}
+.field input:focus{border-color:var(--accent); outline:none; background:var(--card)}
+.field--full{grid-column:1/-1}
+.preview{margin:16px 0 0}
+.preview summary{font-size:12.5px; color:var(--muted); cursor:pointer; list-style:none}
+.preview summary::-webkit-details-marker{display:none}
+.preview summary::before{content:"▸ "; color:var(--accent)}
+.preview[open] summary::before{content:"▾ "}
+.preview textarea{width:100%; margin-top:9px; min-height:190px; border:1px solid var(--line);
+  background:var(--card-2); color:var(--ink-2); border-radius:4px; padding:11px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:12px; line-height:1.6;
+  resize:vertical}
+.handoff{margin:18px 0 0; padding:15px 16px; border-radius:5px; background:var(--accent-soft);
+  font-size:13.5px; line-height:1.6; color:var(--ink-2)}
+.handoff b{color:var(--ink)}
+.handoff .contact{font-family:"IBM Plex Mono",monospace; font-size:13px; color:var(--accent);
+  text-decoration:none; border-bottom:1px solid var(--accent); padding-bottom:1px}
+.sheet__actions{display:flex; gap:10px; margin-top:18px}
+.toast{position:fixed; left:50%; bottom:112px; transform:translate(-50%,10px); z-index:120;
+  background:var(--ink); color:var(--paper); padding:10px 18px; border-radius:999px;
+  font-size:13.5px; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s}
+.toast.is-on{opacity:1; transform:translate(-50%,0)}
+
+footer.end{border-top:1px solid var(--line); padding:26px 0 40px; color:var(--muted);
+  font-size:12.5px; line-height:1.75}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important; animation:none!important}
+  .card:hover{transform:none}
+  .card:hover .card__media img{transform:none}
+}
+</style>
+
+<header class="top">
+  <div class="wrap top__inner">
+    <h1>青年路搬家二手拍</h1>
+    <p class="notice">看到喜歡的就點進去看細節，加進「想買清單」之後一鍵複製傳給我們，會有專人跟你聯繫付款和取貨方式。網站上不收錢、不用結帳。</p>
+  </div>
+</header>
+
+<div class="tools">
+  <div class="wrap tools__inner">
+    <div class="chips" id="chips" role="group" aria-label="商品分類"></div>
+    <div class="tools__right">
+      <div class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="搜尋品名或品牌" aria-label="搜尋商品">
+      </div>
+      <select class="sort" id="sort" aria-label="排序方式">
+        <option value="default">預設排序</option>
+        <option value="asc">價格低到高</option>
+        <option value="desc">價格高到低</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty" hidden>找不到符合的商品，換個關鍵字或分類試試。</p>
+</main>
+
+<footer class="end wrap">
+  <p>青年路搬家二手拍 · 商品資料更新於 <span id="updated" class="mono"></span><br>
+  照片為實品拍攝，二手商品難免有使用痕跡，介意者請先詢問。全部商品皆為自取或自行安排搬運。</p>
+</footer>
+
+<!-- 商品詳細 -->
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="mTitle" hidden>
+  <div class="modal" id="modal">
+    <button class="modal__close" id="mClose" aria-label="關閉">×</button>
+    <div class="modal__grid" id="mBody"></div>
+  </div>
+</div>
+
+<!-- 想買清單常駐列 -->
+<div class="dock" id="dock">
+  <div class="wrap dock__bar">
+    <div class="dock__sum" id="dockSum"></div>
+    <button class="btn" id="dockOpen">查看想買清單</button>
+  </div>
+</div>
+
+<!-- 想買清單面板 -->
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sTitle" hidden>
+  <div class="sheet__panel">
+    <div class="sheet__head">
+      <h2 id="sTitle">想買清單</h2>
+      <button class="modal__close" id="sClose" aria-label="關閉">×</button>
+    </div>
+    <p class="sheet__note">這裡不會扣款，也不用留信用卡。填好下面的聯絡方式，複製清單傳給我們就好。</p>
+    <ul class="picks" id="picks"></ul>
+    <div class="total" id="total"></div>
+
+    <div class="fields">
+      <div class="field">
+        <label for="fName">姓名或暱稱</label>
+        <input id="fName" type="text" placeholder="怎麼稱呼你">
+      </div>
+      <div class="field">
+        <label for="fContact">聯絡方式</label>
+        <input id="fContact" type="text" placeholder="LINE ID 或手機">
+      </div>
+      <div class="field field--full">
+        <label for="fWhen">方便取貨的時間</label>
+        <input id="fWhen" type="text" placeholder="例：11 月的週末白天">
+      </div>
+    </div>
+
+    <details class="preview">
+      <summary>看看會複製什麼內容</summary>
+      <textarea id="msg" readonly aria-label="要複製的訊息"></textarea>
+    </details>
+
+    <!-- ▼▼ 聯絡方式 ▼▼ -->
+    <div class="handoff">
+      <b>複製之後，把清單用 LINE 傳給我們：</b><br>
+      <a class="contact" href="https://line.me/ti/p/~ksh000843" target="_blank" rel="noopener noreferrer">LINE ID：ksh000843</a><br>
+      收到後我們會跟你確認商品、金額和取貨時間。
+    </div>
+    <!-- ▲▲ 聯絡方式 ▲▲ -->
+
+    <div class="sheet__actions">
+      <button class="btn btn--wide" id="copyBtn">一鍵複製想買清單</button>
+      <button class="btn btn--ghost" id="clearBtn">清空</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="application/json" id="shopdata">__DATA__</script>
+<script type="application/json" id="shopphotos">__PHOTOS__</script>
+
+<script>
+(function(){
+  "use strict";
+  var DATA   = JSON.parse(document.getElementById('shopdata').textContent);
+  var PHOTOS = JSON.parse(document.getElementById('shopphotos').textContent);
+  var ITEMS  = DATA.items;
+
+  var TINT = {
+    '大型傢俱':'var(--t-furniture)', '家電':'var(--t-appliance)', '燈具':'var(--t-lamp)',
+    '廚房用品':'var(--t-kitchen)', '杯盤餐具':'var(--t-tableware)',
+    '生活雜物':'var(--t-misc)', '衣物':'var(--t-clothes)'
+  };
+  var STORE = 'qnl-secondhand-picks';
+
+  var state = { cat:'全部', q:'', sort:'default', picks:[] };
+  try {
+    var saved = JSON.parse(localStorage.getItem(STORE) || '[]');
+    if (Array.isArray(saved)) state.picks = saved.filter(function(id){
+      return ITEMS.some(function(it){ return it.id === id; });
+    });
+  } catch(e){}
+
+  var $ = function(id){ return document.getElementById(id); };
+  var esc = function(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  };
+  var nt = function(n){ return 'NT$' + n.toLocaleString('en-US'); };
+  var photosOf = function(id){ return PHOTOS[id] || []; };
+  // 照片可以是一個網址字串，也可以是 {t:縮圖, f:大圖}
+  var pick = function(p, k){ return typeof p === 'string' ? p : p[k]; };
+
+  /* ---------- 價格顯示 ---------- */
+  function priceText(it){
+    if (it.price === 0) return { text:'免費贈送', cls:'is-gift' };
+    if (it.price == null) return { text: it.priceNote || '價格洽談', cls:'is-open' };
+    return { text: nt(it.price), cls:'' };
+  }
+
+  /* ---------- 分類列 ---------- */
+  function renderChips(){
+    var cats = ['全部'].concat(DATA.cats);
+    $('chips').innerHTML = cats.map(function(c){
+      var n = c === '全部' ? ITEMS.length
+            : ITEMS.filter(function(i){ return i.cat === c; }).length;
+      return '<button class="chip" data-cat="' + esc(c) + '" aria-pressed="' +
+             (state.cat === c) + '">' + esc(c) + '<span class="n">' + n + '</span></button>';
+    }).join('');
+  }
+
+  /* ---------- 篩選與排序 ---------- */
+  function visible(){
+    var q = state.q.trim().toLowerCase();
+    var list = ITEMS.filter(function(it){
+      if (state.cat !== '全部' && it.cat !== state.cat) return false;
+      if (!q) return true;
+      return (it.name + ' ' + it.model + ' ' + it.cat).toLowerCase().indexOf(q) > -1;
+    });
+    if (state.sort !== 'default'){
+      var dir = state.sort === 'asc' ? 1 : -1;
+      list = list.slice().sort(function(a, b){
+        // 未定價的一律排在最後，不參與高低比較
+        if (a.price == null && b.price == null) return a.id - b.id;
+        if (a.price == null) return 1;
+        if (b.price == null) return -1;
+        return (a.price - b.price) * dir;
+      });
+    }
+    return list;
+  }
+
+  /* ---------- 商品卡 ---------- */
+  function cardHTML(it){
+    var ph = photosOf(it.id);
+    var p = priceText(it);
+    var picked = state.picks.indexOf(it.id) > -1;
+    var media = ph.length
+      ? '<img src="' + pick(ph[0], 't') + '" alt="' + esc(it.name) + '" loading="lazy" decoding="async">' +
+        (ph.length > 1 ? '<span class="photocount">' + ph.length + ' 張</span>' : '')
+      : '<div class="tile" style="--tint:' + (TINT[it.cat] || 'var(--card-2)') + '">' +
+          '<span class="tile__cat">' + esc(it.cat) + '</span>' +
+          '<span class="tile__name">' + esc(it.name) + '</span>' +
+          '<span class="tile__hint">照片準備中</span>' +
+        '</div>';
+    return '<button class="card' + (picked ? ' is-picked' : '') + '" data-id="' + it.id +
+             '" aria-label="' + esc(it.name) + '，' + esc(p.text) + '，查看詳細">' +
+      (it.price === 0 ? '<span class="badge">免費</span>' : '') +
+      '<div class="card__media">' + media + '</div>' +
+      '<div class="card__body">' +
+        '<p class="card__name">' + esc(it.name) + '</p>' +
+        '<p class="card__price ' + p.cls + '">' + esc(p.text) + '</p>' +
+      '</div></button>';
+  }
+
+  function renderGrid(){
+    var list = visible();
+    $('grid').innerHTML = list.map(cardHTML).join('');
+    $('empty').hidden = list.length > 0;
+    $('count').textContent = state.cat === '全部'
+      ? '共 ' + list.length + ' 件商品'
+      : state.cat + '　' + list.length + ' 件';
+  }
+
+  /* ---------- 商品詳細 pop-up ---------- */
+  var openId = null, lastFocus = null;
+
+  function detailHTML(it){
+    var ph = photosOf(it.id);
+    var p = priceText(it);
+    var picked = state.picks.indexOf(it.id) > -1;
+
+    var gallery = ph.length
+      ? '<div class="gallery__main"><img id="gMain" src="' + pick(ph[0], 'f') + '" alt="' + esc(it.name) + '"></div>' +
+        (ph.length > 1
+          ? '<div class="thumbs">' + ph.map(function(src, i){
+              return '<button class="thumb" data-i="' + i + '" aria-current="' + (i === 0) +
+                     '" aria-label="第 ' + (i + 1) + ' 張照片"><img src="' + pick(src, 't') +
+                     '" alt="" loading="lazy"></button>';
+            }).join('') + '</div>'
+          : '')
+      : '<div class="gallery__main"><div class="gallery__tile" style="--tint:' +
+          (TINT[it.cat] || 'var(--card-2)') + '"><span class="t">' + esc(it.name) +
+          '</span><span class="s">這件還沒拍照，想看實品可以直接問我們</span></div></div>';
+
+    var rows = '';
+    if (it.size)  rows += '<dt>尺寸</dt><dd>' + esc(it.size) + '</dd>';
+    if (it.when)  rows += '<dt>可取貨</dt><dd>' + esc(it.when) + '</dd>';
+    if (it.note)  rows += '<dt>備註</dt><dd>' + esc(it.note) + '</dd>';
+
+    var was = '';
+    if (it.orig) {
+      was = '<span class="priceline__was">原價 <s>' + nt(it.orig) + '</s>' +
+            (it.origWhen ? '　' + esc(it.origWhen) + ' 購入' : '') + '</span>';
+    } else if (it.origWhen) {
+      was = '<span class="priceline__was">' + esc(it.origWhen) + ' 購入</span>';
+    }
+
+    return '<div class="gallery">' + gallery + '</div>' +
+      '<div class="detail">' +
+        '<p class="detail__cat">' + esc(it.cat) + '</p>' +
+        '<h2 id="mTitle">' + esc(it.name) + '</h2>' +
+        (it.model ? '<p class="detail__model">' + esc(it.model) + '</p>' : '') +
+        '<div class="priceline">' +
+          '<span class="priceline__now ' + p.cls + '">' + esc(p.text) + '</span>' + was +
+        '</div>' +
+        (it.priceNote && it.price
+          ? '<p class="pricenote">' + esc(it.priceNote) + '</p>' : '') +
+        (rows ? '<dl class="spec">' + rows + '</dl>' : '') +
+        (it.link
+          ? '<a class="extlink" href="' + esc(it.link) + '" target="_blank" rel="noopener noreferrer">' +
+            '看這件商品的原始頁面' +
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>'
+          : '') +
+        '<div class="detail__actions">' +
+          '<button class="btn btn--wide' + (picked ? ' btn--ghost' : '') +
+            '" id="mPick" data-id="' + it.id + '">' +
+            (picked ? '從想買清單移除' : '加入想買清單') + '</button>' +
+        '</div>' +
+      '</div>';
+  }
+
+  function openItem(id){
+    var it = ITEMS.filter(function(i){ return i.id === id; })[0];
+    if (!it) return;
+    openId = id;
+    lastFocus = document.activeElement;
+    $('mBody').innerHTML = detailHTML(it);
+    $('scrim').hidden = false;
+    requestAnimationFrame(function(){ $('scrim').classList.add('is-open'); });
+    $('modal').scrollTop = 0;
+    $('mClose').focus();
+  }
+  function closeItem(){
+    openId = null;
+    $('scrim').classList.remove('is-open');
+    setTimeout(function(){ $('scrim').hidden = true; }, 180);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  /* ---------- 想買清單 ---------- */
+  function save(){
+    try { localStorage.setItem(STORE, JSON.stringify(state.picks)); } catch(e){}
+  }
+  function toggle(id){
+    var i = state.picks.indexOf(id);
+    if (i > -1) state.picks.splice(i, 1); else state.picks.push(id);
+    save(); renderGrid(); renderDock(); renderSheet();
+    if (openId === id) $('mBody').innerHTML = detailHTML(
+      ITEMS.filter(function(x){ return x.id === id; })[0]);
+  }
+  function pickedItems(){
+    return state.picks.map(function(id){
+      return ITEMS.filter(function(i){ return i.id === id; })[0];
+    }).filter(Boolean);
+  }
+  function totals(){
+    var list = pickedItems(), sum = 0, open = 0;
+    list.forEach(function(it){
+      if (it.price == null) open++; else sum += it.price;
+    });
+    return { n:list.length, sum:sum, open:open };
+  }
+
+  function renderDock(){
+    var t = totals();
+    $('dock').classList.toggle('is-on', t.n > 0);
+    $('dockSum').innerHTML = '已選 ' + t.n + ' 件　<b>' + nt(t.sum) + '</b>' +
+      (t.open ? '<span class="sub">另有 ' + t.open + ' 件價格洽談</span>' : '');
+  }
+
+  function renderSheet(){
+    var list = pickedItems(), t = totals();
+    $('picks').innerHTML = list.length
+      ? list.map(function(it){
+          var p = priceText(it);
+          return '<li><span class="picks__name">' + esc(it.name) +
+            '<span>' + esc(it.cat) + '</span></span>' +
+            '<span class="picks__price ' + p.cls + '">' + esc(p.text) + '</span>' +
+            '<button class="picks__del" data-del="' + it.id +
+            '" aria-label="移除 ' + esc(it.name) + '">×</button></li>';
+        }).join('')
+      : '<li><span class="picks__name" style="color:var(--muted)">還沒有選任何商品</span></li>';
+    $('total').innerHTML = '<span>小計' +
+      (t.open ? '<span class="sub">　（' + t.open + ' 件價格洽談，未計入）</span>' : '') +
+      '</span><b>' + nt(t.sum) + '</b>';
+    $('msg').value = buildMessage();
+  }
+
+  function buildMessage(){
+    var list = pickedItems(), t = totals();
+    var lines = ['【青年路搬家二手拍・想買清單】', ''];
+    list.forEach(function(it, i){
+      var p = priceText(it);
+      lines.push((i + 1) + '. ' + it.name + '（' + it.cat + '）　' + p.text);
+      if (it.priceNote && it.price) lines.push('   ※ ' + it.priceNote);
+    });
+    if (!list.length) lines.push('（尚未選擇商品）');
+    lines.push('');
+    lines.push('小計：' + nt(t.sum) + (t.open ? '（另有 ' + t.open + ' 件價格洽談）' : ''));
+    lines.push('');
+    lines.push('姓名／暱稱：' + ($('fName').value.trim() || '（待填）'));
+    lines.push('聯絡方式：'   + ($('fContact').value.trim() || '（待填）'));
+    lines.push('方便取貨時間：' + ($('fWhen').value.trim() || '（待填）'));
+    lines.push('');
+    lines.push('（此清單由青年路二手拍網站產生，請傳給 LINE ID：ksh000843）');
+    return lines.join('\n');
+  }
+
+  function toast(msg){
+    var el = $('toast');
+    el.textContent = msg;
+    el.classList.add('is-on');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){ el.classList.remove('is-on'); }, 2600);
+  }
+
+  function copyMessage(){
+    var text = buildMessage();
+    if (!pickedItems().length){ toast('清單是空的，先挑幾件商品吧'); return; }
+    var done = function(){ toast('已複製，貼給我們就可以了'); };
+    var fallback = function(){
+      var ta = $('msg');
+      $('msg').closest('details').open = true;
+      ta.removeAttribute('readonly');
+      ta.select(); ta.setSelectionRange(0, 99999);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch(e){}
+      ta.setAttribute('readonly', '');
+      if (ok) done();
+      else toast('這個瀏覽器擋住了複製，請手動選取下方文字');
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  function openSheet(){
+    renderSheet();
+    $('sheet').hidden = false;
+    requestAnimationFrame(function(){ $('sheet').classList.add('is-open'); });
+    $('sClose').focus();
+  }
+  function closeSheet(){
+    $('sheet').classList.remove('is-open');
+    setTimeout(function(){ $('sheet').hidden = true; }, 180);
+  }
+
+  /* ---------- 事件 ---------- */
+  $('chips').addEventListener('click', function(e){
+    var b = e.target.closest('.chip'); if (!b) return;
+    state.cat = b.dataset.cat;
+    renderChips(); renderGrid();
+  });
+  $('q').addEventListener('input', function(e){ state.q = e.target.value; renderGrid(); });
+  $('sort').addEventListener('change', function(e){ state.sort = e.target.value; renderGrid(); });
+
+  $('grid').addEventListener('click', function(e){
+    var c = e.target.closest('.card'); if (!c) return;
+    openItem(Number(c.dataset.id));
+  });
+
+  $('mBody').addEventListener('click', function(e){
+    var pickBtn = e.target.closest('#mPick');
+    if (pickBtn){ toggle(Number(pickBtn.dataset.id)); return; }
+    var th = e.target.closest('.thumb');
+    if (th){
+      var ph = photosOf(openId);
+      var main = $('gMain');
+      if (main) main.src = pick(ph[Number(th.dataset.i)], 'f');
+      Array.prototype.forEach.call($('mBody').querySelectorAll('.thumb'), function(t){
+        t.setAttribute('aria-current', String(t === th));
+      });
+    }
+  });
+
+  $('mClose').addEventListener('click', closeItem);
+  $('scrim').addEventListener('click', function(e){ if (e.target === $('scrim')) closeItem(); });
+  $('dockOpen').addEventListener('click', openSheet);
+  $('sClose').addEventListener('click', closeSheet);
+  $('sheet').addEventListener('click', function(e){ if (e.target === $('sheet')) closeSheet(); });
+  $('picks').addEventListener('click', function(e){
+    var d = e.target.closest('[data-del]'); if (!d) return;
+    toggle(Number(d.dataset.del));
+  });
+  ['fName','fContact','fWhen'].forEach(function(id){
+    $(id).addEventListener('input', function(){ $('msg').value = buildMessage(); });
+  });
+  $('copyBtn').addEventListener('click', copyMessage);
+  $('clearBtn').addEventListener('click', function(){
+    state.picks = []; save(); renderGrid(); renderDock(); renderSheet();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key !== 'Escape') return;
+    if (!$('sheet').hidden) closeSheet();
+    else if (!$('scrim').hidden) closeItem();
+  });
+
+  $('updated').textContent = DATA.updated;
+  renderChips(); renderGrid(); renderDock(); renderSheet();
+})();
+</script>

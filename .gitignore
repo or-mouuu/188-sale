@@ -1,0 +1,5 @@
+# 本機工作檔，不進版控
+build/orig/
+build/inline/
+_oldver/
+.DS_Store

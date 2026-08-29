@@ -1,0 +1,1724 @@
+<meta charset="utf-8">
+<title>青年路二手拍</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --paper:#EEF1EA; --card:#FFFFFF; --card-2:#F7F9F4;
+  --ink:#141A18; --ink-2:#3D4844; --muted:#6B756F;
+  --line:#D9DFD5; --line-2:#E9EDE5;
+  --accent:#1E5A61; --accent-ink:#FFFFFF; --accent-soft:#DBEAEA;
+  --gift:#3C6E4B; --gift-bg:#E3EFE5;
+  --shadow:0 1px 2px rgba(20,26,24,.05), 0 10px 30px -20px rgba(20,26,24,.35);
+  --shadow-lift:0 2px 6px rgba(20,26,24,.07), 0 18px 42px -22px rgba(20,26,24,.45);
+
+  /* 七個分類各有一個極淡底色，用在無照片字卡與分類標籤 */
+  --t-furniture:#E4E9DF; --t-appliance:#E1E8EA; --t-lamp:#EFE9DA;
+  --t-kitchen:#E6E5DD; --t-tableware:#E7E4E8; --t-misc:#E2E7E4; --t-clothes:#EAE4E1;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#101413; --card:#191F1D; --card-2:#1E2523;
+    --ink:#E8ECE6; --ink-2:#B4BDB7; --muted:#87918B;
+    --line:#293230; --line-2:#212927;
+    --accent:#7FBEC1; --accent-ink:#0E1A1B; --accent-soft:#1C3335;
+    --gift:#82C296; --gift-bg:#1A2C21;
+    --shadow:0 1px 2px rgba(0,0,0,.45), 0 10px 30px -20px rgba(0,0,0,.8);
+    --shadow-lift:0 2px 6px rgba(0,0,0,.5), 0 18px 42px -22px rgba(0,0,0,.9);
+    --t-furniture:#242C26; --t-appliance:#212B2D; --t-lamp:#2C2820;
+    --t-kitchen:#272722; --t-tableware:#282430; --t-misc:#222A27; --t-clothes:#2B2523;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101413; --card:#191F1D; --card-2:#1E2523;
+  --ink:#E8ECE6; --ink-2:#B4BDB7; --muted:#87918B;
+  --line:#293230; --line-2:#212927;
+  --accent:#7FBEC1; --accent-ink:#0E1A1B; --accent-soft:#1C3335;
+  --gift:#82C296; --gift-bg:#1A2C21;
+  --shadow:0 1px 2px rgba(0,0,0,.45), 0 10px 30px -20px rgba(0,0,0,.8);
+  --shadow-lift:0 2px 6px rgba(0,0,0,.5), 0 18px 42px -22px rgba(0,0,0,.9);
+  --t-furniture:#242C26; --t-appliance:#212B2D; --t-lamp:#2C2820;
+  --t-kitchen:#272722; --t-tableware:#282430; --t-misc:#222A27; --t-clothes:#2B2523;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  padding-bottom:96px;
+}
+.wrap{max-width:1240px; margin:0 auto; padding:0 20px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:2px}
+button{font:inherit; color:inherit; cursor:pointer}
+a{color:var(--accent)}
+
+/* ============ 公告板式的抬頭 ============ */
+header.top{background:var(--card); border-bottom:1px solid var(--line)}
+.top__inner{padding:38px 0 26px}
+h1{font-family:"Noto Serif TC",Georgia,serif; font-weight:700;
+  font-size:clamp(30px,5.2vw,50px); line-height:1.15; margin:0 0 14px;
+  letter-spacing:-.015em; text-wrap:balance}
+/* ============ 篩選列 ============ */
+.tools{position:sticky; top:0; z-index:30; background:var(--paper);
+  border-bottom:1px solid var(--line); padding:12px 0}
+.tools__inner{display:flex; gap:14px; align-items:center; flex-wrap:wrap}
+.chips{display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; flex:1 1 320px;
+  padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap; border:1px solid var(--line); background:var(--card);
+  color:var(--ink-2); padding:6px 14px; border-radius:999px; font-size:13.5px;
+  transition:background .15s, border-color .15s, color .15s}
+.chip:hover{border-color:var(--accent); color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent);
+  color:var(--accent-ink); font-weight:500}
+.chip .n{font-family:"IBM Plex Mono",monospace; font-size:11px; opacity:.65; margin-left:6px}
+.tools__right{display:flex; gap:8px; align-items:center; flex:0 0 auto}
+.search{position:relative}
+.search input{border:1px solid var(--line); background:var(--card); color:var(--ink);
+  border-radius:999px; padding:7px 14px 7px 32px; font-size:13.5px; width:170px;
+  transition:width .2s, border-color .15s}
+.search input:focus{width:210px; border-color:var(--accent); outline:none}
+.search svg{position:absolute; left:11px; top:50%; transform:translateY(-50%);
+  width:14px; height:14px; stroke:var(--muted); fill:none; stroke-width:2}
+select.sort{border:1px solid var(--line); background:var(--card); color:var(--ink-2);
+  border-radius:999px; padding:7px 12px; font-size:13.5px}
+
+/* ============ 商品格狀陣列 ============ */
+main{padding:28px 0 60px}
+.count{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted);
+  letter-spacing:.06em; margin:0 0 16px}
+.grid{display:grid; gap:22px;
+  grid-template-columns:repeat(auto-fill,minmax(228px,1fr))}
+.card{background:var(--card); border:1px solid var(--line-2); border-radius:5px;
+  overflow:hidden; text-align:left; padding:0; display:flex; flex-direction:column;
+  box-shadow:var(--shadow); transition:box-shadow .18s ease, transform .18s ease;
+  position:relative}
+.card:hover{box-shadow:var(--shadow-lift); transform:translateY(-2px)}
+.card__media{aspect-ratio:1/1; background:var(--card-2); overflow:hidden; position:relative;
+  border-bottom:1px solid var(--line-2)}
+.card__media img{width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .4s ease}
+.card:hover .card__media img{transform:scale(1.035)}
+
+/* 沒有照片的商品：分類色字卡，而不是灰色破洞 */
+.tile{width:100%; height:100%; display:flex; flex-direction:column;
+  justify-content:space-between; padding:16px 16px 18px; background:var(--tint)}
+.tile__cat{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.16em;
+  color:var(--muted); text-transform:uppercase}
+.tile__name{font-family:"Noto Serif TC",Georgia,serif; font-weight:600; font-size:22px;
+  line-height:1.3; color:var(--ink-2); text-wrap:balance}
+.tile__hint{font-size:11px; color:var(--muted); letter-spacing:.04em}
+
+/* 資訊區只留品名與售價，行距壓到最小，空間讓給照片 */
+.card__body{padding:7px 12px 8px; display:flex; flex-direction:column; gap:0; flex:1}
+.card__name{font-size:14px; font-weight:500; line-height:1.3; margin:0;
+  display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden}
+.card__price{margin-top:auto; font-family:"IBM Plex Mono",monospace;
+  font-size:15px; font-weight:500; line-height:1.3; font-variant-numeric:tabular-nums}
+.card__price.is-open{font-size:12.5px; font-weight:400; color:var(--muted);
+  font-family:"Noto Sans TC",sans-serif}
+.card__price.is-gift{color:var(--gift)}
+.badge{position:absolute; top:10px; right:10px; z-index:2;
+  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.08em;
+  padding:3px 8px; border-radius:999px; background:var(--gift-bg); color:var(--gift)}
+.card.is-picked{border-color:var(--accent)}
+.card.is-picked::after{content:"已加入"; position:absolute; top:10px; left:10px; z-index:2;
+  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.08em;
+  padding:3px 8px; border-radius:999px; background:var(--accent); color:var(--accent-ink)}
+.photocount{position:absolute; bottom:8px; right:8px; z-index:2;
+  font-family:"IBM Plex Mono",monospace; font-size:10px; padding:2px 7px; border-radius:999px;
+  background:rgba(20,26,24,.62); color:#fff; letter-spacing:.05em}
+.empty{padding:60px 0; text-align:center; color:var(--muted); font-size:14px}
+
+/* ============ 商品詳細 pop-up ============ */
+.scrim{position:fixed; inset:0; z-index:100; background:rgba(20,26,24,.55);
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  opacity:0; pointer-events:none; transition:opacity .18s ease}
+.scrim.is-open{opacity:1; pointer-events:auto}
+.modal{background:var(--card); border-radius:6px; max-width:940px; width:100%;
+  max-height:min(92vh,860px); overflow:auto; box-shadow:var(--shadow-lift);
+  transform:translateY(8px); transition:transform .18s ease}
+.scrim.is-open .modal{transform:none}
+.modal__grid{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}
+@media (max-width:760px){ .modal__grid{grid-template-columns:1fr} }
+.gallery{background:var(--card-2); border-right:1px solid var(--line-2);
+  display:flex; flex-direction:column}
+@media (max-width:760px){ .gallery{border-right:none; border-bottom:1px solid var(--line-2)} }
+.gallery__main{aspect-ratio:1/1; overflow:hidden; background:var(--card-2)}
+.gallery__main img{width:100%; height:100%; object-fit:contain; display:block}
+.gallery__tile{width:100%; height:100%; display:flex; flex-direction:column;
+  justify-content:center; align-items:center; gap:8px; padding:28px; text-align:center;
+  background:var(--tint)}
+.gallery__tile .t{font-family:"Noto Serif TC",Georgia,serif; font-weight:600; font-size:26px;
+  color:var(--ink-2); line-height:1.3}
+.gallery__tile .s{font-size:12px; color:var(--muted)}
+.thumbs{display:flex; gap:7px; padding:10px 12px; overflow-x:auto; scrollbar-width:none}
+.thumbs::-webkit-scrollbar{display:none}
+.thumb{width:52px; height:52px; flex:0 0 auto; border-radius:3px; overflow:hidden;
+  border:1.5px solid transparent; background:none; padding:0}
+.thumb img{width:100%; height:100%; object-fit:cover; display:block}
+.thumb[aria-current="true"]{border-color:var(--accent)}
+
+.detail{padding:26px 28px 28px; display:flex; flex-direction:column; gap:0}
+.detail__cat{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.16em;
+  color:var(--accent); text-transform:uppercase; margin:0 0 8px}
+.detail h2{font-family:"Noto Serif TC",Georgia,serif; font-weight:700; font-size:25px;
+  line-height:1.3; margin:0 0 4px; text-wrap:balance}
+.detail__model{color:var(--muted); font-size:13px; margin:0 0 18px; line-height:1.5}
+.priceline{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+  padding:14px 0 16px; border-top:1px solid var(--line-2); border-bottom:1px solid var(--line-2)}
+.priceline__now{font-family:"IBM Plex Mono",monospace; font-size:30px; font-weight:500;
+  font-variant-numeric:tabular-nums; line-height:1}
+.priceline__now.is-open{font-size:19px; font-family:"Noto Sans TC",sans-serif;
+  color:var(--muted)}
+.priceline__now.is-gift{color:var(--gift)}
+.priceline__was{font-size:13px; color:var(--muted)}
+.priceline__was s{text-decoration-thickness:1px; text-underline-offset:2px}
+.pricenote{font-size:12.5px; color:var(--muted); margin:8px 0 0}
+dl.spec{margin:18px 0 0; display:grid; grid-template-columns:auto 1fr;
+  gap:9px 18px; font-size:13.5px; align-items:baseline}
+dl.spec dt{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.12em;
+  color:var(--muted); text-transform:uppercase; white-space:nowrap; padding-top:2px}
+dl.spec dd{margin:0; color:var(--ink-2); line-height:1.55; white-space:pre-line}
+.extlink{display:inline-flex; align-items:center; gap:6px; margin-top:18px; font-size:13.5px;
+  color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent-soft);
+  padding-bottom:2px; width:fit-content}
+.extlink:hover{border-bottom-color:var(--accent)}
+.extlink svg{width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2}
+.detail__actions{margin-top:24px; display:flex; gap:10px}
+.btn{border:1px solid var(--accent); background:var(--accent); color:var(--accent-ink);
+  border-radius:4px; padding:11px 20px; font-size:14px; font-weight:500;
+  transition:filter .15s, background .15s}
+.btn:hover{filter:brightness(1.08)}
+.btn--ghost{background:transparent; color:var(--accent)}
+.btn--ghost:hover{background:var(--accent-soft); filter:none}
+.btn--wide{flex:1}
+.modal__close{position:sticky; top:0; float:right; z-index:3; margin:10px 10px 0 0;
+  width:32px; height:32px; border-radius:50%; border:1px solid var(--line);
+  background:var(--card); color:var(--ink-2); font-size:17px; line-height:1;
+  display:flex; align-items:center; justify-content:center}
+.modal__close:hover{border-color:var(--accent); color:var(--accent)}
+
+/* ============ 想買清單 ============ */
+.dock{position:fixed; left:0; right:0; bottom:0; z-index:60; background:var(--card);
+  border-top:1px solid var(--line); box-shadow:0 -8px 30px -22px rgba(20,26,24,.5);
+  transform:translateY(105%); transition:transform .22s ease}
+.dock.is-on{transform:none}
+.dock__bar{display:flex; align-items:center; gap:14px; padding:13px 0}
+.dock__sum{flex:1; min-width:0; font-size:13.5px; color:var(--ink-2)}
+.dock__sum b{font-family:"IBM Plex Mono",monospace; font-size:17px; font-weight:500;
+  color:var(--ink); font-variant-numeric:tabular-nums}
+.dock__sum .sub{display:block; font-size:12px; color:var(--muted)}
+
+.sheet{position:fixed; inset:0; z-index:90; background:rgba(20,26,24,.55);
+  display:flex; align-items:flex-end; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .18s ease}
+.sheet.is-open{opacity:1; pointer-events:auto}
+.sheet__panel{background:var(--card); width:100%; max-width:640px; border-radius:8px 8px 0 0;
+  max-height:88vh; overflow:auto; padding:24px 24px 28px;
+  transform:translateY(14px); transition:transform .2s ease}
+.sheet.is-open .sheet__panel{transform:none}
+@media (min-width:700px){
+  .sheet{align-items:center; padding:24px}
+  .sheet__panel{border-radius:8px}
+}
+.sheet__head{display:flex; align-items:center; justify-content:space-between; gap:12px;
+  margin-bottom:4px}
+.sheet__head h2{font-family:"Noto Serif TC",Georgia,serif; font-size:21px; font-weight:700;
+  margin:0}
+.sheet__note{font-size:12.5px; color:var(--muted); margin:0 0 18px}
+.picks{list-style:none; margin:0 0 4px; padding:0; border-top:1px solid var(--line-2)}
+.picks li{display:flex; align-items:center; gap:12px; padding:11px 0;
+  border-bottom:1px solid var(--line-2)}
+.picks__name{flex:1; min-width:0; font-size:14px; line-height:1.45}
+.picks__name span{display:block; font-size:11.5px; color:var(--muted);
+  font-family:"IBM Plex Mono",monospace}
+.picks__price{font-family:"IBM Plex Mono",monospace; font-size:14px;
+  font-variant-numeric:tabular-nums; white-space:nowrap}
+.picks__price.is-open{font-size:12px; color:var(--muted); font-family:"Noto Sans TC",sans-serif}
+.picks__del{border:none; background:none; color:var(--muted); font-size:18px; line-height:1;
+  padding:2px 4px; border-radius:3px}
+.picks__del:hover{color:#B1424F; background:var(--line-2)}
+.total{display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+  padding:14px 0 4px; font-size:14px}
+.total b{font-family:"IBM Plex Mono",monospace; font-size:22px; font-weight:500;
+  font-variant-numeric:tabular-nums}
+.total .sub{font-size:12px; color:var(--muted)}
+.fields{display:grid; gap:10px; margin:18px 0 0}
+@media (min-width:520px){ .fields{grid-template-columns:1fr 1fr} }
+.field label{display:block; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:5px}
+.field input{width:100%; border:1px solid var(--line); background:var(--card-2);
+  color:var(--ink); border-radius:4px; padding:9px 11px; font-size:14px}
+.field input:focus{border-color:var(--accent); outline:none; background:var(--card)}
+.field--full{grid-column:1/-1}
+.preview{margin:16px 0 0}
+.preview summary{font-size:12.5px; color:var(--muted); cursor:pointer; list-style:none}
+.preview summary::-webkit-details-marker{display:none}
+.preview summary::before{content:"▸ "; color:var(--accent)}
+.preview[open] summary::before{content:"▾ "}
+.preview textarea{width:100%; margin-top:9px; min-height:190px; border:1px solid var(--line);
+  background:var(--card-2); color:var(--ink-2); border-radius:4px; padding:11px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:12px; line-height:1.6;
+  resize:vertical}
+.handoff{margin:18px 0 0; padding:15px 16px; border-radius:5px; background:var(--accent-soft);
+  font-size:13.5px; line-height:1.6; color:var(--ink-2)}
+.handoff b{color:var(--ink)}
+.handoff .contact{font-family:"IBM Plex Mono",monospace; font-size:13px; color:var(--accent);
+  text-decoration:none; border-bottom:1px solid var(--accent); padding-bottom:1px}
+.sheet__actions{display:flex; gap:10px; margin-top:18px}
+.toast{position:fixed; left:50%; bottom:112px; transform:translate(-50%,10px); z-index:120;
+  background:var(--ink); color:var(--paper); padding:10px 18px; border-radius:999px;
+  font-size:13.5px; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s}
+.toast.is-on{opacity:1; transform:translate(-50%,0)}
+
+footer.end{border-top:1px solid var(--line); padding:26px 0 40px; color:var(--muted);
+  font-size:12.5px; line-height:1.75}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important; animation:none!important}
+  .card:hover{transform:none}
+  .card:hover .card__media img{transform:none}
+}
+</style>
+
+<header class="top">
+  <div class="wrap top__inner">
+    <h1>青年路搬家二手拍</h1>
+    <p class="notice">看到喜歡的就點進去看細節，加進「想買清單」之後一鍵複製傳給我們，會有專人跟你聯繫付款和取貨方式。網站上不收錢、不用結帳。</p>
+  </div>
+</header>
+
+<div class="tools">
+  <div class="wrap tools__inner">
+    <div class="chips" id="chips" role="group" aria-label="商品分類"></div>
+    <div class="tools__right">
+      <div class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="搜尋品名或品牌" aria-label="搜尋商品">
+      </div>
+      <select class="sort" id="sort" aria-label="排序方式">
+        <option value="default">預設排序</option>
+        <option value="asc">價格低到高</option>
+        <option value="desc">價格高到低</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty" hidden>找不到符合的商品，換個關鍵字或分類試試。</p>
+</main>
+
+<footer class="end wrap">
+  <p>青年路搬家二手拍 · 商品資料更新於 <span id="updated" class="mono"></span><br>
+  照片為實品拍攝，二手商品難免有使用痕跡，介意者請先詢問。全部商品皆為自取或自行安排搬運。</p>
+</footer>
+
+<!-- 商品詳細 -->
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="mTitle" hidden>
+  <div class="modal" id="modal">
+    <button class="modal__close" id="mClose" aria-label="關閉">×</button>
+    <div class="modal__grid" id="mBody"></div>
+  </div>
+</div>
+
+<!-- 想買清單常駐列 -->
+<div class="dock" id="dock">
+  <div class="wrap dock__bar">
+    <div class="dock__sum" id="dockSum"></div>
+    <button class="btn" id="dockOpen">查看想買清單</button>
+  </div>
+</div>
+
+<!-- 想買清單面板 -->
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sTitle" hidden>
+  <div class="sheet__panel">
+    <div class="sheet__head">
+      <h2 id="sTitle">想買清單</h2>
+      <button class="modal__close" id="sClose" aria-label="關閉">×</button>
+    </div>
+    <p class="sheet__note">這裡不會扣款，也不用留信用卡。填好下面的聯絡方式，複製清單傳給我們就好。</p>
+    <ul class="picks" id="picks"></ul>
+    <div class="total" id="total"></div>
+
+    <div class="fields">
+      <div class="field">
+        <label for="fName">姓名或暱稱</label>
+        <input id="fName" type="text" placeholder="怎麼稱呼你">
+      </div>
+      <div class="field">
+        <label for="fContact">聯絡方式</label>
+        <input id="fContact" type="text" placeholder="LINE ID 或手機">
+      </div>
+      <div class="field field--full">
+        <label for="fWhen">方便取貨的時間</label>
+        <input id="fWhen" type="text" placeholder="例：11 月的週末白天">
+      </div>
+    </div>
+
+    <details class="preview">
+      <summary>看看會複製什麼內容</summary>
+      <textarea id="msg" readonly aria-label="要複製的訊息"></textarea>
+    </details>
+
+    <!-- ▼▼ 聯絡方式 ▼▼ -->
+    <div class="handoff">
+      <b>複製之後，把清單用 LINE 傳給我們：</b><br>
+      <a class="contact" href="https://line.me/ti/p/~ksh000843" target="_blank" rel="noopener noreferrer">LINE ID：ksh000843</a><br>
+      收到後我們會跟你確認商品、金額和取貨時間。
+    </div>
+    <!-- ▲▲ 聯絡方式 ▲▲ -->
+
+    <div class="sheet__actions">
+      <button class="btn btn--wide" id="copyBtn">一鍵複製想買清單</button>
+      <button class="btn btn--ghost" id="clearBtn">清空</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="application/json" id="shopdata">{
+ "cats": [
+  "大型傢俱",
+  "家電",
+  "燈具",
+  "廚房用品",
+  "杯盤餐具",
+  "生活雜物",
+  "衣物"
+ ],
+ "updated": "2026-08-28",
+ "items": [
+  {
+   "id": 1,
+   "cat": "大型傢俱",
+   "name": "單人床組",
+   "model": "宜得利",
+   "size": "108.4×197×69 cm",
+   "price": 2000,
+   "priceNote": "床墊+床包+床架合售",
+   "orig": 10265,
+   "origWhen": "2024.10",
+   "when": "10月初可搬走，需自行搬運",
+   "note": "床墊：宜得利 T-FLUM2 TW 記憶床墊（105×186×19 cm）\n床包：宜得利 伸縮床包 N FIT EVE2 DBR 單人\n床架：宜得利 床座 PACK4 NA-S (EC)",
+   "link": "https://www.nitori-net.tw/product/2000905s",
+   "nPhoto": 3
+  },
+  {
+   "id": 4,
+   "cat": "大型傢俱",
+   "name": "書桌（2張）",
+   "model": "IKEA LINNMON/ADILS 染白橡木紋/黑",
+   "size": "120×60×74 cm",
+   "price": 300,
+   "priceNote": "",
+   "orig": 999,
+   "origWhen": "2023.08",
+   "when": "11-12月可搬走",
+   "note": "可自行拆開桌面跟椅腳，需自行搬運，單張售300，兩張一起買500",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 5,
+   "cat": "大型傢俱",
+   "name": "宜得利書架",
+   "model": "宜得利 N STAIN 1680 BR（絕版）",
+   "size": "80×40×160 cm",
+   "price": 500,
+   "priceNote": "",
+   "orig": 3490,
+   "origWhen": "2023.08",
+   "when": "11-12月可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 4
+  },
+  {
+   "id": 6,
+   "cat": "大型傢俱",
+   "name": "宜得利皮餐椅",
+   "model": "宜得利 N SHIELD GEARIG 3 （絕版）",
+   "size": "47×53.5×80 cm",
+   "price": 500,
+   "priceNote": "",
+   "orig": 2490,
+   "origWhen": "2023.08",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 7,
+   "cat": "大型傢俱",
+   "name": "餐椅（方形曲木椅）",
+   "model": "方形曲木椅（絕版）",
+   "size": "45×51×87 cm（座高45）",
+   "price": 400,
+   "priceNote": "",
+   "orig": 800,
+   "origWhen": "2023.08",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 8,
+   "cat": "大型傢俱",
+   "name": "餐桌",
+   "model": "宜得利 SI01 S 120cm 中褐色 櫸木實木貼皮",
+   "size": "120×78×70 cm",
+   "price": 300,
+   "priceNote": "",
+   "orig": 3400,
+   "origWhen": "2023.08",
+   "when": "11-12月可搬走",
+   "note": "",
+   "link": "https://www.nitori-net.tw/product/4012922",
+   "nPhoto": 3
+  },
+  {
+   "id": 9,
+   "cat": "大型傢俱",
+   "name": "電視櫃",
+   "model": "IKEA TULLSTORP（絕版）",
+   "size": "114×35×53 cm",
+   "price": 700,
+   "priceNote": "",
+   "orig": 2000,
+   "origWhen": "2023.08",
+   "when": "11-12月可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 10,
+   "cat": "大型傢俱",
+   "name": "白色床邊櫃",
+   "model": "IKEA（絕版）",
+   "size": "45×38×57 cm",
+   "price": 0,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "10月初可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 2
+  },
+  {
+   "id": 11,
+   "cat": "大型傢俱",
+   "name": "黑色抽屜邊櫃",
+   "model": "IKEA（絕版）",
+   "size": "35×50×75 cm",
+   "price": 0,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "10月初可搬走",
+   "note": "四層櫃子，有一點不穩",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 12,
+   "cat": "大型傢俱",
+   "name": "無印紙板層櫃",
+   "model": "無印良品（絕版）",
+   "size": "15×29×180 cm",
+   "price": 250,
+   "priceNote": "",
+   "orig": 700,
+   "origWhen": "2023.08",
+   "when": "11-12月可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 13,
+   "cat": "大型傢俱",
+   "name": "Karimoku 雜誌架",
+   "model": "Karimoku",
+   "size": "46×22×46 cm",
+   "price": 2200,
+   "priceNote": "",
+   "orig": 3000,
+   "origWhen": "",
+   "when": "10月初可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 3
+  },
+  {
+   "id": 14,
+   "cat": "大型傢俱",
+   "name": "十八紙椅凳（附椅墊）",
+   "model": "十八紙 風琴摺疊三人長凳（棕/42CM）",
+   "size": "高42cm，三人座（收起厚度8cm寬度31cm",
+   "price": 1500,
+   "priceNote": "",
+   "orig": 4280,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "附3個坐墊、椅面有些微損傷但不影響使用",
+   "link": "https://shopee.tw/%E5%8D%81%E5%85%AB%E7%B4%99-%E9%A2%A8%E7%90%B4%E6%91%BA%E7%96%8A%E4%B8%89%E4%BA%BA%E9%95%B7%E5%87%B3(28CM-42CM)-%E6%89%BF%E9%87%8D300%E5%85%AC%E6%96%A4-%E5%A4%9A%E8%89%B2%E5%8F%AF%E9%81%B8-Beutii-i.24511456.12281076874",
+   "nPhoto": 1
+  },
+  {
+   "id": 15,
+   "cat": "大型傢俱",
+   "name": "茶几（日本古物）",
+   "model": "1983 日本古物",
+   "size": "86.5×45×35 cm",
+   "price": 3400,
+   "priceNote": "",
+   "orig": 6800,
+   "origWhen": "2023.08",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 3
+  },
+  {
+   "id": 16,
+   "cat": "大型傢俱",
+   "name": "電腦椅",
+   "model": "無品牌",
+   "size": "70×50×120 cm",
+   "price": 300,
+   "priceNote": "",
+   "orig": null,
+   "origWhen": "",
+   "when": "10月初可搬走",
+   "note": "功能正常，扶手有些微痕跡，座高可自行調整",
+   "link": "",
+   "nPhoto": 2
+  },
+  {
+   "id": 17,
+   "cat": "家電",
+   "name": "冷暖氣（2台）",
+   "model": "SAMPO AM-SF36DC、AM-SF50DC",
+   "size": "參考網頁",
+   "price": 15000,
+   "priceNote": "",
+   "orig": 56000,
+   "origWhen": "2023.08",
+   "when": "11月可拆（需討論怎麼拆）",
+   "note": "使用3年，已過保固，會協助拆下室內外機但需自行運送\n36：適用5-7坪（臥室）、50：適用8-10坪（客廳）\n如可自行拆卸，可再折3000",
+   "link": "https://tw.buy.yahoo.com/gdsale/SAMPO%E8%81%B2%E5%AF%B6-8-10%E5%9D%AA-1%E7%B4%9A%E8%AE%8A%E9%A0%BB%E5%86%B7%E6%9A%96%E5%86%B7%E6%B0%A3-AM-SF50DC-AU-SF50DC-9278235.html",
+   "nPhoto": 3
+  },
+  {
+   "id": 18,
+   "cat": "家電",
+   "name": "除濕機1",
+   "model": "Panasonic FY12EM（2020年製，6L/日）",
+   "size": "53×29×23 cm",
+   "price": 2000,
+   "priceNote": "",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "較新",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 19,
+   "cat": "家電",
+   "name": "除濕機2",
+   "model": "Panasonic FY12BMW（2015年製，6L/日）",
+   "size": "53×29×23 cm",
+   "price": 0,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "11-12月可搬走",
+   "note": "較舊，功能正常，現放在浴室除濕",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 20,
+   "cat": "家電",
+   "name": "微波爐",
+   "model": "one amadana 17L 機械式 STWM-0101",
+   "size": "31.5×45.5×26.5 cm・11.3kg",
+   "price": 500,
+   "priceNote": "",
+   "orig": 2000,
+   "origWhen": "2022",
+   "when": "11-12月可搬走",
+   "note": "旋鈕式，功能正常，內部有小小痕跡",
+   "link": "https://www.citiesocial.com/products/17l-stwm-0101",
+   "nPhoto": 1
+  },
+  {
+   "id": 21,
+   "cat": "家電",
+   "name": "烤箱",
+   "model": "TOSHIBA 32L 雙溫控旋風電烤箱 TL1-MC32AZT",
+   "size": "49.5×32.5×40.5 cm・9.1kg",
+   "price": 800,
+   "priceNote": "",
+   "orig": 3000,
+   "origWhen": "2023.08",
+   "when": "11-12月可搬走",
+   "note": "",
+   "link": "https://tw.buy.yahoo.com/gdsale/%E6%97%A5%E6%9C%AC%E6%9D%B1%E8%8A%9DTOSHIBA-32%E5%85%AC%E5%8D%87%E9%9B%99%E6%BA%AB%E6%8E%A7%E6%97%8B%E9%A2%A8%E9%9B%BB%E7%83%A4%E7%AE%B1-TL1-MC32AZT-GR-9875905.html",
+   "nPhoto": 1
+  },
+  {
+   "id": 22,
+   "cat": "家電",
+   "name": "電磁爐",
+   "model": "AmadanaONE STCI-0205 IH",
+   "size": "28×36×6.5 cm・2.5kg",
+   "price": 500,
+   "priceNote": "",
+   "orig": 2000,
+   "origWhen": "2021",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 2
+  },
+  {
+   "id": 23,
+   "cat": "家電",
+   "name": "掛燙機",
+   "model": "Electrolux 極淨呵護700 直立式蒸氣掛燙機（燕麥白）1600W",
+   "size": "30×34×170 cm",
+   "price": 500,
+   "priceNote": "",
+   "orig": 2990,
+   "origWhen": "2025",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "https://www.electrolux.com.tw/appliances/garment-steamers/e7gs1-74ow/",
+   "nPhoto": 3
+  },
+  {
+   "id": 24,
+   "cat": "家電",
+   "name": "真空機",
+   "model": "工業抽吸式 UV400N",
+   "size": "50×31×16 cm・12kg",
+   "price": 0,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "https://www.eakup.com/product_detail/191023164107",
+   "nPhoto": 1
+  },
+  {
+   "id": 25,
+   "cat": "家電",
+   "name": "簡易氣泡水機",
+   "model": "附氣瓶",
+   "size": "",
+   "price": 0,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 26,
+   "cat": "家電",
+   "name": "伊日生活 無水香氛機",
+   "model": "伊日生活",
+   "size": "寬8cm 高13.7cm",
+   "price": 1000,
+   "priceNote": "",
+   "orig": 3600,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "僅用10次以內，贈精油",
+   "link": "https://www.momoshop.com.tw/product/12238804",
+   "nPhoto": 3
+  },
+  {
+   "id": 28,
+   "cat": "家電",
+   "name": "無印循環扇（舊款）",
+   "model": "無印良品",
+   "size": "28×20×28 cm",
+   "price": 300,
+   "priceNote": "",
+   "orig": 2700,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 3
+  },
+  {
+   "id": 29,
+   "cat": "家電",
+   "name": "煤油暖爐",
+   "model": "CORONA SL6625 煤油暖爐",
+   "size": "46×46×60 cm",
+   "price": 3000,
+   "priceNote": "",
+   "orig": 6990,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "功能正常，需自行搬運",
+   "link": "https://24h.pchome.com.tw/prod/DXAUC5-A900JMBIA",
+   "nPhoto": 1
+  },
+  {
+   "id": 30,
+   "cat": "家電",
+   "name": "嬰兒體重計（貓用）",
+   "model": "無品牌",
+   "size": "54×32×2.6 cm",
+   "price": 300,
+   "priceNote": "",
+   "orig": 990,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "可量體重到0.01公斤，先前用於幫貓量體重",
+   "link": "https://www.momoshop.com.tw/product/13936371",
+   "nPhoto": 3
+  },
+  {
+   "id": 31,
+   "cat": "家電",
+   "name": "探針溫度計",
+   "model": "蝦皮（未拆）",
+   "size": "長22.8cm",
+   "price": 0,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "https://shopee.tw/%E3%80%90%E5%85%8D%E9%81%8B%E9%99%84%E7%99%BC%E7%A5%A8%E3%80%91%E9%9B%BB%E5%AD%90%E9%A3%9F%E5%93%81%E6%BA%AB%E5%BA%A6%E8%A8%88-%E7%A7%92%E6%B8%AC%E6%8E%A2%E9%87%9D%E5%BC%8F-%E5%BB%9A%E6%88%BF%E7%83%98%E7%84%99-%E7%85%8E%E7%89%9B%E6%8E%92%E8%82%89%E6%BA%AB-%E5%AC%B0%E5%85%92%E6%B3%A1%E5%A5%B6%E6%B0%B4%E6%BA%AB%E8%A8%88-%E9%AB%98%E6%B8%85%E6%95%B8%E4%BD%8D%E9%A1%AF%E7%A4%BA-%E6%96%99%E7%90%86%E6%B2%B9%E6%BA%AB%E8%A8%88-i.64376432.3166616843?extraParams=%7B%22display_model_id%22%3A64962017176%2C%22model_selection_logic%22%3A3%7D&sp_atk=0c6078fb-0e43-4c5f-9698-44ef5355220c&xptdk=0c6078fb-0e43-4c5f-9698-44ef5355220c",
+   "nPhoto": 1
+  },
+  {
+   "id": 32,
+   "cat": "燈具",
+   "name": "紙立燈",
+   "model": "IKEA（二手店購入）",
+   "size": "寬22cm 高112cm",
+   "price": 100,
+   "priceNote": "",
+   "orig": 300,
+   "origWhen": "",
+   "when": "11月可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 3
+  },
+  {
+   "id": 33,
+   "cat": "燈具",
+   "name": "IKEA 黑色桌上立燈",
+   "model": "IKEA NÄVLINGE",
+   "size": "底座12cm 高66cm",
+   "price": 200,
+   "priceNote": "",
+   "orig": 499,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "https://www.ikea.com.tw/zh/products/luminaires/desk-lamps-and-clamp-lamps/navlinge-art-00404911?gad_source=1&gad_campaignid=23011321354&gbraid=0AAAAACfI1up8k9_gFwH6mECGj93_rs48Q&gclid=CjwKCAjw48TUBhBREiwAK0GnQXq-uVryqsxvr7Bsnz49NAYldtrj4aq8XnCnFwRQazrBFsWQCJaYFxoCbewQAvD_BwE",
+   "nPhoto": 2
+  },
+  {
+   "id": 34,
+   "cat": "燈具",
+   "name": "蠟燭掛燈",
+   "model": "無品牌",
+   "size": "寬12cm 高22cm",
+   "price": null,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "",
+   "nPhoto": 2
+  },
+  {
+   "id": 35,
+   "cat": "廚房用品",
+   "name": "蘆筍鍋",
+   "model": "Resto demeyere（德國雙人牌代理）口徑16cm，可煮義大利麵（蝦皮購入）",
+   "size": "口徑16cm（內）×高23cm・2kg",
+   "price": 300,
+   "priceNote": "",
+   "orig": 600,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "無盒",
+   "link": "https://shopee.tw/%E4%BA%8C%E6%89%8B%E8%89%AF%E5%93%81-%E7%84%A1%E7%9B%92-Resto-demeyere%E5%BE%B7%E5%9C%8B%E9%9B%99%E4%BA%BA%E7%89%8C%E4%BB%A3%E7%90%86-%E5%8F%A3%E5%BE%9116cm%E8%98%86%E7%AD%8D%E9%8D%8B-%E5%8F%AF%E7%85%AE%E7%BE%A9%E5%A4%A7%E5%88%A9%E9%BA%B5-i.12788202.13458801495",
+   "nPhoto": 1
+  },
+  {
+   "id": 36,
+   "cat": "廚房用品",
+   "name": "濾水壺＋3個濾芯",
+   "model": "BRITA MARELLA 2.4L 藍色",
+   "size": "2.4L",
+   "price": 400,
+   "priceNote": "",
+   "orig": 800,
+   "origWhen": "2023.08",
+   "when": "11-12月可搬走",
+   "note": "窄身適合小空間使用，送 3 個濾芯",
+   "link": "https://www.tw.coupang.com/products/498632839053312",
+   "nPhoto": 1
+  },
+  {
+   "id": 37,
+   "cat": "廚房用品",
+   "name": "小砂鍋",
+   "model": "無品牌",
+   "size": "20cm",
+   "price": null,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 2
+  },
+  {
+   "id": 38,
+   "cat": "廚房用品",
+   "name": "迷你蒸籠",
+   "model": "無品牌",
+   "size": "內徑15cm外徑17cm",
+   "price": 0,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "",
+   "nPhoto": 2
+  },
+  {
+   "id": 39,
+   "cat": "廚房用品",
+   "name": "鍋上白鐵蒸籠",
+   "model": "無品牌",
+   "size": "20cm",
+   "price": 0,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "可搭配20cm的湯鍋使用",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 40,
+   "cat": "廚房用品",
+   "name": "玉子燒不沾鍋",
+   "model": "無品牌",
+   "size": "寬14cm（詳見連結）",
+   "price": 0,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "https://shopee.tw/%E3%80%90LMG-%E5%AE%98%E6%96%B9%E6%97%97%E8%89%A6%E5%BA%97%E3%80%91%E9%9B%AA%E8%97%8F%E6%97%A5%E5%BC%8F%E4%B8%8D%E6%B2%BE%E7%8E%89%E5%AD%90%E7%87%92%E9%8D%8B%EF%BD%9C%E6%9B%9C%E7%9F%B3%E9%BB%91-%E8%B1%A1%E7%89%99%E7%99%BD%EF%BC%88%E8%B4%88%E5%B0%88%E7%94%A8%E7%8E%89%E5%AD%90%E7%87%92%E9%8F%9F%EF%BC%89-i.64600701.8486789103?extraParams=%7B%22display_model_id%22%3A255978945469%2C%22model_selection_logic%22%3A3%7D&sp_atk=7486d271-0614-4c93-9184-843b2351e777&xptdk=7486d271-0614-4c93-9184-843b2351e777",
+   "nPhoto": 2
+  },
+  {
+   "id": 41,
+   "cat": "廚房用品",
+   "name": "紅蘿蔔造型切片器",
+   "model": "蝦皮",
+   "size": "每個約3-5cm",
+   "price": 0,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "",
+   "nPhoto": 2
+  },
+  {
+   "id": 42,
+   "cat": "廚房用品",
+   "name": "耐熱矽膠料理配件（5入）",
+   "model": "掌廚可樂膳",
+   "size": "見連結",
+   "price": 100,
+   "priceNote": "",
+   "orig": 600,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "沒有湯勺，其他都未使用",
+   "link": "https://www.momoshop.com.tw/product/15358544",
+   "nPhoto": 1
+  },
+  {
+   "id": 43,
+   "cat": "廚房用品",
+   "name": "餅乾模具",
+   "model": "蝦皮",
+   "size": "每個4-5cm",
+   "price": 50,
+   "priceNote": "",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "約有15個，皆為不同造型",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 44,
+   "cat": "廚房用品",
+   "name": "廚房便利垃圾桶架",
+   "model": "無品牌",
+   "size": "25x5.5x13.5cm",
+   "price": 0,
+   "priceNote": "免費贈送",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "https://24h.pchome.com.tw/prod/DEBAM2-A9009OU6F",
+   "nPhoto": 1
+  },
+  {
+   "id": 45,
+   "cat": "杯盤餐具",
+   "name": "有深度的中碗",
+   "model": "古物",
+   "size": "19cm",
+   "price": 50,
+   "priceNote": "",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "",
+   "nPhoto": 3
+  },
+  {
+   "id": 46,
+   "cat": "杯盤餐具",
+   "name": "日本手繪龍拉麵碗",
+   "model": "日本",
+   "size": "23cm",
+   "price": 300,
+   "priceNote": "",
+   "orig": 1000,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 2
+  },
+  {
+   "id": 47,
+   "cat": "杯盤餐具",
+   "name": "日本中華料理八角盤",
+   "model": "日本",
+   "size": "19cm",
+   "price": 100,
+   "priceNote": "",
+   "orig": 400,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 3
+  },
+  {
+   "id": 48,
+   "cat": "杯盤餐具",
+   "name": "古手繪花盤 1",
+   "model": "古物",
+   "size": "27cm",
+   "price": 300,
+   "priceNote": "",
+   "orig": 600,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 4
+  },
+  {
+   "id": 49,
+   "cat": "杯盤餐具",
+   "name": "古手繪花盤 2",
+   "model": "古物",
+   "size": "27cm",
+   "price": 300,
+   "priceNote": "",
+   "orig": 600,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 4
+  },
+  {
+   "id": 50,
+   "cat": "杯盤餐具",
+   "name": "古手繪花盤 3",
+   "model": "古物",
+   "size": "27cm",
+   "price": 300,
+   "priceNote": "",
+   "orig": 600,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 3
+  },
+  {
+   "id": 51,
+   "cat": "杯盤餐具",
+   "name": "古藍色花腰子盤",
+   "model": "古物",
+   "size": "30cmx15cm",
+   "price": 200,
+   "priceNote": "",
+   "orig": 500,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 3
+  },
+  {
+   "id": 52,
+   "cat": "杯盤餐具",
+   "name": "Crate&Barrel 藍圓盤",
+   "model": "Crate&Barrel",
+   "size": "22cm",
+   "price": 50,
+   "priceNote": "",
+   "orig": 200,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 2
+  },
+  {
+   "id": 53,
+   "cat": "杯盤餐具",
+   "name": "Crate&Barrel 白大圓盤",
+   "model": "Crate&Barrel",
+   "size": "27cm",
+   "price": 100,
+   "priceNote": "",
+   "orig": 400,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 3
+  },
+  {
+   "id": 54,
+   "cat": "杯盤餐具",
+   "name": "Zara Home 小花盤",
+   "model": "Zara Home",
+   "size": "15cm",
+   "price": 100,
+   "priceNote": "",
+   "orig": 350,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 3
+  },
+  {
+   "id": 55,
+   "cat": "杯盤餐具",
+   "name": "studio M 盤子 ×2",
+   "model": "studio M'",
+   "size": "19cm x 13cm",
+   "price": 100,
+   "priceNote": "",
+   "orig": 450,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "單個售100",
+   "link": "",
+   "nPhoto": 2
+  },
+  {
+   "id": 56,
+   "cat": "杯盤餐具",
+   "name": "有腳小盤子",
+   "model": "無",
+   "size": "15cm",
+   "price": 50,
+   "priceNote": "",
+   "orig": 450,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "",
+   "nPhoto": 2
+  },
+  {
+   "id": 57,
+   "cat": "杯盤餐具",
+   "name": "intel 保溫杯",
+   "model": "無品牌",
+   "size": "",
+   "price": 50,
+   "priceNote": "",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "",
+   "nPhoto": 2
+  },
+  {
+   "id": 58,
+   "cat": "杯盤餐具",
+   "name": "捷元保溫杯",
+   "model": "無品牌",
+   "size": "",
+   "price": 50,
+   "priceNote": "",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 59,
+   "cat": "杯盤餐具",
+   "name": "北臉保溫杯",
+   "model": "The North Face",
+   "size": "",
+   "price": 80,
+   "priceNote": "",
+   "orig": null,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 60,
+   "cat": "杯盤餐具",
+   "name": "ThermoFlask 保溫壺",
+   "model": "好市多購入（未使用）",
+   "size": "1.2公升",
+   "price": 200,
+   "priceNote": "",
+   "orig": 380,
+   "origWhen": "",
+   "when": "現在可搬走",
+   "note": "",
+   "link": "https://www.costco.com.tw/Furniture-Kitchen/Kitchen-Dining/Water-Bottles/ThermoFlask-Stainless-Steel-Water-Bottle-12-L-X-2-Piece-Set/p/158977?srsltid=AfmBOooDw5pKRAQPSNxz_ST-zUIv67sBRPQQhhsf-tX2ROPNd82oahM7",
+   "nPhoto": 1
+  },
+  {
+   "id": 61,
+   "cat": "生活雜物",
+   "name": "螢幕架",
+   "model": "蝦皮",
+   "size": "38×19.5×13 cm",
+   "price": 100,
+   "priceNote": "",
+   "orig": 200,
+   "origWhen": "",
+   "when": "11-12月可搬走",
+   "note": "單個售100，兩個一起帶150",
+   "link": "https://shopee.tw/product/457889190/19622117193",
+   "nPhoto": 1
+  },
+  {
+   "id": 62,
+   "cat": "大型傢俱",
+   "name": "無印全身鏡",
+   "model": "無印良品（絕版）",
+   "size": "44×38.5×150.5 cm",
+   "price": 2000,
+   "priceNote": "",
+   "orig": 3690,
+   "origWhen": "",
+   "when": "10月初可搬走",
+   "note": "",
+   "link": "https://www.books.com.tw/products/N012571656",
+   "nPhoto": 2
+  },
+  {
+   "id": 63,
+   "cat": "生活雜物",
+   "name": "寵物水碗",
+   "model": "mao&kao購入",
+   "size": "14cm寬 10cm高",
+   "price": 0,
+   "priceNote": "免費贈送",
+   "orig": 300,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "碗內有細微痕跡，但陶瓷不影響使用，可進洗碗機",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 64,
+   "cat": "衣物",
+   "name": "家宏の黑色外套",
+   "model": "Uiscel (URBAN RESEARCH)",
+   "size": "L號",
+   "price": 500,
+   "priceNote": "",
+   "orig": null,
+   "origWhen": "8800日幣",
+   "when": "現在可帶走",
+   "note": "近全新",
+   "link": "https://item.rakuten.co.jp/sop-rba/ge5655/",
+   "nPhoto": 3
+  },
+  {
+   "id": 65,
+   "cat": "衣物",
+   "name": "古著外套",
+   "model": "韓國古著",
+   "size": "XL號",
+   "price": 200,
+   "priceNote": "",
+   "orig": 500,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "",
+   "nPhoto": 1
+  },
+  {
+   "id": 66,
+   "cat": "衣物",
+   "name": "家宏の牛仔外套",
+   "model": "UNIQLO",
+   "size": "XL號",
+   "price": 500,
+   "priceNote": "",
+   "orig": 1690,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "近全新",
+   "link": "https://www.uniqlo.com/tw/zh_TW/product-detail.html?productCode=u0000000050570",
+   "nPhoto": 4
+  },
+  {
+   "id": 67,
+   "cat": "衣物",
+   "name": "UQ 軍綠羽絨外套",
+   "model": "UNIQLO",
+   "size": "M號",
+   "price": 200,
+   "priceNote": "",
+   "orig": 3000,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "https://uq.goodjack.tw/hmall-products/u0000000020333",
+   "nPhoto": 4
+  },
+  {
+   "id": 68,
+   "cat": "廚房用品",
+   "name": "柳宗理片手鍋（附蓋）",
+   "model": "柳宗理",
+   "size": "18cm",
+   "price": 500,
+   "priceNote": "",
+   "orig": 2000,
+   "origWhen": "",
+   "when": "10月初可搬走",
+   "note": "不適用電磁爐，僅適用瓦斯爐",
+   "link": "https://www.momoshop.com.tw/product/14386516?osm=Ad07&utm_source=googleshop&utm_medium=googleshop-pla-label3&gad_source=1&gad_campaignid=22562159723&gbraid=0AAAAADlbkmOGEiserAzSJ8Q25dM1qR9KO&gclid=CjwKCAjw48TUBhBREiwAK0GnQZsyUc5xx-NvA49qBSDEDdJy6MiyEKtP6GQl4azAUK8phhN_yAA9xhoCEU4QAvD_BwE",
+   "nPhoto": 3
+  }
+ ]
+}</script>
+<script type="application/json" id="shopphotos">{"1":[{"t":"photos/t/1-Hc7mgul4Vwmp1qGeoHqUst3AibuGdqq.jpg","f":"photos/f/1-Hc7mgul4Vwmp1qGeoHqUst3AibuGdqq.jpg"},{"t":"photos/t/1QlT8Xxk_RROAo0Z5IU7CzVY5xFWCcHFp.jpg","f":"photos/f/1QlT8Xxk_RROAo0Z5IU7CzVY5xFWCcHFp.jpg"},{"t":"photos/t/18TRjxTZ057Z08DvkaU4mlDvUB-BO70x5.jpg","f":"photos/f/18TRjxTZ057Z08DvkaU4mlDvUB-BO70x5.jpg"}],"4":[{"t":"photos/t/17_5cSXGYZPKRQxdOsVMUE2EPxtPGIlu8.jpg","f":"photos/f/17_5cSXGYZPKRQxdOsVMUE2EPxtPGIlu8.jpg"}],"5":[{"t":"photos/t/1P0QvG-b4BH8gtszY7vE_NsunUdssT6-m.jpg","f":"photos/f/1P0QvG-b4BH8gtszY7vE_NsunUdssT6-m.jpg"},{"t":"photos/t/1gqssCzVAru2va0L7pM1KqyFHyBCLhPeX.jpg","f":"photos/f/1gqssCzVAru2va0L7pM1KqyFHyBCLhPeX.jpg"},{"t":"photos/t/1RKYIiXsjX-2HMsa7nD4lnX2ZVKTgFtWN.jpg","f":"photos/f/1RKYIiXsjX-2HMsa7nD4lnX2ZVKTgFtWN.jpg"}],"6":[{"t":"photos/t/1j1bY13NcGeJdbATfMwUmBKSVtQt6sOGo.jpg","f":"photos/f/1j1bY13NcGeJdbATfMwUmBKSVtQt6sOGo.jpg"}],"7":[{"t":"photos/t/1DyO3dV7F54QfbAV1gZjAiPt2ncrXxIFy.jpg","f":"photos/f/1DyO3dV7F54QfbAV1gZjAiPt2ncrXxIFy.jpg"}],"8":[{"t":"photos/t/1nOLZXEMt8oXdM9zvQpr3wDLb1EMgAB5H.jpg","f":"photos/f/1nOLZXEMt8oXdM9zvQpr3wDLb1EMgAB5H.jpg"},{"t":"photos/t/1_xlJ0ajnk2uUyw0U0BrFIhnLmBXEC-17.jpg","f":"photos/f/1_xlJ0ajnk2uUyw0U0BrFIhnLmBXEC-17.jpg"},{"t":"photos/t/10NE40VZzOqeihaIu1u3jvr2_xNTZhxfz.jpg","f":"photos/f/10NE40VZzOqeihaIu1u3jvr2_xNTZhxfz.jpg"}],"9":[{"t":"photos/t/1apbqHpHYHdbI2kG8oS9B0NE2PNSMDVMf.jpg","f":"photos/f/1apbqHpHYHdbI2kG8oS9B0NE2PNSMDVMf.jpg"},{"t":"photos/t/1mB_I5q_JZRF-XqQwrdR_B4ox_PkYStum.jpg","f":"photos/f/1mB_I5q_JZRF-XqQwrdR_B4ox_PkYStum.jpg"}],"10":[{"t":"photos/t/1j_NrxjYm-Obc11gNCo0cXCkjn_WhDBXr.jpg","f":"photos/f/1j_NrxjYm-Obc11gNCo0cXCkjn_WhDBXr.jpg"},{"t":"photos/t/1sAIkJtmTeDZpoYAk4Zbs3Lh80WVfjUl1.jpg","f":"photos/f/1sAIkJtmTeDZpoYAk4Zbs3Lh80WVfjUl1.jpg"}],"11":[{"t":"photos/t/113sOgMFk7nVu3LGWQ5JB8SPqIxls8rQz.jpg","f":"photos/f/113sOgMFk7nVu3LGWQ5JB8SPqIxls8rQz.jpg"}],"12":[{"t":"photos/t/1OX9CJnGyRWmOPgcZV9OzJ-hnP1rcf8P-.jpg","f":"photos/f/1OX9CJnGyRWmOPgcZV9OzJ-hnP1rcf8P-.jpg"}],"13":[{"t":"photos/t/1om1Z1sz82R1mpVJUMGUcct8h-WVctc2T.jpg","f":"photos/f/1om1Z1sz82R1mpVJUMGUcct8h-WVctc2T.jpg"},{"t":"photos/t/1W5Twr4IXxxzhc4U9ZSJRuKYIUlNX6L5S.jpg","f":"photos/f/1W5Twr4IXxxzhc4U9ZSJRuKYIUlNX6L5S.jpg"}],"14":[{"t":"photos/t/1qGDEDcOkSJ8PUwyFCB4W17-_eTAGC7TN.jpg","f":"photos/f/1qGDEDcOkSJ8PUwyFCB4W17-_eTAGC7TN.jpg"}],"15":[{"t":"photos/t/1vg00FILND2MROZ53oTgT1vnBWLBU0bRa.jpg","f":"photos/f/1vg00FILND2MROZ53oTgT1vnBWLBU0bRa.jpg"},{"t":"photos/t/1N8xj5jqp--HviWLGGrnS0Jfcyytazm4O.jpg","f":"photos/f/1N8xj5jqp--HviWLGGrnS0Jfcyytazm4O.jpg"},{"t":"photos/t/1BkjcDnziVDbHJXa3IFu9VF3WCVgSDB5q.jpg","f":"photos/f/1BkjcDnziVDbHJXa3IFu9VF3WCVgSDB5q.jpg"}],"16":[{"t":"photos/t/1blNEiRnq72WOufMzKBHDXR3gXls7LSip.jpg","f":"photos/f/1blNEiRnq72WOufMzKBHDXR3gXls7LSip.jpg"},{"t":"photos/t/1DdWC6pB13HyRq9CZCFCFw77DWYUbxbjD.jpg","f":"photos/f/1DdWC6pB13HyRq9CZCFCFw77DWYUbxbjD.jpg"}],"17":[{"t":"photos/t/1CCcfTEs3eLJKHzYgfSfIFsNi7uyoctbh.jpg","f":"photos/f/1CCcfTEs3eLJKHzYgfSfIFsNi7uyoctbh.jpg"},{"t":"photos/t/1l7RYZ8aer9LS5Gz_CTof1M0VhZcQIHlR.jpg","f":"photos/f/1l7RYZ8aer9LS5Gz_CTof1M0VhZcQIHlR.jpg"},{"t":"photos/t/1TY40s9R9ojqtZgNkUqnv8Mfq0FGGs4kh.jpg","f":"photos/f/1TY40s9R9ojqtZgNkUqnv8Mfq0FGGs4kh.jpg"}],"18":[{"t":"photos/t/1ukekhaWI7S4PHI6ye_1mxn67pS58r7n_.jpg","f":"photos/f/1ukekhaWI7S4PHI6ye_1mxn67pS58r7n_.jpg"}],"19":[{"t":"photos/t/1fYpw3y-z-MSRDZprpNutCjaBZzeUL0KK.jpg","f":"photos/f/1fYpw3y-z-MSRDZprpNutCjaBZzeUL0KK.jpg"}],"20":[{"t":"photos/t/11KLcaLOIANG6Nfq8PmRLEULkzKt_mvYj.jpg","f":"photos/f/11KLcaLOIANG6Nfq8PmRLEULkzKt_mvYj.jpg"}],"21":[{"t":"photos/t/168m0GEDpjdVBP_jCySd-a7Cp0IktWVYF.jpg","f":"photos/f/168m0GEDpjdVBP_jCySd-a7Cp0IktWVYF.jpg"}],"22":[{"t":"photos/t/1vhBTR0V3cl-nyZde7iJjLVkD6SPh-Gj6.jpg","f":"photos/f/1vhBTR0V3cl-nyZde7iJjLVkD6SPh-Gj6.jpg"},{"t":"photos/t/1GP6GRH8TTfuKEUreSxXhRrzEypPeZgDT.jpg","f":"photos/f/1GP6GRH8TTfuKEUreSxXhRrzEypPeZgDT.jpg"}],"23":[{"t":"photos/t/1dzUysycTvDPgGTce3knJxahuicO9gmQW.jpg","f":"photos/f/1dzUysycTvDPgGTce3knJxahuicO9gmQW.jpg"},{"t":"photos/t/1tvBQX9ovJ3oEHMEYXiTZY9L2sCLR1ETp.jpg","f":"photos/f/1tvBQX9ovJ3oEHMEYXiTZY9L2sCLR1ETp.jpg"},{"t":"photos/t/1rI-Kl92ik4rwcAIhBzMGGZUaYIwylv6I.jpg","f":"photos/f/1rI-Kl92ik4rwcAIhBzMGGZUaYIwylv6I.jpg"},{"t":"photos/t/1Qk1V3_N3bA7CisRH-WuV5Bd3pSL-fNgx.jpg","f":"photos/f/1Qk1V3_N3bA7CisRH-WuV5Bd3pSL-fNgx.jpg"}],"24":[{"t":"photos/t/19K4KoER5MzAM-Jkv7qqfF4qsjPGij21U.jpg","f":"photos/f/19K4KoER5MzAM-Jkv7qqfF4qsjPGij21U.jpg"}],"25":[{"t":"photos/t/1p4eIwX0Q9DvjhzDbbFraudai7UTUSnL9.jpg","f":"photos/f/1p4eIwX0Q9DvjhzDbbFraudai7UTUSnL9.jpg"}],"26":[{"t":"photos/t/1apeVbaPOg-CwFC9OkFi5WT88n7yN4RYR.jpg","f":"photos/f/1apeVbaPOg-CwFC9OkFi5WT88n7yN4RYR.jpg"},{"t":"photos/t/1AXEiesaM6QzVcXyLEqAJu0HKw9-_cpIB.jpg","f":"photos/f/1AXEiesaM6QzVcXyLEqAJu0HKw9-_cpIB.jpg"},{"t":"photos/t/1N9wdULfnyo8sFsa8QQSBtPu6ChYjER-E.jpg","f":"photos/f/1N9wdULfnyo8sFsa8QQSBtPu6ChYjER-E.jpg"}],"28":[{"t":"photos/t/1Q_9S-eFfaKZIYy9PkqxNZEK4DYycLNzb.jpg","f":"photos/f/1Q_9S-eFfaKZIYy9PkqxNZEK4DYycLNzb.jpg"},{"t":"photos/t/1U_zLuFc11-F5EOS_ih7_7o4VfoD_uPvo.jpg","f":"photos/f/1U_zLuFc11-F5EOS_ih7_7o4VfoD_uPvo.jpg"},{"t":"photos/t/157laeK8wq0rhXQw-S4n9qPDL6gUjZ4Up.jpg","f":"photos/f/157laeK8wq0rhXQw-S4n9qPDL6gUjZ4Up.jpg"}],"29":[{"t":"photos/t/1uNTnKgIJ93s8qJcEAXwf-zQatA7P0LiS.jpg","f":"photos/f/1uNTnKgIJ93s8qJcEAXwf-zQatA7P0LiS.jpg"}],"30":[{"t":"photos/t/1Pfp1yDjZj4d6ogf_GZX6hIgaspMeEX27.jpg","f":"photos/f/1Pfp1yDjZj4d6ogf_GZX6hIgaspMeEX27.jpg"},{"t":"photos/t/1PhIsRv2GpO0kRgwWKL9bN_OXKGw7IvG-.jpg","f":"photos/f/1PhIsRv2GpO0kRgwWKL9bN_OXKGw7IvG-.jpg"},{"t":"photos/t/18T7pn9EJlPFC8y3WRlsdbK2XLtYtCPR1.jpg","f":"photos/f/18T7pn9EJlPFC8y3WRlsdbK2XLtYtCPR1.jpg"}],"31":[{"t":"photos/t/1B2cKUgyJhgFm0PkQLvHew50izbgahMKN.jpg","f":"photos/f/1B2cKUgyJhgFm0PkQLvHew50izbgahMKN.jpg"}],"32":[{"t":"photos/t/1GxxtPQWyxW7vAY_D0IvceFk5j-HiOPzd.jpg","f":"photos/f/1GxxtPQWyxW7vAY_D0IvceFk5j-HiOPzd.jpg"},{"t":"photos/t/1XvBzQEJ748HY2V6ZM--62r1Pj9Y_IREE.jpg","f":"photos/f/1XvBzQEJ748HY2V6ZM--62r1Pj9Y_IREE.jpg"}],"33":[{"t":"photos/t/1E0LsYXrRDrgR5x23gZJHpG2I5Pi2M8Fi.jpg","f":"photos/f/1E0LsYXrRDrgR5x23gZJHpG2I5Pi2M8Fi.jpg"},{"t":"photos/t/1w1U2lk9-qbefJjAODDTouvNfUjC4Y4Kx.jpg","f":"photos/f/1w1U2lk9-qbefJjAODDTouvNfUjC4Y4Kx.jpg"}],"34":[{"t":"photos/t/1fQ8Qe-nd6X8c4PJsf6V2GXjTxQZS0dgd.jpg","f":"photos/f/1fQ8Qe-nd6X8c4PJsf6V2GXjTxQZS0dgd.jpg"},{"t":"photos/t/1v9lkcvMr4QpAA0_UI3gP9vQSXyzSAKAO.jpg","f":"photos/f/1v9lkcvMr4QpAA0_UI3gP9vQSXyzSAKAO.jpg"}],"35":[{"t":"photos/t/1RHpJH7TfOFNgsUL4pYGgt7FwsnbTGsd4.jpg","f":"photos/f/1RHpJH7TfOFNgsUL4pYGgt7FwsnbTGsd4.jpg"}],"36":[{"t":"photos/t/1M9R_HQrx8UTs_yrfJy7YUfSR5BBqjHTH.jpg","f":"photos/f/1M9R_HQrx8UTs_yrfJy7YUfSR5BBqjHTH.jpg"}],"37":[{"t":"photos/t/1nZ5hRGDbDE8SIJOqu0rO1sTnRI2_dXen.jpg","f":"photos/f/1nZ5hRGDbDE8SIJOqu0rO1sTnRI2_dXen.jpg"},{"t":"photos/t/1mRA4iqPCQVmVrycI6BcZU82oJilc7d1c.jpg","f":"photos/f/1mRA4iqPCQVmVrycI6BcZU82oJilc7d1c.jpg"}],"38":[{"t":"photos/t/1vNE1FE7u4UFcA1tqI-LK9MEc30DTmIEd.jpg","f":"photos/f/1vNE1FE7u4UFcA1tqI-LK9MEc30DTmIEd.jpg"},{"t":"photos/t/1sDRJRDnzdLfypQFi5QckUB2x2qnflUtU.jpg","f":"photos/f/1sDRJRDnzdLfypQFi5QckUB2x2qnflUtU.jpg"}],"39":[{"t":"photos/t/1fq_uYuEtBJUY2-aOM_NhIHxWpdAFCCJD.jpg","f":"photos/f/1fq_uYuEtBJUY2-aOM_NhIHxWpdAFCCJD.jpg"}],"40":[{"t":"photos/t/1QCjevUXd_4wHkUghWrBWcqPOXABjO8vu.jpg","f":"photos/f/1QCjevUXd_4wHkUghWrBWcqPOXABjO8vu.jpg"},{"t":"photos/t/1BqU0oba3-wsfoRuFED0zvwfo_c5G4v2S.jpg","f":"photos/f/1BqU0oba3-wsfoRuFED0zvwfo_c5G4v2S.jpg"}],"41":[{"t":"photos/t/1eKtTpUd1H2MOuiMj2ZxdlYivRJgR2N9z.jpg","f":"photos/f/1eKtTpUd1H2MOuiMj2ZxdlYivRJgR2N9z.jpg"},{"t":"photos/t/19vQp2NeBynqj3fzwURqw2C0acThehoIt.jpg","f":"photos/f/19vQp2NeBynqj3fzwURqw2C0acThehoIt.jpg"}],"42":[{"t":"photos/t/1ADRH16TLcv2lUXFO3FCqFcGp2pd_P6aQ.jpg","f":"photos/f/1ADRH16TLcv2lUXFO3FCqFcGp2pd_P6aQ.jpg"},{"t":"photos/t/1WMhyTqK1dRyRW-NS_7iX1VcSHw3H-KwB.jpg","f":"photos/f/1WMhyTqK1dRyRW-NS_7iX1VcSHw3H-KwB.jpg"}],"43":[{"t":"photos/t/1FazclVpPUwggI2kUK4tcWGKcBWlJdfrX.jpg","f":"photos/f/1FazclVpPUwggI2kUK4tcWGKcBWlJdfrX.jpg"}],"44":[{"t":"photos/t/1nfxCFfmuQg4IJAMmvxQJWQz0NieeWKNC.jpg","f":"photos/f/1nfxCFfmuQg4IJAMmvxQJWQz0NieeWKNC.jpg"}],"45":[{"t":"photos/t/13iiBAKYB7FfBALv-LCFkVGdDaO1lGz5n.jpg","f":"photos/f/13iiBAKYB7FfBALv-LCFkVGdDaO1lGz5n.jpg"},{"t":"photos/t/1-KXVSS3OwCFmoodV5rtIUdhw01bcbrAU.jpg","f":"photos/f/1-KXVSS3OwCFmoodV5rtIUdhw01bcbrAU.jpg"},{"t":"photos/t/1bhR40_hjbR206plRHmGwmRb_9BSCoP5l.jpg","f":"photos/f/1bhR40_hjbR206plRHmGwmRb_9BSCoP5l.jpg"},{"t":"photos/t/1sKv-LQFr0SYOSayAYgHZl7tdwunDtE7C.jpg","f":"photos/f/1sKv-LQFr0SYOSayAYgHZl7tdwunDtE7C.jpg"}],"46":[{"t":"photos/t/1D513SHiSDWAgpVvhbyFva15l-ogFwfoK.jpg","f":"photos/f/1D513SHiSDWAgpVvhbyFva15l-ogFwfoK.jpg"},{"t":"photos/t/1GhKe-zjuE_8E_ApSV_XQNPTLjs3bFZ-j.jpg","f":"photos/f/1GhKe-zjuE_8E_ApSV_XQNPTLjs3bFZ-j.jpg"}],"47":[{"t":"photos/t/1qbwxfOSmOUIh7F1cnR5JeJSuhIOiEQvj.jpg","f":"photos/f/1qbwxfOSmOUIh7F1cnR5JeJSuhIOiEQvj.jpg"},{"t":"photos/t/1U_xvovZpUENYSxLYqVUEKTFKA1GcAe0t.jpg","f":"photos/f/1U_xvovZpUENYSxLYqVUEKTFKA1GcAe0t.jpg"},{"t":"photos/t/16b2YlOE8T2QhSgmFv0DG65y3BEWny1d8.jpg","f":"photos/f/16b2YlOE8T2QhSgmFv0DG65y3BEWny1d8.jpg"}],"48":[{"t":"photos/t/1rSkSdqA6BFUJ-uMcQ0SX0vvtQLvSOhLL.jpg","f":"photos/f/1rSkSdqA6BFUJ-uMcQ0SX0vvtQLvSOhLL.jpg"},{"t":"photos/t/1dpbYDASLHguTKDJ-u86zQl5NCTHvIXG-.jpg","f":"photos/f/1dpbYDASLHguTKDJ-u86zQl5NCTHvIXG-.jpg"},{"t":"photos/t/11qLP0CH26wEgXeKQ1oteLQW-JltvXIJH.jpg","f":"photos/f/11qLP0CH26wEgXeKQ1oteLQW-JltvXIJH.jpg"},{"t":"photos/t/1RIZto8wV07StmeKAKLyVw6xnb_xx6PrI.jpg","f":"photos/f/1RIZto8wV07StmeKAKLyVw6xnb_xx6PrI.jpg"}],"49":[{"t":"photos/t/1rShea4vMqeNURNzGqHZzrR_6bCmOVWwS.jpg","f":"photos/f/1rShea4vMqeNURNzGqHZzrR_6bCmOVWwS.jpg"},{"t":"photos/t/1LTfvHN6fD74-kGEPqihfJq-qhzh7ZbpA.jpg","f":"photos/f/1LTfvHN6fD74-kGEPqihfJq-qhzh7ZbpA.jpg"},{"t":"photos/t/1tZhkSawSMgKCp7JoEg1P1I0988-wQ3P_.jpg","f":"photos/f/1tZhkSawSMgKCp7JoEg1P1I0988-wQ3P_.jpg"},{"t":"photos/t/1BT4tJx6nvFP7GiK4tjA2Jf8tHujsS-Ns.jpg","f":"photos/f/1BT4tJx6nvFP7GiK4tjA2Jf8tHujsS-Ns.jpg"}],"50":[{"t":"photos/t/1CsQWjEm74hs6ZoeXfaW0l2qX1VcJYAeJ.jpg","f":"photos/f/1CsQWjEm74hs6ZoeXfaW0l2qX1VcJYAeJ.jpg"},{"t":"photos/t/1q3ceOediVCp1G4JdRDmrK2Wgjtk7MY8T.jpg","f":"photos/f/1q3ceOediVCp1G4JdRDmrK2Wgjtk7MY8T.jpg"},{"t":"photos/t/1QBWFB4078fNY5KQWIKB_iMKPz0JdEmfZ.jpg","f":"photos/f/1QBWFB4078fNY5KQWIKB_iMKPz0JdEmfZ.jpg"}],"51":[{"t":"photos/t/1K36vqFCjf-xJqu5BsCv-CfdnwPTalEqQ.jpg","f":"photos/f/1K36vqFCjf-xJqu5BsCv-CfdnwPTalEqQ.jpg"},{"t":"photos/t/1Im3hWocDSd8fceoER-6EkY1NHIe4gfsN.jpg","f":"photos/f/1Im3hWocDSd8fceoER-6EkY1NHIe4gfsN.jpg"},{"t":"photos/t/11V8us7vMljTDsFXpevjx9JFE_bxxJTi-.jpg","f":"photos/f/11V8us7vMljTDsFXpevjx9JFE_bxxJTi-.jpg"}],"52":[{"t":"photos/t/1EOkXqdd3WxKynfnL1mCbPa7pTJHmeKxs.jpg","f":"photos/f/1EOkXqdd3WxKynfnL1mCbPa7pTJHmeKxs.jpg"},{"t":"photos/t/1hKy_fJ3uDY0ql8KeFcqrSZfvPNmoirAi.jpg","f":"photos/f/1hKy_fJ3uDY0ql8KeFcqrSZfvPNmoirAi.jpg"}],"53":[{"t":"photos/t/1-agGNsIbYkG9KfjAY0A7xGnv8YyfKE7i.jpg","f":"photos/f/1-agGNsIbYkG9KfjAY0A7xGnv8YyfKE7i.jpg"},{"t":"photos/t/1qP0ft3jcx6hK7SlOstC23uANgU_152Z8.jpg","f":"photos/f/1qP0ft3jcx6hK7SlOstC23uANgU_152Z8.jpg"},{"t":"photos/t/17eP5vxJxQgJDPc_akH4jFsCC047kAy8W.jpg","f":"photos/f/17eP5vxJxQgJDPc_akH4jFsCC047kAy8W.jpg"}],"54":[{"t":"photos/t/14_ZtSEJ_W5O8djuQUDB_exjn_oFSOxKQ.jpg","f":"photos/f/14_ZtSEJ_W5O8djuQUDB_exjn_oFSOxKQ.jpg"},{"t":"photos/t/1QvrBhDCvZ9f1ax0smCCnR2PaJd_WDFQl.jpg","f":"photos/f/1QvrBhDCvZ9f1ax0smCCnR2PaJd_WDFQl.jpg"},{"t":"photos/t/1Y_Wrf2oqIB4vb5I1apCt4ohEpuQj90tH.jpg","f":"photos/f/1Y_Wrf2oqIB4vb5I1apCt4ohEpuQj90tH.jpg"}],"55":[{"t":"photos/t/1uYqCb6wGrp0bYIRy5EILd3zX648G5Odl.jpg","f":"photos/f/1uYqCb6wGrp0bYIRy5EILd3zX648G5Odl.jpg"},{"t":"photos/t/1BpGiWK5eE5cmUwhY4uSlU-bnRMhuE1mk.jpg","f":"photos/f/1BpGiWK5eE5cmUwhY4uSlU-bnRMhuE1mk.jpg"}],"56":[{"t":"photos/t/1j3uulnPSxFIdHJpnFWybbksUWQ3jBWus.jpg","f":"photos/f/1j3uulnPSxFIdHJpnFWybbksUWQ3jBWus.jpg"},{"t":"photos/t/1PMyY3xiOuoxLh7vDWK5yUE6PKHZJTQaI.jpg","f":"photos/f/1PMyY3xiOuoxLh7vDWK5yUE6PKHZJTQaI.jpg"}],"57":[{"t":"photos/t/14dn6c7YmUtbWgsMa7Y8sY2IWHF9X-oZ4.jpg","f":"photos/f/14dn6c7YmUtbWgsMa7Y8sY2IWHF9X-oZ4.jpg"},{"t":"photos/t/1doP024SCdVEgMN6PiafN-ayeIv6nvgrx.jpg","f":"photos/f/1doP024SCdVEgMN6PiafN-ayeIv6nvgrx.jpg"}],"58":[{"t":"photos/t/1UjVXCHvOwxweNPg8nF-lA5ArWoLxf6jQ.jpg","f":"photos/f/1UjVXCHvOwxweNPg8nF-lA5ArWoLxf6jQ.jpg"}],"59":[{"t":"photos/t/1wsZ0wmgUdegIUBz0rFKxgENQBIFaVBzM.jpg","f":"photos/f/1wsZ0wmgUdegIUBz0rFKxgENQBIFaVBzM.jpg"}],"60":[{"t":"photos/t/1DFOt7AmBxKy0U3WEvoby2rr9aj_sIHbw.jpg","f":"photos/f/1DFOt7AmBxKy0U3WEvoby2rr9aj_sIHbw.jpg"}],"61":[{"t":"photos/t/1ukzwe2v8QzdznlYP7n7GrpV5pbFkiLNM.jpg","f":"photos/f/1ukzwe2v8QzdznlYP7n7GrpV5pbFkiLNM.jpg"}],"62":[{"t":"photos/t/1rOBtYele3kcoHJFbWyDIGCpx2_ckuXk1.jpg","f":"photos/f/1rOBtYele3kcoHJFbWyDIGCpx2_ckuXk1.jpg"}],"63":[{"t":"photos/t/1w-p1rbodRq124ttkFGJ09meZZ3AKxPzD.jpg","f":"photos/f/1w-p1rbodRq124ttkFGJ09meZZ3AKxPzD.jpg"}],"64":[{"t":"photos/t/1MVzBM6jwxtt3LP5g70TV5ADoISrmNJzO.jpg","f":"photos/f/1MVzBM6jwxtt3LP5g70TV5ADoISrmNJzO.jpg"},{"t":"photos/t/14Y31iDfMQsMIiPeLQUCj4ozVyI3TxVGy.jpg","f":"photos/f/14Y31iDfMQsMIiPeLQUCj4ozVyI3TxVGy.jpg"},{"t":"photos/t/1ukbu4XD_PWtTiKnKYPopuRjx2wCHsJ7A.jpg","f":"photos/f/1ukbu4XD_PWtTiKnKYPopuRjx2wCHsJ7A.jpg"}],"65":[{"t":"photos/t/1BXXP3z68D5SgZ06XIIuBPB-ykeIhQylI.jpg","f":"photos/f/1BXXP3z68D5SgZ06XIIuBPB-ykeIhQylI.jpg"}],"66":[{"t":"photos/t/1yQ677HnmFIF9w7nsuFueztOnJJmVYXrQ.jpg","f":"photos/f/1yQ677HnmFIF9w7nsuFueztOnJJmVYXrQ.jpg"},{"t":"photos/t/1XaL5F1apa5bboCBvfMtN1xtHJAvX_roU.jpg","f":"photos/f/1XaL5F1apa5bboCBvfMtN1xtHJAvX_roU.jpg"},{"t":"photos/t/1p0Amab_J96RekqAuM2DO48lTXOjjNujb.jpg","f":"photos/f/1p0Amab_J96RekqAuM2DO48lTXOjjNujb.jpg"},{"t":"photos/t/16cndcXmpTDUZH9uuIXr8A5wKyT-HUe10.jpg","f":"photos/f/16cndcXmpTDUZH9uuIXr8A5wKyT-HUe10.jpg"}],"67":[{"t":"photos/t/1gaSEXUqPmaB6iZ47I_56gmIdzrPetWeW.jpg","f":"photos/f/1gaSEXUqPmaB6iZ47I_56gmIdzrPetWeW.jpg"},{"t":"photos/t/1sqQ1F0-lfaSnGj5PtpN3AQ97Lya6Z108.jpg","f":"photos/f/1sqQ1F0-lfaSnGj5PtpN3AQ97Lya6Z108.jpg"},{"t":"photos/t/1Jfd78xJwPBB5OhpNi0Cox-wRkPsM0CkH.jpg","f":"photos/f/1Jfd78xJwPBB5OhpNi0Cox-wRkPsM0CkH.jpg"},{"t":"photos/t/1aUWou1TxNjLzz_NRSjZw6c41iW8s9eWU.jpg","f":"photos/f/1aUWou1TxNjLzz_NRSjZw6c41iW8s9eWU.jpg"}],"68":[{"t":"photos/t/1wWA9xUT9qoWUJZIA__4o9OkjYIsYMH8r.jpg","f":"photos/f/1wWA9xUT9qoWUJZIA__4o9OkjYIsYMH8r.jpg"},{"t":"photos/t/1xeWBfLS5L5vlp9JffjjmEwTVRjkm4dBI.jpg","f":"photos/f/1xeWBfLS5L5vlp9JffjjmEwTVRjkm4dBI.jpg"},{"t":"photos/t/1PLOMGHoXGDuKdH56YNAP5VHLcZWKWzGb.jpg","f":"photos/f/1PLOMGHoXGDuKdH56YNAP5VHLcZWKWzGb.jpg"}]}</script>
+
+<script>
+(function(){
+  "use strict";
+  var DATA   = JSON.parse(document.getElementById('shopdata').textContent);
+  var PHOTOS = JSON.parse(document.getElementById('shopphotos').textContent);
+  var ITEMS  = DATA.items;
+
+  var TINT = {
+    '大型傢俱':'var(--t-furniture)', '家電':'var(--t-appliance)', '燈具':'var(--t-lamp)',
+    '廚房用品':'var(--t-kitchen)', '杯盤餐具':'var(--t-tableware)',
+    '生活雜物':'var(--t-misc)', '衣物':'var(--t-clothes)'
+  };
+  var STORE = 'qnl-secondhand-picks';
+
+  var state = { cat:'全部', q:'', sort:'default', picks:[] };
+  try {
+    var saved = JSON.parse(localStorage.getItem(STORE) || '[]');
+    if (Array.isArray(saved)) state.picks = saved.filter(function(id){
+      return ITEMS.some(function(it){ return it.id === id; });
+    });
+  } catch(e){}
+
+  var $ = function(id){ return document.getElementById(id); };
+  var esc = function(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  };
+  var nt = function(n){ return 'NT$' + n.toLocaleString('en-US'); };
+  var photosOf = function(id){ return PHOTOS[id] || []; };
+  // 照片可以是一個網址字串，也可以是 {t:縮圖, f:大圖}
+  var pick = function(p, k){ return typeof p === 'string' ? p : p[k]; };
+
+  /* ---------- 價格顯示 ---------- */
+  function priceText(it){
+    if (it.price === 0) return { text:'免費贈送', cls:'is-gift' };
+    if (it.price == null) return { text: it.priceNote || '價格洽談', cls:'is-open' };
+    return { text: nt(it.price), cls:'' };
+  }
+
+  /* ---------- 分類列 ---------- */
+  function renderChips(){
+    var cats = ['全部'].concat(DATA.cats);
+    $('chips').innerHTML = cats.map(function(c){
+      var n = c === '全部' ? ITEMS.length
+            : ITEMS.filter(function(i){ return i.cat === c; }).length;
+      return '<button class="chip" data-cat="' + esc(c) + '" aria-pressed="' +
+             (state.cat === c) + '">' + esc(c) + '<span class="n">' + n + '</span></button>';
+    }).join('');
+  }
+
+  /* ---------- 篩選與排序 ---------- */
+  function visible(){
+    var q = state.q.trim().toLowerCase();
+    var list = ITEMS.filter(function(it){
+      if (state.cat !== '全部' && it.cat !== state.cat) return false;
+      if (!q) return true;
+      return (it.name + ' ' + it.model + ' ' + it.cat).toLowerCase().indexOf(q) > -1;
+    });
+    if (state.sort !== 'default'){
+      var dir = state.sort === 'asc' ? 1 : -1;
+      list = list.slice().sort(function(a, b){
+        // 未定價的一律排在最後，不參與高低比較
+        if (a.price == null && b.price == null) return a.id - b.id;
+        if (a.price == null) return 1;
+        if (b.price == null) return -1;
+        return (a.price - b.price) * dir;
+      });
+    }
+    return list;
+  }
+
+  /* ---------- 商品卡 ---------- */
+  function cardHTML(it){
+    var ph = photosOf(it.id);
+    var p = priceText(it);
+    var picked = state.picks.indexOf(it.id) > -1;
+    var media = ph.length
+      ? '<img src="' + pick(ph[0], 't') + '" alt="' + esc(it.name) + '" loading="lazy" decoding="async">' +
+        (ph.length > 1 ? '<span class="photocount">' + ph.length + ' 張</span>' : '')
+      : '<div class="tile" style="--tint:' + (TINT[it.cat] || 'var(--card-2)') + '">' +
+          '<span class="tile__cat">' + esc(it.cat) + '</span>' +
+          '<span class="tile__name">' + esc(it.name) + '</span>' +
+          '<span class="tile__hint">照片準備中</span>' +
+        '</div>';
+    return '<button class="card' + (picked ? ' is-picked' : '') + '" data-id="' + it.id +
+             '" aria-label="' + esc(it.name) + '，' + esc(p.text) + '，查看詳細">' +
+      (it.price === 0 ? '<span class="badge">免費</span>' : '') +
+      '<div class="card__media">' + media + '</div>' +
+      '<div class="card__body">' +
+        '<p class="card__name">' + esc(it.name) + '</p>' +
+        '<p class="card__price ' + p.cls + '">' + esc(p.text) + '</p>' +
+      '</div></button>';
+  }
+
+  function renderGrid(){
+    var list = visible();
+    $('grid').innerHTML = list.map(cardHTML).join('');
+    $('empty').hidden = list.length > 0;
+    $('count').textContent = state.cat === '全部'
+      ? '共 ' + list.length + ' 件商品'
+      : state.cat + '　' + list.length + ' 件';
+  }
+
+  /* ---------- 商品詳細 pop-up ---------- */
+  var openId = null, lastFocus = null;
+
+  function detailHTML(it){
+    var ph = photosOf(it.id);
+    var p = priceText(it);
+    var picked = state.picks.indexOf(it.id) > -1;
+
+    var gallery = ph.length
+      ? '<div class="gallery__main"><img id="gMain" src="' + pick(ph[0], 'f') + '" alt="' + esc(it.name) + '"></div>' +
+        (ph.length > 1
+          ? '<div class="thumbs">' + ph.map(function(src, i){
+              return '<button class="thumb" data-i="' + i + '" aria-current="' + (i === 0) +
+                     '" aria-label="第 ' + (i + 1) + ' 張照片"><img src="' + pick(src, 't') +
+                     '" alt="" loading="lazy"></button>';
+            }).join('') + '</div>'
+          : '')
+      : '<div class="gallery__main"><div class="gallery__tile" style="--tint:' +
+          (TINT[it.cat] || 'var(--card-2)') + '"><span class="t">' + esc(it.name) +
+          '</span><span class="s">這件還沒拍照，想看實品可以直接問我們</span></div></div>';
+
+    var rows = '';
+    if (it.size)  rows += '<dt>尺寸</dt><dd>' + esc(it.size) + '</dd>';
+    if (it.when)  rows += '<dt>可取貨</dt><dd>' + esc(it.when) + '</dd>';
+    if (it.note)  rows += '<dt>備註</dt><dd>' + esc(it.note) + '</dd>';
+
+    var was = '';
+    if (it.orig) {
+      was = '<span class="priceline__was">原價 <s>' + nt(it.orig) + '</s>' +
+            (it.origWhen ? '　' + esc(it.origWhen) + ' 購入' : '') + '</span>';
+    } else if (it.origWhen) {
+      was = '<span class="priceline__was">' + esc(it.origWhen) + ' 購入</span>';
+    }
+
+    return '<div class="gallery">' + gallery + '</div>' +
+      '<div class="detail">' +
+        '<p class="detail__cat">' + esc(it.cat) + '</p>' +
+        '<h2 id="mTitle">' + esc(it.name) + '</h2>' +
+        (it.model ? '<p class="detail__model">' + esc(it.model) + '</p>' : '') +
+        '<div class="priceline">' +
+          '<span class="priceline__now ' + p.cls + '">' + esc(p.text) + '</span>' + was +
+        '</div>' +
+        (it.priceNote && it.price
+          ? '<p class="pricenote">' + esc(it.priceNote) + '</p>' : '') +
+        (rows ? '<dl class="spec">' + rows + '</dl>' : '') +
+        (it.link
+          ? '<a class="extlink" href="' + esc(it.link) + '" target="_blank" rel="noopener noreferrer">' +
+            '看這件商品的原始頁面' +
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>'
+          : '') +
+        '<div class="detail__actions">' +
+          '<button class="btn btn--wide' + (picked ? ' btn--ghost' : '') +
+            '" id="mPick" data-id="' + it.id + '">' +
+            (picked ? '從想買清單移除' : '加入想買清單') + '</button>' +
+        '</div>' +
+      '</div>';
+  }
+
+  function openItem(id){
+    var it = ITEMS.filter(function(i){ return i.id === id; })[0];
+    if (!it) return;
+    openId = id;
+    lastFocus = document.activeElement;
+    $('mBody').innerHTML = detailHTML(it);
+    $('scrim').hidden = false;
+    requestAnimationFrame(function(){ $('scrim').classList.add('is-open'); });
+    $('modal').scrollTop = 0;
+    $('mClose').focus();
+  }
+  function closeItem(){
+    openId = null;
+    $('scrim').classList.remove('is-open');
+    setTimeout(function(){ $('scrim').hidden = true; }, 180);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  /* ---------- 想買清單 ---------- */
+  function save(){
+    try { localStorage.setItem(STORE, JSON.stringify(state.picks)); } catch(e){}
+  }
+  function toggle(id){
+    var i = state.picks.indexOf(id);
+    if (i > -1) state.picks.splice(i, 1); else state.picks.push(id);
+    save(); renderGrid(); renderDock(); renderSheet();
+    if (openId === id) $('mBody').innerHTML = detailHTML(
+      ITEMS.filter(function(x){ return x.id === id; })[0]);
+  }
+  function pickedItems(){
+    return state.picks.map(function(id){
+      return ITEMS.filter(function(i){ return i.id === id; })[0];
+    }).filter(Boolean);
+  }
+  function totals(){
+    var list = pickedItems(), sum = 0, open = 0;
+    list.forEach(function(it){
+      if (it.price == null) open++; else sum += it.price;
+    });
+    return { n:list.length, sum:sum, open:open };
+  }
+
+  function renderDock(){
+    var t = totals();
+    $('dock').classList.toggle('is-on', t.n > 0);
+    $('dockSum').innerHTML = '已選 ' + t.n + ' 件　<b>' + nt(t.sum) + '</b>' +
+      (t.open ? '<span class="sub">另有 ' + t.open + ' 件價格洽談</span>' : '');
+  }
+
+  function renderSheet(){
+    var list = pickedItems(), t = totals();
+    $('picks').innerHTML = list.length
+      ? list.map(function(it){
+          var p = priceText(it);
+          return '<li><span class="picks__name">' + esc(it.name) +
+            '<span>' + esc(it.cat) + '</span></span>' +
+            '<span class="picks__price ' + p.cls + '">' + esc(p.text) + '</span>' +
+            '<button class="picks__del" data-del="' + it.id +
+            '" aria-label="移除 ' + esc(it.name) + '">×</button></li>';
+        }).join('')
+      : '<li><span class="picks__name" style="color:var(--muted)">還沒有選任何商品</span></li>';
+    $('total').innerHTML = '<span>小計' +
+      (t.open ? '<span class="sub">　（' + t.open + ' 件價格洽談，未計入）</span>' : '') +
+      '</span><b>' + nt(t.sum) + '</b>';
+    $('msg').value = buildMessage();
+  }
+
+  function buildMessage(){
+    var list = pickedItems(), t = totals();
+    var lines = ['【青年路搬家二手拍・想買清單】', ''];
+    list.forEach(function(it, i){
+      var p = priceText(it);
+      lines.push((i + 1) + '. ' + it.name + '（' + it.cat + '）　' + p.text);
+      if (it.priceNote && it.price) lines.push('   ※ ' + it.priceNote);
+    });
+    if (!list.length) lines.push('（尚未選擇商品）');
+    lines.push('');
+    lines.push('小計：' + nt(t.sum) + (t.open ? '（另有 ' + t.open + ' 件價格洽談）' : ''));
+    lines.push('');
+    lines.push('姓名／暱稱：' + ($('fName').value.trim() || '（待填）'));
+    lines.push('聯絡方式：'   + ($('fContact').value.trim() || '（待填）'));
+    lines.push('方便取貨時間：' + ($('fWhen').value.trim() || '（待填）'));
+    lines.push('');
+    lines.push('（此清單由青年路二手拍網站產生，請傳給 LINE ID：ksh000843）');
+    return lines.join('\n');
+  }
+
+  function toast(msg){
+    var el = $('toast');
+    el.textContent = msg;
+    el.classList.add('is-on');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){ el.classList.remove('is-on'); }, 2600);
+  }
+
+  function copyMessage(){
+    var text = buildMessage();
+    if (!pickedItems().length){ toast('清單是空的，先挑幾件商品吧'); return; }
+    var done = function(){ toast('已複製，貼給我們就可以了'); };
+    var fallback = function(){
+      var ta = $('msg');
+      $('msg').closest('details').open = true;
+      ta.removeAttribute('readonly');
+      ta.select(); ta.setSelectionRange(0, 99999);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch(e){}
+      ta.setAttribute('readonly', '');
+      if (ok) done();
+      else toast('這個瀏覽器擋住了複製，請手動選取下方文字');
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  function openSheet(){
+    renderSheet();
+    $('sheet').hidden = false;
+    requestAnimationFrame(function(){ $('sheet').classList.add('is-open'); });
+    $('sClose').focus();
+  }
+  function closeSheet(){
+    $('sheet').classList.remove('is-open');
+    setTimeout(function(){ $('sheet').hidden = true; }, 180);
+  }
+
+  /* ---------- 事件 ---------- */
+  $('chips').addEventListener('click', function(e){
+    var b = e.target.closest('.chip'); if (!b) return;
+    state.cat = b.dataset.cat;
+    renderChips(); renderGrid();
+  });
+  $('q').addEventListener('input', function(e){ state.q = e.target.value; renderGrid(); });
+  $('sort').addEventListener('change', function(e){ state.sort = e.target.value; renderGrid(); });
+
+  $('grid').addEventListener('click', function(e){
+    var c = e.target.closest('.card'); if (!c) return;
+    openItem(Number(c.dataset.id));
+  });
+
+  $('mBody').addEventListener('click', function(e){
+    var pickBtn = e.target.closest('#mPick');
+    if (pickBtn){ toggle(Number(pickBtn.dataset.id)); return; }
+    var th = e.target.closest('.thumb');
+    if (th){
+      var ph = photosOf(openId);
+      var main = $('gMain');
+      if (main) main.src = pick(ph[Number(th.dataset.i)], 'f');
+      Array.prototype.forEach.call($('mBody').querySelectorAll('.thumb'), function(t){
+        t.setAttribute('aria-current', String(t === th));
+      });
+    }
+  });
+
+  $('mClose').addEventListener('click', closeItem);
+  $('scrim').addEventListener('click', function(e){ if (e.target === $('scrim')) closeItem(); });
+  $('dockOpen').addEventListener('click', openSheet);
+  $('sClose').addEventListener('click', closeSheet);
+  $('sheet').addEventListener('click', function(e){ if (e.target === $('sheet')) closeSheet(); });
+  $('picks').addEventListener('click', function(e){
+    var d = e.target.closest('[data-del]'); if (!d) return;
+    toggle(Number(d.dataset.del));
+  });
+  ['fName','fContact','fWhen'].forEach(function(id){
+    $(id).addEventListener('input', function(){ $('msg').value = buildMessage(); });
+  });
+  $('copyBtn').addEventListener('click', copyMessage);
+  $('clearBtn').addEventListener('click', function(){
+    state.picks = []; save(); renderGrid(); renderDock(); renderSheet();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key !== 'Escape') return;
+    if (!$('sheet').hidden) closeSheet();
+    else if (!$('scrim').hidden) closeItem();
+  });
+
+  $('updated').textContent = DATA.updated;
+  renderChips(); renderGrid(); renderDock(); renderSheet();
+})();
+</script>
