@@ -316,7 +316,7 @@
    "name": "掛燙機",
    "model": "Electrolux 極淨呵護700 直立式蒸氣掛燙機（燕麥白）1600W",
    "size": "30×34×170 cm",
-   "price": 500,
+   "price": 750,
    "priceNote": "",
    "orig": 2990,
    "origWhen": "2025",
@@ -969,21 +969,6 @@
    "note": "",
    "link": "https://uq.goodjack.tw/hmall-products/u0000000020333",
    "nPhoto": 4
-  },
-  {
-   "id": 68,
-   "cat": "廚房用品",
-   "name": "柳宗理片手鍋（附蓋）",
-   "model": "柳宗理",
-   "size": "18cm",
-   "price": 500,
-   "priceNote": "",
-   "orig": 2000,
-   "origWhen": "",
-   "when": "10月初可搬走",
-   "note": "不適用電磁爐，僅適用瓦斯爐",
-   "link": "https://www.momoshop.com.tw/product/14386516?osm=Ad07&utm_source=googleshop&utm_medium=googleshop-pla-label3&gad_source=1&gad_campaignid=22562159723&gbraid=0AAAAADlbkmOGEiserAzSJ8Q25dM1qR9KO&gclid=CjwKCAjw48TUBhBREiwAK0GnQZsyUc5xx-NvA49qBSDEDdJy6MiyEKtP6GQl4azAUK8phhN_yAA9xhoCEU4QAvD_BwE",
-   "nPhoto": 3
   }
  ]
 }
