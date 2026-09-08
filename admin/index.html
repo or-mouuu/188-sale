@@ -86,6 +86,7 @@ h1{font-family:"Noto Serif TC",Georgia,serif; font-weight:700;
 .pubmsg{font-size:12.5px; color:var(--muted)}
 .pubmsg.err{color:var(--crit)}
 .pubmsg.ok{color:var(--ok)}
+.pubmsg.warn{color:var(--warn)}
 
 /* ---- controls ---- */
 .controls{position:sticky; top:47px; z-index:20; background:var(--surface);
@@ -477,11 +478,56 @@ async function publish(){
     remote = json(D);
     clearDraft();
     publishing = false; render();
-    say('已發佈。網站約 2 分鐘後更新完成。', 'ok');
+    say('已送出，正在等網站重建…（0:00）');
+    watchLive(say);
   } catch(e){
     publishing = false; render();
     say(e.message, 'err');
   }
+}
+
+/* ---------- 確認前台真的更新了 ----------
+   重建（約 40 秒）→ Pages 部署（約 40 秒）→ CDN 快取最長 10 分鐘，
+   中間去看會看到舊版。所以發佈後直接抓前台比對，比報時間可靠。 */
+let watchGen = 0;
+
+function expectedIds(){
+  return new Set(D.items.filter(i => !i.sold).map(i => i.id));
+}
+
+async function liveIds(){
+  try {
+    const r = await fetch('../index.html?v=' + Date.now(), {cache:'no-store'});
+    if (!r.ok) return null;
+    const m = (await r.text()).match(/id="shopdata">([\s\S]*?)<\/script>/);
+    if (!m) return null;
+    const d = JSON.parse(m[1].replace(/<\\\//g, '</'));
+    return new Set(d.items.map(i => i.id));
+  } catch(e){ return null; }
+}
+
+function sameSet(got, want){
+  if (!got || got.size !== want.size) return false;
+  for (const x of want) if (!got.has(x)) return false;
+  return true;
+}
+
+async function watchLive(say){
+  const gen = ++watchGen;
+  const want = expectedIds();
+  const started = Date.now();
+  while (Date.now() - started < 8 * 60 * 1000){
+    if (gen !== watchGen) return;                 // 又按了一次發佈，這個守候作廢
+    if (sameSet(await liveIds(), want)){
+      if (gen === watchGen) say('前台已更新，目前顯示 ' + want.size + ' 件。', 'ok');
+      return;
+    }
+    const t = Math.round((Date.now() - started) / 1000);
+    say('已送出，正在等網站重建…（' +
+        Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0') + '）');
+    await new Promise(r => setTimeout(r, 12000));
+  }
+  if (gen === watchGen) say('等超過 8 分鐘還沒更新，去「看重建進度」看看是不是卡住了。', 'warn');
 }
 
 function b64(str){
@@ -629,8 +675,9 @@ function render(){
       <p class="eyebrow">出清盤點</p>
       <h1>青年路搬家二手拍</h1>
       <p class="lede">改完資料按右上角<strong>發佈到前台</strong>，
-        買家看的網站會自動重建，約兩分鐘後生效。
-        <a href="../" target="_blank" rel="noopener">看前台</a> ・
+        買家看的網站會自動重建。按下之後這裡會一直等到前台真的換上新資料才報「已更新」，
+        通常一到三分鐘。
+        <a href="../" id="viewsite" target="_blank" rel="noopener">看前台</a> ・
         <a href="https://github.com/${REPO}/actions" target="_blank" rel="noopener">看重建進度</a></p>
       ${banner}${draftNote}
     </div>
@@ -771,6 +818,12 @@ document.addEventListener('click', e => {
   if (chip){
     if (chip.dataset.g === 'cat') fCat = chip.dataset.v; else fSt = chip.dataset.v;
     render(); return;
+  }
+  const vs = e.target.closest('#viewsite');
+  if (vs){                                   // 帶時間戳，避開瀏覽器與 CDN 的舊快取
+    e.preventDefault();
+    window.open('../?v=' + Date.now(), '_blank', 'noopener');
+    return;
   }
   if (e.target.closest('#add')){ openEditor(null); return; }
   if (e.target.closest('#pubbtn')){ publish(); return; }
