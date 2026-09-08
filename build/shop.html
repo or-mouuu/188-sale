@@ -143,6 +143,9 @@ main{padding:28px 0 60px}
 .card__price.is-open{font-size:12.5px; font-weight:400; color:var(--muted);
   font-family:"Noto Sans TC",sans-serif}
 .card__price.is-gift{color:var(--gift)}
+/* 可取貨時間：長的（例「10月初可搬走，需自行搬運」）折成兩行，不硬截斷語意 */
+.card__when{margin:2px 0 0; font-size:11.5px; line-height:1.35; color:var(--muted);
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
 .badge{position:absolute; top:10px; right:10px; z-index:2;
   font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.08em;
   padding:3px 8px; border-radius:999px; background:var(--gift-bg); color:var(--gift)}
@@ -168,6 +171,7 @@ main{padding:28px 0 60px}
   .card__name{font-size:13.5px; line-height:1.4; -webkit-line-clamp:2}
   .card__price{font-size:15px; line-height:1.25}
   .card__price.is-open{font-size:12.5px}
+  .card__when{font-size:11px; margin-top:1px}
   .photocount{font-size:9.5px; padding:2px 6px; bottom:6px; right:6px}
   .badge{font-size:9.5px; padding:2px 7px; top:7px; right:7px}
   .card.is-picked::after{font-size:9.5px; padding:2px 7px; top:7px; left:7px}
@@ -548,12 +552,14 @@ footer.end{border-top:1px solid var(--line); padding:26px 0 40px; color:var(--mu
           '<span class="tile__hint">照片準備中</span>' +
         '</div>';
     return '<button class="card' + (picked ? ' is-picked' : '') + '" data-id="' + it.id +
-             '" aria-label="' + esc(it.name) + '，' + esc(p.text) + '，查看詳細">' +
+             '" aria-label="' + esc(it.name) + '，' + esc(p.text) +
+             (it.when ? '，' + esc(it.when) : '') + '，查看詳細">' +
       (it.price === 0 ? '<span class="badge">免費</span>' : '') +
       '<div class="card__media">' + media + '</div>' +
       '<div class="card__body">' +
         '<p class="card__name">' + esc(it.name) + '</p>' +
         '<p class="card__price ' + p.cls + '">' + esc(p.text) + '</p>' +
+        (it.when ? '<p class="card__when">' + esc(it.when) + '</p>' : '') +
       '</div></button>';
   }
 
