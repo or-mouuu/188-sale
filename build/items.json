@@ -781,8 +781,8 @@
    "name": "intel 保溫杯",
    "model": "無品牌",
    "size": "",
-   "price": 50,
-   "priceNote": "",
+   "price": 0,
+   "priceNote": "免費贈送",
    "orig": null,
    "origWhen": "",
    "when": "現在可帶走",
@@ -791,34 +791,19 @@
    "nPhoto": 2
   },
   {
-   "id": 58,
-   "cat": "杯盤餐具",
-   "name": "捷元保溫杯",
-   "model": "無品牌",
-   "size": "",
-   "price": 50,
-   "priceNote": "",
-   "orig": null,
-   "origWhen": "",
-   "when": "現在可帶走",
-   "note": "",
-   "link": "",
-   "nPhoto": 1
-  },
-  {
    "id": 59,
    "cat": "杯盤餐具",
    "name": "北臉保溫杯",
    "model": "The North Face",
    "size": "",
-   "price": 80,
-   "priceNote": "",
+   "price": 0,
+   "priceNote": "免費贈送",
    "orig": null,
    "origWhen": "",
    "when": "現在可帶走",
    "note": "",
    "link": "",
-   "nPhoto": 1
+   "nPhoto": 3
   },
   {
    "id": 60,
