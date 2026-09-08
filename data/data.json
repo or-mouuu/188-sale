@@ -40,12 +40,12 @@
    "s": "80×40×160 cm",
    "buy": "3,490（2023.08）",
    "sell": "500",
-   "when": "11-12月可搬走",
+   "when": "11-12月可搬走，需自行搬走",
    "ph": 4,
    "url": "https://drive.google.com/drive/folders/1Dnq8Qe3o49DuWoSjBO4ofT738-Bnxcqp",
    "link": "",
    "cover": "",
-   "note": "",
+   "note": "可拆，需自行搬走",
    "sold": false
   },
   {
@@ -254,7 +254,7 @@
    "link": "",
    "cover": "",
    "note": "較新",
-   "sold": false
+   "sold": true
   },
   {
    "id": 19,
@@ -279,7 +279,7 @@
    "m": "one amadana 17L 機械式 STWM-0101",
    "s": "31.5×45.5×26.5 cm・11.3kg",
    "buy": "2,000（2022）",
-   "sell": "500",
+   "sell": "700",
    "when": "11-12月可搬走",
    "ph": 1,
    "url": "https://drive.google.com/drive/folders/140pwlGRmo-hsH-a5m2_omcNV_Ue56N6h",
@@ -295,7 +295,7 @@
    "m": "TOSHIBA 32L 雙溫控旋風電烤箱 TL1-MC32AZT",
    "s": "49.5×32.5×40.5 cm・9.1kg",
    "buy": "3,000（2023.08）",
-   "sell": "800",
+   "sell": "1000",
    "when": "11-12月可搬走",
    "ph": 1,
    "url": "https://drive.google.com/file/d/168m0GEDpjdVBP_jCySd-a7Cp0IktWVYF/view",
@@ -311,7 +311,7 @@
    "m": "AmadanaONE STCI-0205 IH",
    "s": "28×36×6.5 cm・2.5kg",
    "buy": "2,000（2021）",
-   "sell": "500",
+   "sell": "800",
    "when": "現在可搬走",
    "ph": 2,
    "url": "https://drive.google.com/drive/folders/1OpYiqxdhaG3RdXsKRI57oOR1YWPgLCP6",
@@ -327,7 +327,7 @@
    "m": "Electrolux 極淨呵護700 直立式蒸氣掛燙機（燕麥白）1600W",
    "s": "30×34×170 cm",
    "buy": "2,990（2025）",
-   "sell": "750",
+   "sell": "800",
    "when": "現在可搬走",
    "ph": 3,
    "url": "https://drive.google.com/drive/folders/1wR9FXISVdSM6RlwrIiRBtooitIJpkxlE",
@@ -354,7 +354,7 @@
   },
   {
    "id": 25,
-   "c": "家電",
+   "c": "生活雜物",
    "n": "簡易氣泡水機",
    "m": "附氣瓶",
    "s": "無",
@@ -370,7 +370,7 @@
   },
   {
    "id": 26,
-   "c": "家電",
+   "c": "生活雜物",
    "n": "伊日生活 無水香氛機",
    "m": "伊日生活",
    "s": "寬8cm 高13.7cm",
@@ -418,7 +418,7 @@
   },
   {
    "id": 30,
-   "c": "家電",
+   "c": "生活雜物",
    "n": "嬰兒體重計（貓用）",
    "m": "無品牌",
    "s": "54×32×2.6 cm",
@@ -434,7 +434,7 @@
   },
   {
    "id": 31,
-   "c": "家電",
+   "c": "生活雜物",
    "n": "探針溫度計",
    "m": "蝦皮（未拆）",
    "s": "長22.8cm",
@@ -1020,6 +1020,22 @@
    "ph": 4,
    "url": "https://drive.google.com/drive/folders/12CFw66gMc1GmDAccSfwWC4KUYsK9eyzB",
    "link": "https://uq.goodjack.tw/hmall-products/u0000000020333",
+   "cover": "",
+   "note": "",
+   "sold": false
+  },
+  {
+   "id": 68,
+   "c": "燈具",
+   "n": "IKEA可調光桌燈",
+   "m": "IKEA SPETSBOJ",
+   "s": "直徑12cm 高度22cm",
+   "buy": "399",
+   "sell": "100",
+   "when": "現在可帶走",
+   "ph": 2,
+   "url": "https://drive.google.com/drive/u/0/folders/1hCw1iCKdQZQS74hkCrr78x_OT0asA8_m",
+   "link": "https://www.ikea.com.tw/zh/products/luminaires/table-lamps/spetsboj-art-40591623",
    "cover": "",
    "note": "",
    "sold": false
