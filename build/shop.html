@@ -1,4 +1,5 @@
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>青年路二手拍</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,7 +61,7 @@ a{color:var(--accent)}
 
 /* ============ 公告板式的抬頭 ============ */
 header.top{background:var(--card); border-bottom:1px solid var(--line)}
-.top__inner{padding:38px 0 26px}
+.top__inner{padding:38px 20px 26px}
 h1{font-family:"Noto Serif TC",Georgia,serif; font-weight:700;
   font-size:clamp(30px,5.2vw,50px); line-height:1.15; margin:0 0 14px;
   letter-spacing:-.015em; text-wrap:balance}
@@ -89,21 +90,30 @@ h1{font-family:"Noto Serif TC",Georgia,serif; font-weight:700;
 select.sort{border:1px solid var(--line); background:var(--card); color:var(--ink-2);
   border-radius:999px; padding:7px 12px; font-size:13.5px}
 
+/* 手機上分類不橫向捲動（會看不到後面幾類），直接換行攤開；
+   搜尋和排序各佔一半，觸控目標也放大到 40px 左右 */
+@media (max-width:560px){
+  .tools{padding:10px 0}
+  .tools__inner{gap:9px}
+  .chips{flex:1 1 100%; gap:6px; -webkit-overflow-scrolling:touch;
+    /* 右側淡出，暗示還可以往右滑 */
+    -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);
+    mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);
+    padding-right:20px}
+  .chip{font-size:13px; padding:7px 12px}
+  .tools__right{flex:1 1 100%; gap:8px}
+  .search{flex:1 1 auto}
+  .search input{width:100%; font-size:16px; padding:9px 14px 9px 34px}
+  .search input:focus{width:100%}
+  select.sort{flex:0 0 auto; font-size:13.5px; padding:9px 10px}
+}
+
 /* ============ 商品格狀陣列 ============ */
 main{padding:28px 0 60px}
 .count{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted);
   letter-spacing:.06em; margin:0 0 16px}
 .grid{display:grid; gap:22px;
   grid-template-columns:repeat(auto-fill,minmax(228px,1fr))}
-/* 手機一排固定兩個，字級跟著縮一點才不會擠 */
-@media (max-width:560px){
-  .grid{grid-template-columns:repeat(2,1fr); gap:11px}
-  .card__body{padding:8px 10px 9px}
-  .card__name{font-size:13px}
-  .card__price{font-size:13.5px}
-  .tile{padding:12px 11px 13px}
-  .tile__name{font-size:17px}
-}
 .card{background:var(--card); border:1px solid var(--line-2); border-radius:5px;
   overflow:hidden; text-align:left; padding:0; display:flex; flex-direction:column;
   box-shadow:var(--shadow); transition:box-shadow .18s ease, transform .18s ease;
@@ -145,6 +155,27 @@ main{padding:28px 0 60px}
   background:rgba(20,26,24,.62); color:#fff; letter-spacing:.05em}
 .empty{padding:60px 0; text-align:center; color:var(--muted); font-size:14px}
 
+/* ---- 手機：一排兩張，字要看得清楚，點得到 ---- */
+@media (max-width:560px){
+  .wrap{padding:0 14px}          /* 邊界收窄，讓卡片本身大一點 */
+  .top__inner{padding:26px 14px 20px}
+  h1{font-size:26px; margin-bottom:10px}
+  .notice{font-size:13px; line-height:1.6}
+
+  .grid{grid-template-columns:repeat(2,1fr); gap:12px}
+  .card__body{padding:9px 10px 10px; gap:3px}
+  /* 品名給兩行，長品名不會被切掉；固定高度讓兩張卡的價格對齊 */
+  .card__name{font-size:13.5px; line-height:1.4; -webkit-line-clamp:2}
+  .card__price{font-size:15px; line-height:1.25}
+  .card__price.is-open{font-size:12.5px}
+  .photocount{font-size:9.5px; padding:2px 6px; bottom:6px; right:6px}
+  .badge{font-size:9.5px; padding:2px 7px; top:7px; right:7px}
+  .card.is-picked::after{font-size:9.5px; padding:2px 7px; top:7px; left:7px}
+  .tile{padding:12px 11px 13px}
+  .tile__name{font-size:17px}
+  .tile__cat, .tile__hint{font-size:9.5px}
+}
+
 /* ============ 商品詳細 pop-up ============ */
 .scrim{position:fixed; inset:0; z-index:100; background:rgba(20,26,24,.55);
   display:flex; align-items:center; justify-content:center; padding:20px;
@@ -159,6 +190,21 @@ main{padding:28px 0 60px}
 .gallery{background:var(--card-2); border-right:1px solid var(--line-2);
   display:flex; flex-direction:column}
 @media (max-width:760px){ .gallery{border-right:none; border-bottom:1px solid var(--line-2)} }
+@media (max-width:560px){
+  .scrim{padding:0}
+  .modal{max-height:100vh; border-radius:0}
+  .detail{padding:20px 16px 0}
+  .detail h2{font-size:22px}
+  .priceline__now{font-size:26px}
+  .priceline{padding:12px 0 14px}
+  dl.spec{gap:8px 14px; font-size:13.5px}
+  /* 主要動作釘在底部，長備註不會把它推到看不見的地方 */
+  .detail__actions{position:sticky; bottom:0; margin:18px -16px 0; padding:12px 16px;
+    background:var(--card); border-top:1px solid var(--line-2)}
+  .btn{padding:13px 20px; font-size:15px}
+  .thumbs{padding:9px 10px}
+  .thumb{width:56px; height:56px}
+}
 .gallery__main{aspect-ratio:1/1; overflow:hidden; background:var(--card-2)}
 .gallery__main img{width:100%; height:100%; object-fit:contain; display:block}
 .gallery__tile{width:100%; height:100%; display:flex; flex-direction:column;
@@ -208,10 +254,12 @@ dl.spec dd{margin:0; color:var(--ink-2); line-height:1.55; white-space:pre-line}
 .btn--ghost{background:transparent; color:var(--accent)}
 .btn--ghost:hover{background:var(--accent-soft); filter:none}
 .btn--wide{flex:1}
-.modal__close{position:sticky; top:0; float:right; z-index:3; margin:10px 10px 0 0;
-  width:32px; height:32px; border-radius:50%; border:1px solid var(--line);
-  background:var(--card); color:var(--ink-2); font-size:17px; line-height:1;
-  display:flex; align-items:center; justify-content:center}
+.modal__topbar{position:sticky; top:0; z-index:3; height:0; display:flex;
+  justify-content:flex-end; pointer-events:none}
+.modal__close{pointer-events:auto; margin:10px 10px 0 0;
+  width:34px; height:34px; border-radius:50%; border:1px solid var(--line);
+  background:var(--card); color:var(--ink-2); font-size:18px; line-height:1;
+  display:flex; align-items:center; justify-content:center; flex:none}
 .modal__close:hover{border-color:var(--accent); color:var(--accent)}
 
 /* ============ 想買清單 ============ */
@@ -282,6 +330,21 @@ dl.spec dd{margin:0; color:var(--ink-2); line-height:1.55; white-space:pre-line}
 .handoff .contact{font-family:"IBM Plex Mono",monospace; font-size:13px; color:var(--accent);
   text-decoration:none; border-bottom:1px solid var(--accent); padding-bottom:1px}
 .sheet__actions{display:flex; gap:10px; margin-top:18px}
+/* ---- 手機：想買清單面板 ---- */
+@media (max-width:560px){
+  .sheet__panel{padding:20px 16px 0; max-height:90vh}
+  .sheet__head h2{font-size:19px}
+  /* iOS Safari 對 16px 以下的輸入框會自動放大整頁，所以這裡不能再小 */
+  .field input{font-size:16px; padding:11px}
+  .picks__name{font-size:13.5px}
+  .picks__del{padding:6px 8px}          /* 觸控目標放大 */
+  /* 複製鍵釘在底部，清單很長時也不用捲到最下面才找得到 */
+  .sheet__actions{position:sticky; bottom:0; margin:16px -16px 0; padding:12px 16px;
+    background:var(--card); border-top:1px solid var(--line-2)}
+  .sheet__actions .btn{padding:13px 18px; font-size:15px}
+  .handoff{font-size:14px}
+}
+
 .toast{position:fixed; left:50%; bottom:112px; transform:translate(-50%,10px); z-index:120;
   background:var(--ink); color:var(--paper); padding:10px 18px; border-radius:999px;
   font-size:13.5px; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s}
@@ -335,7 +398,7 @@ footer.end{border-top:1px solid var(--line); padding:26px 0 40px; color:var(--mu
 <!-- 商品詳細 -->
 <div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="mTitle" hidden>
   <div class="modal" id="modal">
-    <button class="modal__close" id="mClose" aria-label="關閉">×</button>
+    <div class="modal__topbar"><button class="modal__close" id="mClose" aria-label="關閉">×</button></div>
     <div class="modal__grid" id="mBody"></div>
   </div>
 </div>
