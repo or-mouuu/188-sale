@@ -50,8 +50,8 @@
    "priceNote": "",
    "orig": 3490,
    "origWhen": "2023.08",
-   "when": "11-12月可搬走",
-   "note": "",
+   "when": "11-12月可搬走，需自行搬走",
+   "note": "可拆，需自行搬走",
    "link": "",
    "nPhoto": 4
   },
@@ -236,21 +236,6 @@
    "nPhoto": 3
   },
   {
-   "id": 18,
-   "cat": "家電",
-   "name": "除濕機1",
-   "model": "Panasonic FY12EM（2020年製，6L/日）",
-   "size": "53×29×23 cm",
-   "price": 2000,
-   "priceNote": "",
-   "orig": null,
-   "origWhen": "",
-   "when": "現在可搬走",
-   "note": "較新",
-   "link": "",
-   "nPhoto": 1
-  },
-  {
    "id": 19,
    "cat": "家電",
    "name": "除濕機2",
@@ -271,7 +256,7 @@
    "name": "微波爐",
    "model": "one amadana 17L 機械式 STWM-0101",
    "size": "31.5×45.5×26.5 cm・11.3kg",
-   "price": 500,
+   "price": 700,
    "priceNote": "",
    "orig": 2000,
    "origWhen": "2022",
@@ -286,7 +271,7 @@
    "name": "烤箱",
    "model": "TOSHIBA 32L 雙溫控旋風電烤箱 TL1-MC32AZT",
    "size": "49.5×32.5×40.5 cm・9.1kg",
-   "price": 800,
+   "price": 1000,
    "priceNote": "",
    "orig": 3000,
    "origWhen": "2023.08",
@@ -301,7 +286,7 @@
    "name": "電磁爐",
    "model": "AmadanaONE STCI-0205 IH",
    "size": "28×36×6.5 cm・2.5kg",
-   "price": 500,
+   "price": 800,
    "priceNote": "",
    "orig": 2000,
    "origWhen": "2021",
@@ -316,7 +301,7 @@
    "name": "掛燙機",
    "model": "Electrolux 極淨呵護700 直立式蒸氣掛燙機（燕麥白）1600W",
    "size": "30×34×170 cm",
-   "price": 750,
+   "price": 800,
    "priceNote": "",
    "orig": 2990,
    "origWhen": "2025",
@@ -342,7 +327,7 @@
   },
   {
    "id": 25,
-   "cat": "家電",
+   "cat": "生活雜物",
    "name": "簡易氣泡水機",
    "model": "附氣瓶",
    "size": "",
@@ -357,7 +342,7 @@
   },
   {
    "id": 26,
-   "cat": "家電",
+   "cat": "生活雜物",
    "name": "伊日生活 無水香氛機",
    "model": "伊日生活",
    "size": "寬8cm 高13.7cm",
@@ -402,7 +387,7 @@
   },
   {
    "id": 30,
-   "cat": "家電",
+   "cat": "生活雜物",
    "name": "嬰兒體重計（貓用）",
    "model": "無品牌",
    "size": "54×32×2.6 cm",
@@ -417,7 +402,7 @@
   },
   {
    "id": 31,
-   "cat": "家電",
+   "cat": "生活雜物",
    "name": "探針溫度計",
    "model": "蝦皮（未拆）",
    "size": "長22.8cm",
@@ -969,6 +954,21 @@
    "note": "",
    "link": "https://uq.goodjack.tw/hmall-products/u0000000020333",
    "nPhoto": 4
+  },
+  {
+   "id": 68,
+   "cat": "燈具",
+   "name": "IKEA可調光桌燈",
+   "model": "IKEA SPETSBOJ",
+   "size": "直徑12cm 高度22cm",
+   "price": 100,
+   "priceNote": "",
+   "orig": 399,
+   "origWhen": "",
+   "when": "現在可帶走",
+   "note": "",
+   "link": "https://www.ikea.com.tw/zh/products/luminaires/table-lamps/spetsboj-art-40591623",
+   "nPhoto": 2
   }
  ]
 }
