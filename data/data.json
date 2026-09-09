@@ -30,7 +30,7 @@
    "link": "",
    "cover": "",
    "note": "可自行拆開桌面跟椅腳，需自行搬運，單張售300，兩張一起買500",
-   "sold": false
+   "sold": true
   },
   {
    "id": 5,
@@ -62,7 +62,7 @@
    "link": "",
    "cover": "",
    "note": "",
-   "sold": false
+   "sold": true
   },
   {
    "id": 7,
@@ -270,7 +270,7 @@
    "link": "",
    "cover": "",
    "note": "較舊，功能正常，現放在浴室除濕",
-   "sold": false
+   "sold": true
   },
   {
    "id": 20,
@@ -414,7 +414,7 @@
    "link": "https://24h.pchome.com.tw/prod/DXAUC5-A900JMBIA",
    "cover": "",
    "note": "功能正常，需自行搬運",
-   "sold": false
+   "sold": true
   },
   {
    "id": 30,
@@ -430,7 +430,7 @@
    "link": "https://www.momoshop.com.tw/product/13936371",
    "cover": "",
    "note": "可量體重到0.01公斤，先前用於幫貓量體重",
-   "sold": false
+   "sold": true
   },
   {
    "id": 31,
@@ -478,7 +478,7 @@
    "link": "https://www.ikea.com.tw/zh/products/luminaires/desk-lamps-and-clamp-lamps/navlinge-art-00404911?gad_source=1&gad_campaignid=23011321354&gbraid=0AAAAACfI1up8k9_gFwH6mECGj93_rs48Q&gclid=CjwKCAjw48TUBhBREiwAK0GnQXq-uVryqsxvr7Bsnz49NAYldtrj4aq8XnCnFwRQazrBFsWQCJaYFxoCbewQAvD_BwE",
    "cover": "",
    "note": "",
-   "sold": false
+   "sold": true
   },
   {
    "id": 34,
@@ -510,7 +510,7 @@
    "link": "https://shopee.tw/%E4%BA%8C%E6%89%8B%E8%89%AF%E5%93%81-%E7%84%A1%E7%9B%92-Resto-demeyere%E5%BE%B7%E5%9C%8B%E9%9B%99%E4%BA%BA%E7%89%8C%E4%BB%A3%E7%90%86-%E5%8F%A3%E5%BE%9116cm%E8%98%86%E7%AD%8D%E9%8D%8B-%E5%8F%AF%E7%85%AE%E7%BE%A9%E5%A4%A7%E5%88%A9%E9%BA%B5-i.12788202.13458801495",
    "cover": "",
    "note": "無盒",
-   "sold": false
+   "sold": true
   },
   {
    "id": 36,
@@ -702,7 +702,7 @@
    "link": "",
    "cover": "",
    "note": "照片有、清單未列　規格欄請補「數量」",
-   "sold": false
+   "sold": true
   },
   {
    "id": 48,
@@ -718,7 +718,7 @@
    "link": "",
    "cover": "",
    "note": "照片有、清單未列　規格欄請補「數量」",
-   "sold": false
+   "sold": true
   },
   {
    "id": 49,
@@ -814,7 +814,7 @@
    "link": "",
    "cover": "",
    "note": "照片有、清單未列　規格欄請補「數量」",
-   "sold": false
+   "sold": true
   },
   {
    "id": 55,
