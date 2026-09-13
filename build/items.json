@@ -177,21 +177,6 @@
    "nPhoto": 1
   },
   {
-   "id": 26,
-   "cat": "生活雜物",
-   "name": "伊日生活 無水香氛機",
-   "model": "伊日生活",
-   "size": "寬8cm 高13.7cm",
-   "price": 1000,
-   "priceNote": "",
-   "orig": 3600,
-   "origWhen": "",
-   "when": "現在可帶走",
-   "note": "僅用10次以內，贈精油",
-   "link": "https://www.momoshop.com.tw/product/12238804",
-   "nPhoto": 3
-  },
-  {
    "id": 28,
    "cat": "家電",
    "name": "無印循環扇（舊款）",
@@ -1035,21 +1020,6 @@
    "id": 109,
    "cat": "書",
    "name": "VERMICULAR FRYING PAN 食譜書",
-   "model": "",
-   "size": "",
-   "price": 0,
-   "priceNote": "免費贈送",
-   "orig": null,
-   "origWhen": "",
-   "when": "現在可帶走",
-   "note": "",
-   "link": "",
-   "nPhoto": 1
-  },
-  {
-   "id": 110,
-   "cat": "書",
-   "name": "開動了！日本料理小知識放題",
    "model": "",
    "size": "",
    "price": 0,
