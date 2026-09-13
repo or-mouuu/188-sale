@@ -1358,7 +1358,7 @@
    "link": "",
    "cover": "",
    "note": "",
-   "sold": false
+   "sold": true
   },
   {
    "id": 90,
@@ -1390,7 +1390,7 @@
    "link": "",
    "cover": "",
    "note": "",
-   "sold": false
+   "sold": true
   },
   {
    "id": 92,
@@ -1726,7 +1726,7 @@
    "link": "",
    "cover": "",
    "note": "",
-   "sold": false
+   "sold": true
   },
   {
    "id": 113,
@@ -2142,7 +2142,7 @@
    "link": "",
    "cover": "",
    "note": "",
-   "sold": false
+   "sold": true
   },
   {
    "id": 139,
@@ -2174,7 +2174,7 @@
    "link": "",
    "cover": "",
    "note": "",
-   "sold": false
+   "sold": true
   },
   {
    "id": 141,
@@ -2286,7 +2286,7 @@
    "link": "",
    "cover": "",
    "note": "",
-   "sold": false
+   "sold": true
   },
   {
    "id": 148,
