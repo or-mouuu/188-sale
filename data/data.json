@@ -382,7 +382,7 @@
    "link": "https://www.momoshop.com.tw/product/12238804",
    "cover": "",
    "note": "僅用10次以內，贈精油",
-   "sold": false
+   "sold": true
   },
   {
    "id": 28,
@@ -1694,7 +1694,7 @@
    "link": "",
    "cover": "",
    "note": "",
-   "sold": false
+   "sold": true
   },
   {
    "id": 111,
