@@ -523,8 +523,11 @@ async function watchLive(say){
       return;
     }
     const t = Math.round((Date.now() - started) / 1000);
-    say('已送出，正在等網站重建…（' +
-        Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0') + '）');
+    const clock = Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
+    // GitHub 有時要排好幾分鐘才輪到，等待久一點是正常的
+    say(t < 120
+      ? '已送出，正在等網站重建…（' + clock + '）'
+      : '已送出，GitHub 排隊中（' + clock + '）。這是正常的，繼續等就好。');
     await new Promise(r => setTimeout(r, 12000));
   }
   if (gen === watchGen) say('等超過 8 分鐘還沒更新，去「看重建進度」看看是不是卡住了。', 'warn');

@@ -9,10 +9,14 @@ on:
       - '.github/workflows/build.yml'
   workflow_dispatch:        # 也可以在 Actions 頁面手動按一下重跑
 
-# 同一時間只跑一個，連續按發佈時只有最後一次會完整跑完
+# 同一時間只跑一個，但「排隊中」的不取消。
+# cancel-in-progress: true 會連 queued 的 run 一起砍掉；遇到 GitHub 排隊
+# 塞車（曾經等 15 分鐘）時，使用者因為看不到變化而再按一次發佈，就會把
+# 正要開始的那次取消，永遠輪不到執行。改成排隊執行，雖然可能多跑幾次，
+# 但每次都是從當下的 data.json 重建，結果一致，而且一定會完成。
 concurrency:
   group: build-site
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
