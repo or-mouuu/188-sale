@@ -822,21 +822,6 @@
    "nPhoto": 1
   },
   {
-   "id": 96,
-   "cat": "書",
-   "name": "香料入門教科書",
-   "model": "",
-   "size": "",
-   "price": 0,
-   "priceNote": "免費贈送",
-   "orig": null,
-   "origWhen": "",
-   "when": "現在可帶走",
-   "note": "",
-   "link": "",
-   "nPhoto": 1
-  },
-  {
    "id": 97,
    "cat": "書",
    "name": "季節日本漬 112",
@@ -1170,21 +1155,6 @@
    "id": 121,
    "cat": "書",
    "name": "懂一點法律 勞資不對立、管理不犯錯",
-   "model": "",
-   "size": "",
-   "price": 0,
-   "priceNote": "免費贈送",
-   "orig": null,
-   "origWhen": "",
-   "when": "現在可帶走",
-   "note": "",
-   "link": "",
-   "nPhoto": 1
-  },
-  {
-   "id": 122,
-   "cat": "書",
-   "name": "茶味裡的隱知識",
    "model": "",
    "size": "",
    "price": 0,
