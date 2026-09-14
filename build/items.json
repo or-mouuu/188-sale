@@ -147,21 +147,6 @@
    "nPhoto": 1
   },
   {
-   "id": 22,
-   "cat": "廚房用品",
-   "name": "電磁爐",
-   "model": "AmadanaONE STCI-0205 IH",
-   "size": "28×36×6.5 cm・2.5kg",
-   "price": 800,
-   "priceNote": "",
-   "orig": 2000,
-   "origWhen": "2021",
-   "when": "現在可搬走",
-   "note": "",
-   "link": "",
-   "nPhoto": 2
-  },
-  {
    "id": 25,
    "cat": "生活雜物",
    "name": "簡易氣泡水機",
