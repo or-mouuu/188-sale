@@ -10,16 +10,16 @@ inline, files, missing = {}, {}, []
 for item_id, ids in pmap.items():
     ins, fs = [], []
     for i in ids:
-        p_in = os.path.join(ROOT, 'inline', i + '.jpg')
-        p_t  = os.path.join(ROOT, 'photos', 't', i + '.jpg')
-        p_f  = os.path.join(ROOT, 'photos', 'f', i + '.jpg')
+        p_in = os.path.join(ROOT, 'inline', i + '.webp')
+        p_t  = os.path.join(ROOT, 'photos', 't', i + '.webp')
+        p_f  = os.path.join(ROOT, 'photos', 'f', i + '.webp')
         if not (os.path.exists(p_t) and os.path.exists(p_f)):
             missing.append(i); continue
         # inline 只有本機建 Claude artifact 時才需要，CI 上沒有就跳過
         if os.path.exists(p_in):
             with open(p_in, 'rb') as fh:
                 ins.append('data:image/jpeg;base64,' + base64.b64encode(fh.read()).decode())
-        fs.append({'t': 'photos/t/%s.jpg' % i, 'f': 'photos/f/%s.jpg' % i})
+        fs.append({'t': 'photos/t/%s.webp' % i, 'f': 'photos/f/%s.webp' % i})
     if fs:
         files[item_id] = fs
         if ins:

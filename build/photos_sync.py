@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""依 photomap.json 把 Drive 照片同步成網站要用的兩種尺寸。
+"""依 photomap.json 把 Drive 照片同步成網站要用的兩種尺寸（WebP）。
 
 只處理「還沒有的」照片，並刪掉 Drive 已移除的孤兒檔，所以每次跑都很快。
 macOS 與 GitHub Actions 共用這一支（不依賴 sips）。
@@ -9,7 +9,7 @@ macOS 與 GitHub Actions 共用這一支（不依賴 sips）。
 """
 import io, json, os, sys, urllib.request
 
-from PIL import Image
+from PIL import Image, ImageOps
 import pillow_heif
 
 pillow_heif.register_heif_opener()
@@ -18,9 +18,14 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(BASE)
 DL = 'https://drive.google.com/uc?export=download&id='
 
-# (資料夾, 最長邊, JPEG 品質)
-SIZES = [('photos/t', 560, 48), ('photos/f', 1600, 72)]
-INLINE = ('inline', 760, 45)
+EXT = '.webp'
+
+# 列表縮圖在卡片上是 1:1 裁切顯示，所以直接存成方形，
+# 不要再下載看不到的那半邊高度。手機 2 倍螢幕需要 336px，400 夠用。
+# 詳細頁大圖實際只顯示到 480px 寬，長邊 1200 已有兩倍餘裕。
+# (資料夾, 尺寸, 品質, 是否裁成方形)
+SIZES = [('photos/t', 400, 72, True), ('photos/f', 1200, 78, False)]
+INLINE = ('inline', 760, 70, False)
 
 
 def wanted_ids():
@@ -42,13 +47,16 @@ def fetch(file_id):
 
 def write_sizes(raw, file_id, targets):
     im = Image.open(io.BytesIO(raw))
-    im = im.convert('RGB')
-    for folder, longest, quality in targets:
-        out = os.path.join(ROOT, folder, file_id + '.jpg')
+    im = ImageOps.exif_transpose(im).convert('RGB')
+    for folder, size, quality, square in targets:
+        out = os.path.join(ROOT, folder, file_id + EXT)
         os.makedirs(os.path.dirname(out), exist_ok=True)
-        c = im.copy()
-        c.thumbnail((longest, longest), Image.LANCZOS)
-        c.save(out, 'JPEG', quality=quality, optimize=True, progressive=True)
+        if square:
+            c = ImageOps.fit(im, (size, size), Image.LANCZOS)   # 置中裁切成正方形
+        else:
+            c = im.copy()
+            c.thumbnail((size, size), Image.LANCZOS)
+        c.save(out, 'WEBP', quality=quality, method=5)
 
 
 def main():
@@ -59,7 +67,7 @@ def main():
     added = failed = 0
     for file_id in ids:
         missing = [s for s in sizes
-                   if not os.path.exists(os.path.join(ROOT, s[0], file_id + '.jpg'))]
+                   if not os.path.exists(os.path.join(ROOT, s[0], file_id + EXT))]
         if not missing:
             continue
         try:
@@ -71,12 +79,12 @@ def main():
             print('  ! %s 取得失敗：%s' % (file_id, e))
 
     removed = 0
-    for folder, _, _ in sizes:
+    for folder, _, _, _ in sizes:
         d = os.path.join(ROOT, folder)
         if not os.path.isdir(d):
             continue
         for f in os.listdir(d):
-            if f.endswith('.jpg') and f[:-4] not in keep:
+            if not f.endswith(EXT) or f[:-len(EXT)] not in keep:
                 os.remove(os.path.join(d, f))
                 removed += 1
 
